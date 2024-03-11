@@ -20,7 +20,7 @@ export const useAuth = defineStore('auth', {
                 this.isLoadingButton = true;
                 console.log(API_URL)
                 await new Promise((resolve) => setTimeout(resolve, 600));
-                const res = await axios.post(`${API_URL}/auth/login`, { email, password });
+                const res = await axios.post(`${API_URL}/login`, { email, password });
                 this.token = res.data.token
                 this.image = res.data.user_image
                 this.loggedIn = true
@@ -48,7 +48,7 @@ export const useAuth = defineStore('auth', {
             try {
                 this.isLoadingButton = true;
                 await new Promise((resolve) => setTimeout(resolve, 600));
-                const res = await axios.post(`${API_URL}/auth/register`, { name, email, password, confirmPassword });
+                const res = await axios.post(`${API_URL}/register`, { name, email, password, confirmPassword });
                 this.token = res.data.token
                 this.image = res.data.user_image
                 this.loggedIn = true

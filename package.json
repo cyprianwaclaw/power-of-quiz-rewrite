@@ -11,12 +11,12 @@
   },
   "dependencies": {
     "@pinia/nuxt": "^0.5.1",
-    "@vee-validate/nuxt": "^4.12.6",
     "axios": "^1.6.7",
     "gsap": "^3.12.5",
     "nuxt": "^3.10.3",
     "pinia": "^2.1.7",
     "sass-loader": "^14.1.1",
+    "vee-validate": "^4.12.6",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0",
     "yup": "^1.4.0"

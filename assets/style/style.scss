@@ -39,6 +39,10 @@
     --section-gap: 160px;
 }
 
+body {
+    font-family: $family;
+}
+
 .click {
     -webkit-tap-highlight-color: transparent;
     border-radius: 999px;
@@ -246,28 +250,27 @@ input:focus::placeholder {
     // padding-top: 12px
 }
 
-@media only screen and (max-width: 520px) {
-    .auth-background {
-        padding-top: 90px;
-        background-color: $page-backgroud !important;
-        position: absolute;
-        height: 100%;
-        z-index: 1;
-        width: 100%;
-    }
-}
-
-@media only screen and (min-width: 520px) {
-    .auth-background {
-        /* The image used */
-        background-image: url("@/assets/file/photo1.jpg");
-        height: 100vh;
-        /* Center and scale the image nicely */
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: cover;
-        box-shadow: inset 0px 1000000px 4px rgba(0, 0, 0, 0.15);
-    }
+// @media only screen and (max-width: 520px) {
+//     .auth-background {
+//         padding-top: 90px;
+//         background-color: $page-backgroud !important;
+//         position: absolute;
+//         height: 100%;
+//         z-index: 1;
+//         width: 100%;
+//     }
+// }
+// @media only screen and (min-width: 520px) {
+.auth-background {
+    /* The image used */
+    background-image: url("@/assets/file/hero.webp");
+    height: 100vh;
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    box-shadow: inset 0px 1000000px 4px rgba(0, 0, 0, 0.15);
+    // }
 }
 
 .shaddow-effect {

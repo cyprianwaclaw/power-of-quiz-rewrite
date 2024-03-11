@@ -1,7 +1,6 @@
 <template>
   <div>
     <NuxtPage />
-    dsfsfdf
   </div>
 </template>
 

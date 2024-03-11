@@ -1,9 +1,9 @@
-import { useAuth } from "@/store/useAuth";
+import { useAuth } from "@/stores/useAuth";
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
   const authState = useAuth();
 
   if (authState.loggedIn) {
-    return navigateTo("/");
+    return navigateTo("/konto");
   }
 });
