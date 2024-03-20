@@ -25,7 +25,7 @@
 
 <script setup lang="ts">
 import { useField } from "vee-validate";
-// import { modes } from "@/functions";
+import { modes } from "@/functions";
 const color = ref("#9B9B9B") as any;
 
 // const hasError = ref(false);
@@ -127,7 +127,6 @@ input {
   height: 54px;
   overflow: hidden;
   border-radius: 10px;
-   font-family: $family;
   padding: 9px 16px;
   font-weight: 400;
   transition: border-color 0.3s ease;

@@ -4,6 +4,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   const authState = useAuth();
 
   if (authState.loggedIn) {
-    return navigateTo("/konto");
+    return navigateTo("/panel");
   }
 });

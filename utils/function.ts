@@ -1,8 +1,4 @@
 
-
-
-
-
 import type { FieldContext } from 'vee-validate';
 
 type InteractionEventGetter = (ctx: FieldContext) => string[];
@@ -31,13 +27,7 @@ export const modes: any = {
 };
 
 
-export const sliceText = (text: string, number: number) => {
-  if (text?.length < number) {
-    return text
-  } else {
-    return text?.slice(0, number) + '...'
-  }
-}
+
 export const formatQueryString = (queryObject: Record<string, any>) => {
   const filteredQueryObject: Record<string, string | number> = Object.keys(queryObject)
     // .filter((key) => key !== "page")
@@ -51,57 +41,9 @@ export const formatQueryString = (queryObject: Record<string, any>) => {
   return queryString;
 };
 
-export const handleInputTextArea = (event: Event) => {
-  const target = event.target as HTMLTextAreaElement;
-  target.style.height = 'auto';
-  target.style.height = target.scrollHeight + 'px';
-};
-export const debounce = (func: Function, delay: number) => {
-  let timer: number;
-  return (...args: any[]) => {
-    clearTimeout(timer);
-    timer = window.setTimeout(() => {
-      func(...args);
-    }, delay);
-  };
-};
-export const goTo = (link: string, type: string, show: any, router: any) => {
-  show
-  if (type === "category") {
-    setTimeout(() => {
-      router.push(`/kategoria/${link}`);
-    }, 54);
-  } else if (type === "post") {
-    setTimeout(() => {
-      router.push(`/post/${link}`);
-    }, 54);
-  } else {
-    setTimeout(() => {
-      router.push(`/autor/${link}`);
-    }, 54);
-  }
-};
-
-export const getDate = () => {
-  const currentDate = new Date();
-  const day = String(currentDate.getDate()).padStart(2, "0");
-  const month = String(currentDate.getMonth() + 1).padStart(2, "0"); // Dodajemy 1, ponieważ miesiące są indeksowane od 0
-  const year = currentDate.getFullYear();
-
-  return `${day}.${month}.${year}`;
-}
-
-export const bgDynamicColor = (type: string) => {
-  if (type === "success") {
-    return "#CEF2D2";
-  } else if (type === "warning") {
-    return "#3AA845";
-  } else {
-    return "#FFE5E5";
-  }
-}
 
 
+// ! nie wiem czy wszystko jest potrzebne, chyba nie xDDDD
 
 export function ErrorInput(text: string,) {
   let result = {

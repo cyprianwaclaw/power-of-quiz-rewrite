@@ -118,6 +118,10 @@ import { Form, Field, useForm, ErrorMessage, useField } from "vee-validate";
 const axiosInstance = useNuxtApp().$axiosInstance;
 const auth = useAuth();
 
+definePageMeta({
+  middleware: "user",
+});
+
 const { isLoadingButton, errorValue } = storeToRefs(auth);
 
 const error = ref("") as any;
