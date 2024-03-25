@@ -42,6 +42,12 @@ export const formatQueryString = (queryObject: Record<string, any>) => {
 };
 
 
+export const returnSelectedNameFromArray = (ourArray: any) => {
+  const selectedCategories = ourArray.filter((single: any) => single.selected === true);
+  const selectedCategoryNames = selectedCategories.map((single: any) => single.name);
+  return selectedCategoryNames;
+}
+
 
 // ! nie wiem czy wszystko jest potrzebne, chyba nie xDDDD
 
@@ -406,7 +412,7 @@ export const selectItemsByParams = (itemsList: any, params: any) => {
     if (Array.isArray(params)) {
       params.forEach((param) => {
         itemsList.value.forEach((item: any) => {
-          if (item.value === param || item.id === Number(param)) {
+          if (item.name === param || item.id === Number(param)) {
             item.selected = true;
           }
         });
@@ -414,7 +420,7 @@ export const selectItemsByParams = (itemsList: any, params: any) => {
     } else {
       const paramValue = Array.isArray(params) ? params[0] : params;
       itemsList.value.forEach((item: any) => {
-        if (item.value === paramValue || item.id === Number(paramValue)) {
+        if (item.name === paramValue || item.id === Number(paramValue)) {
           item.selected = true;
         }
       });
@@ -434,7 +440,7 @@ export const test = (payouts: any) => {
     statusName: changePayoutsStatus(single.status).name,
     statusClass: changePayoutsStatus(single.status).class,
   }));
-}  
+}
 
 export const mapInvitedUsers = (allInvited: any) => {
   return allInvited.data.map((user: any) => ({
