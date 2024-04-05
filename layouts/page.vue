@@ -9,6 +9,8 @@
     "
     class="md:pb-[200px] lg:relative pb-[150px]"
   >
+    <!-- class="md:pb-[200px] lg:relative pb-[150px]" -->
+
     <NavUser />
     <div class="own-container min-h-screen page-background">
       <slot />

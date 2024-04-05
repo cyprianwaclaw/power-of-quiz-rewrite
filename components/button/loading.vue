@@ -2,38 +2,21 @@
 <template>
   <div v-if="props.loading" class="button-primary h-[54px] loading-button w-full">
     <div class="spinner-container">
-      <svg
-        class="spinner"
-        width="24px"
-        height="24px"
-        viewBox="0 0 66 66"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <circle
-          class="path"
-          fill="none"
-          stroke-width="6"
-          stroke-linecap="round"
-          cx="33"
-          cy="33"
-          r="30"
-        ></circle>
+      <svg class="spinner" width="24px" height="24px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+        <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
       </svg>
     </div>
   </div>
-  <button
-    v-else
-    :disabled="props.disable"
-    :class="{
-      'button-primary-disabled': props.disable ,
-    }"
-    class="w-full button-primary h-[54px]"
-  >
+  <button v-else :disabled="props.disable" :class="{
+    'button-primary-disabled': props.disable,
+  }" class="w-full button-primary h-[54px]">
     {{ props.text }}
   </button>
 </template>
 <script setup lang="ts">
-const router = useRouter();
+
+
+
 const props = defineProps({
   loading: {
     type: Boolean,
@@ -85,6 +68,7 @@ $duration: 1.2s;
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(270deg);
   }
@@ -102,15 +86,19 @@ $duration: 1.2s;
   0% {
     stroke: white;
   }
+
   25% {
     stroke: white;
   }
+
   50% {
     stroke: white;
   }
+
   75% {
     stroke: white;
   }
+
   100% {
     stroke: white;
   }
@@ -120,10 +108,12 @@ $duration: 1.2s;
   0% {
     stroke-dashoffset: $offset;
   }
+
   50% {
     stroke-dashoffset: calc(#{$offset} / 4);
     transform: rotate(135deg);
   }
+
   100% {
     stroke-dashoffset: $offset;
     transform: rotate(450deg);

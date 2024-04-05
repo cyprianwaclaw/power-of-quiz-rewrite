@@ -6,7 +6,7 @@
       <p class="mb-2.5 text-lg font-bold">Liczba na stronie</p>
       <InputSingleRange :max="60" :min="2" v-model="perPage" />
     </div>
-    <!-- <p class="mb-4 text-lg font-bold">Inne opcje sortowania</p>
+    <p class="mb-4 text-lg font-bold">Inne opcje sortowania</p>
     <div v-for="(single, index) in otherSorting1" :key="index">
       <label class="flex w-full mt-2">
         <input
@@ -31,7 +31,7 @@
           <p class="text-gray-400 text-[13px] mt-[4px]">{{ single.des }}</p>
         </div>
       </label>
-    </div> -->
+    </div>
     <button class="button-primary w-full mt-9 mb-5" @click="saveChanges">
       Zapisz zmiany
     </button>

@@ -1,4 +1,15 @@
 <template>
+    <!-- <ModalDown :modalActive="filter" title="Filtruj quizy" @close="filterShow()">
+        <template #content>
+          <ModalContentQuizFilterView @close="filterShow" @category="category" />
+        </template>
+      </ModalDown> -->
+    <ModalDown :modalActive="sortingMobile" title="Sortowanie" @close="sortingShowMobile()">
+        <template #content>
+            {{ cookie }}
+            <ModalContentSorting @close="sortingShowMobile" @save="saveSort" />
+        </template>
+    </ModalDown>
     <div v-if="!isLoading" class="flex justify-center">
         <p class="text-center">Ładowanie wyników...</p>
     </div>
@@ -13,24 +24,30 @@
             </div>
             <div class="sm:flex hidden">
                 <!-- sortowanie na desktop -->
-                <button @click="sortingShow">Sortuj</button>
+                <button @click="sortingShowDesktop">Sortuj</button>
+            </div>
+            <div class="flex sm:hidden">
+                <!-- sortowanie na mobile -->
+                <button @click="sortingShowMobile">Sortuj Quizy</button>
             </div>
         </div>
         <!-- <Transition @enter="EnterModal" @leave="LeaveModal" :css="false"> -->
-        <div v-if="sorting" ref="section">
+        <div v-if="sortingDesktop" ref="section" class="sm:flex hidden">
             <SectionSorting :categories="mapCategories" />
         </div>
         <!-- </Transition> -->
-        <div v-if="view == 'two'">
+        <div v-if="cookieView == 'two'">
             <div class="grid grid-cols-2 gap-6">
                 <CardForYou v-for="(quiz, index) in allQuiz.data" :key="index" :quizes="quiz"
                     :plan="hasPremium?.has_premium" />
             </div>
         </div>
-        <div v-if="view == 'three'">
+        <div v-if="cookieView == 'three'">
+            trzy
             <QuizSearchCard v-for="quiz in allQuiz" :key="quiz?.id" :quiz="quiz" />
         </div>
-        <div v-if="view == 'four'">
+        <div v-if="cookieView == 'four'">
+            cztery
             <div class="grid grid-cols-2 gap-6">
                 <QuizTwoQuiz v-for="quiz in allQuiz" :key="quiz?.id" :quiz="quiz" />
             </div>
@@ -50,16 +67,24 @@ const axiosInstance = useNuxtApp().$axiosInstance;
 definePageMeta({
     middleware: "auth",
 });
+const router = useRouter()
+
+const cookieView = useCookie('view')
+cookieView.value = cookieView.value ? cookieView.value : 'two'
+
 
 const userState = useUser();
 const { hasPremium } = storeToRefs(userState);
-const sorting = ref(false)
-const sortingShow = () => {
-    sorting.value = !sorting.value;
+const sortingDesktop = ref(false)
+const sortingShowDesktop = () => {
+    sortingDesktop.value = !sortingDesktop.value;
+}
+const sortingMobile = ref(false)
+const sortingShowMobile = () => {
+    sortingMobile.value = !sortingMobile.value;
 }
 const route = useRoute()
 const isLoading = ref(true)
-const view = ref('two')
 
 const endpoint = ref('/quizzes/all')
 
@@ -77,11 +102,23 @@ const mapCategories = categories.value.map((single: any) => ({
 }));
 
 
+// const cookie = useCookie('view')
 
-onBeforeRouteUpdate(async (to) => {
-    const res = await axiosInstance.get(`${endpoint.value}?${formatQueryString(to.query)}`)
+const saveSort = async (value: any) => {
+    // view.value = value as any
+
+    // console.log(value)
+    const res = await axiosInstance.get(`${endpoint.value}?${formatQueryString(router.currentRoute.value.query)}`)
     allQuiz.value = res.data;
-})
+}
+
+// onBeforeRouteUpdate(async (to, from) => {
+//     // view.value = to.query.view as any
+//     // if (to.query.view === from.query.view ) {
+//         const res = await axiosInstance.get(`${endpoint.value}?${formatQueryString(to.query)}`)
+//         allQuiz.value = res.data;
+//     // }
+// })
 
 const section = ref()
 

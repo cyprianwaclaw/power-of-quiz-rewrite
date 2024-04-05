@@ -26,8 +26,6 @@ export const useAuth = defineStore('auth', {
                 this.isLoadingButton = false;
                 this.errorValue = error.response.data
 
-            } finally {
-                this.isLoadingButton = false;
             }
         },
         logout() {
