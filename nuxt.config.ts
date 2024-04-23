@@ -6,6 +6,7 @@ export default defineNuxtConfig({
       API_URL: process.env.API_URL
     }
   },
-  modules: ['@pinia/nuxt', '@nuxtjs/tailwindcss', '@pinia-plugin-persistedstate/nuxt', 'nuxt-icon'],
-  css: ['@/assets/style/tailwind.css', '@/assets/style/style.scss'],
+  modules: ['@pinia/nuxt', '@nuxtjs/tailwindcss', '@pinia-plugin-persistedstate/nuxt', 'nuxt-icon', 'nuxt-primevue'
+],
+  css: ['@/assets/style/tailwind.css', '@/assets/style/style.scss', 'primevue/resources/themes/aura-light-green/theme.css'],
 })

@@ -1,34 +1,21 @@
 <template>
-  <div
-    v-if="
-      router.currentRoute.value.fullPath == '/' ||
-      router.currentRoute.value.fullPath == '/przypomnij-haslo' ||
-      router.currentRoute.value.fullPath == '/rejestracja'
-        ? false
-        : true
-    "
-    class="md:pb-[200px] lg:relative pb-[150px]"
-  >
-    <!-- class="md:pb-[200px] lg:relative pb-[150px]" -->
-
+  <div class="w-full">
     <NavUser />
-    <div class="own-container min-h-screen page-background">
+    <div class="own-container min-h-screen page-background pb-[200px]">
       <slot />
     </div>
-    <div class="md:hidden">
+    <div class="md:hidden fixed bottom-0 z-50 w-full">
       <NavBottom />
     </div>
-    <div class="hidden md:flex">
+    <!-- <div class="hidden md:flex">
       <NavBottomDesktop />
-    </div>
-  </div>
-  <div v-else>
-    <slot />
+    </div> -->
   </div>
 </template>
 
 <script setup lang="ts">
 const router = useRouter();
+
 </script>
 
 <style scoped>
@@ -37,6 +24,7 @@ const router = useRouter();
   margin-right: 30px;
   padding-top: 100px;
 }
+
 @media (min-width: 640px) {
   .own-container {
     margin-left: 30px;
@@ -44,6 +32,7 @@ const router = useRouter();
     padding-top: 100px;
   }
 }
+
 @media (min-width: 768px) {
   .own-container {
     margin-left: 30px;
@@ -51,6 +40,7 @@ const router = useRouter();
     padding-top: 100px;
   }
 }
+
 @media (min-width: 1024px) {
   .own-container {
     margin-left: 100px;
@@ -58,6 +48,7 @@ const router = useRouter();
     padding-top: 100px;
   }
 }
+
 @media (min-width: 1280px) {
   .own-container {
     width: 1150px;
@@ -65,6 +56,7 @@ const router = useRouter();
     padding-top: 100px;
   }
 }
+
 @media (min-width: 1536px) {
   .own-container {
     width: 1280px;

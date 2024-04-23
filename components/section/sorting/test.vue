@@ -1,9 +1,10 @@
 <template>
-    <div class="w-full h-[510px] pb-10">
+    <!-- <div class="w-full h-[510px] pb-10 absolute bg-white z-30 top-0"> -->
+        <div class="w-full h-[510px] pb-10">
         <div class="w-full p-10 bg-white">
             <div class="w-full flex">
                 <div class="w-full ">
-                    <p class="mb-2 text-lg font-bold">Poziom trudności</p>
+                    <p class="mb-2 text-lg font-bold">Poziom trasasudności</p>
                     <div v-for="(level, index) in difficultyArray" :key="index">
                         <label class="flex w-full mt-2">
                             <input class="w-5 flex mb-[4px]" type="checkbox" v-model="level.selected" />

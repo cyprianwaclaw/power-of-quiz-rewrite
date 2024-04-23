@@ -7,7 +7,7 @@ export const useAuth = defineStore('auth', {
         loggedIn: false as boolean,
         token: null as any,
         isLoadingButton: false as boolean,
-        errorValue: null as string | null,
+        errorValue: null as any | null,
     }),
 
     persist: true,
@@ -23,9 +23,8 @@ export const useAuth = defineStore('auth', {
                 this.loggedIn = true
                 window?.location?.reload()
             } catch (error: any) {
-                this.isLoadingButton = false;
                 this.errorValue = error.response.data
-
+                this.isLoadingButton = false;
             }
         },
         logout() {
@@ -36,24 +35,27 @@ export const useAuth = defineStore('auth', {
 
         nullError() {
             this.errorValue = null
+            this.isLoadingButton = false;
         },
 
-        async register(name: string, email: string, password: string, confirmPassword: string) {
+        async register(name: string, email: string, invitation: string, password: string, password_confirmation: string) {
             const API_URL = useRuntimeConfig().public.API_URL;
             try {
                 this.isLoadingButton = true;
                 await new Promise((resolve) => setTimeout(resolve, 600));
-                const res = await axios.post(`${API_URL}/register`, { name, email, password, confirmPassword });
+                const res = await axios.post(`${API_URL}/register`, { name, email, invitation, password, password_confirmation });
                 this.token = res.data.access_token
                 this.loggedIn = true
-                window?.location?.reload()
+                this.isLoadingButton = false;
+                // window?.location?.reload()
             } catch (error: any) {
                 this.isLoadingButton = false;
                 this.errorValue = error.response.data
-
-            } finally {
                 this.isLoadingButton = false;
+
             }
+            // } finally {
+            //     this.isLoadingButton = false;
         },
     }
 })

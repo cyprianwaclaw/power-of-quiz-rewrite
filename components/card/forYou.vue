@@ -13,9 +13,9 @@
         <ModalContentSingleQuiz :quiz="quiz" />
       </template>
     </ModalDown> -->
-  <div v-if="props.plan" class="border-transparent rounded-[24px] lg:rounded-[12px] w-[260px] lg:w-full"
+  <div v-if="props.plan" class="border-transparent rounded-[24px] lg:rounded-[12px] w-full"
     :style="`background-image: url(${props.quizes.image}); background-size: cover`" @click="isModal()">
-    <div class="bg-image w-[260px] lg:w-full rounded-[24px] lg:rounded-[12px] cursor-pointer">
+    <div class="bg-image w-full rounded-[24px] lg:rounded-[12px] cursor-pointer">
       <div class="details">
         <h3 class="title hover:underline-offset-4">{{ props.quizes.title }}</h3>
         <div class="flex mt-3 gap-3 float-left">
@@ -28,9 +28,9 @@
       </div>
     </div>
   </div>
-  <div v-else class="border-transparent rounded-[24px] lg:rounded-[12px] w-[260px] lg:w-full"
+  <div v-else class="border-transparent rounded-[24px] lg:rounded-[12px] w-full"
     :style="`background-image: url(${props.quizes.image}); background-size: cover`" @click="isAlert()">
-    <div class="bg-image w-[260px] lg:w-full rounded-[24px] lg:rounded-[12px] cursor-pointer">
+    <div class="bg-image w-full rounded-[24px] lg:rounded-[12px] cursor-pointer">
       <div class="details">
         <p class="des">
           nie ma premium

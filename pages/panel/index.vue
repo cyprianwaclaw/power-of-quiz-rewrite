@@ -43,9 +43,9 @@
         </div>
       </div>
     </div>
-    <pre>
+    <!-- <pre>
       {{  quizLatest }}
-    </pre>
+    </pre> -->
     <!-- {{ quizForYou }} -->
   </div>
 </template>

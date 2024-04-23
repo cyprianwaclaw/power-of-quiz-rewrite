@@ -4,7 +4,7 @@
         <SectionSortingCardView @changeView="changeView" />
         <div class="mb-8">
             <p class="mb-2.5 text-lg font-bold">Liczba na stronie</p>
-            <InputSingleRange :max="60" :min="2" v-model="perPage" />
+            <InputSingleRange :max="60" :min="2" v-model="cookiePerPage" />
         </div>
         <p class="mb-4 text-lg font-bold">Inne opcje sortowania</p>
         <div v-for="(single, index) in otherSorting1" :key="index">
@@ -73,17 +73,19 @@ const handleChange2 = (selected: any) => {
     });
 };
 
-const currentView = ref();
+// const currentView = ref();
 
 
-const perPage = ref();
-const perPageParams = Number(router.currentRoute.value.query.per_page);
-perPage.value = perPageParams ? perPageParams : "15";
+// const perPage = ref();
+const cookiePerPage = useCookie('perPage')
+
+// const perPageParams = Number(router.currentRoute.value.query.per_page);
+// perPage.value = perPageParams ? perPageParams : "15";
 
 
 const saveChanges = () => {
 
-    cookieView.value = view.value
+    cookieView.value = view.value ? view.value : cookieView.value
     emit("save", 'view.value');
     emit("close");
 

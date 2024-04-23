@@ -2,107 +2,58 @@
   <div class="auth-background" @click="auth.nullError()">
     <div class="width-login sm:shaddow-effect">
       <h2 class="mb-[18px] text-[28px] font-semibold">Rejestracja</h2>
-      <p
-        v-if="errorValue?.errors?.otherError ? true : false"
-        class="text-red-500 text-[14px] mb-4 -mt-4"
-      >
+      {{ errorValue?.errors }}
+      <p v-if="errorValue?.errors?.otherError ? true : false" class="text-red-500 text-[14px] mb-4 -mt-4">
         {{ errorValue?.errors?.otherError }}
       </p>
-      <Form
-        @submit="registerUser"
-        @click="auth.nullError()"
-        :validation-schema="schema"
-        v-slot="{ meta, values, errors }"
-      >
+      <Form @submit="registerUser" @click="auth.nullError()" :validation-schema="schema"
+        v-slot="{ meta, values, errors }">
         <div class="flex flex-col sm:gap-[16px] mb-7">
           <div class="sm:flex gap-[24px]">
-            <InputBase
-            name="name"
-            placeholder="Imię i nazwisko"
-            type="text"
-            :hasError="errors?.name"
-            class="mb-3 md:mb-0"
-            />
-            <InputBase
-            name="email"
-            placeholder="E-mail"
-            type="text"
-              class="mb-3 md:mb-0"
-            :hasError="errors?.email || errorValue?.errors?.email[0]"
-            />
-          </div>        
-          <InputBase
-            name="email"
-            placeholder="E-mail"
-            type="text"
-              class="mb-3 md:mb-0"
-            :hasError="errors?.email || errorValue?.errors?.email[0]"
-            />
+            <InputBase name="name" placeholder="Imię i nazwisko" type="text" :hasError="errors?.name"
+              class="mb-3 md:mb-0" />
+            <InputBase name="email" placeholder="E-mail" type="text" class="mb-3 md:mb-0"
+              :hasError="errors?.email || errorValue?.errors?.email[0]" />
+          </div>
+          <InputBase name="invitationCode" placeholder="Kod polecajacy" type="text" class="mb-3 md:mb-0"
+            :hasError="errorValue?.errors" />
           <!-- <div class="relative"> -->
-            <div class="sm:flex gap-[24px]">
-            <Icon
-              :name="iconType"
-              @click="changeType(loginType)"
+          <div class="sm:flex gap-[24px]">
+            <Icon :name="iconType" @click="changeType(loginType)"
               class="absolute z-50 top-[16px] right-[24px] text-[#b7b6b6] hover:text-[#878787] hover:duration-150 cursor-pointer"
-              size="23"
-
-            />
+              size="23" />
             <!-- <div> -->
 
-              <div class="relative w-full">
-                <Icon
-                :name="iconTypePassword"
-                @click="changeType('password')"
+            <div class="relative w-full">
+              <Icon :name="iconTypePassword" @click="changeType('password')"
                 class="absolute z-50 top-[16px] right-[24px] text-[#b7b6b6] hover:text-[#878787] hover:duration-150 cursor-pointer"
-                size="23"
-                />
-                <InputBase
-                name="password"
-                placeholder="Nowe hasło"
-                :type="typePassword"
-                :hasError="errors?.password"
-                  class="mb-3 md:mb-0"
-                />
-              </div>
+                size="23" />
+              <InputBase name="password" placeholder="Hasło" :type="typePassword" :hasError="errors?.password"
+                class="mb-3 md:mb-0" />
+            </div>
             <!-- </div> -->
             <div class="relative w-full">
-              <Icon
-                :name="iconTypeConfirmPassword"
-                @click="changeType('confirmPassword')"
+              <Icon :name="iconTypeConfirmPassword" @click="changeType('confirmPassword')"
                 class="absolute z-50 top-[16px] right-[24px] text-[#b7b6b6] hover:text-[#878787] hover:duration-150 cursor-pointer"
-                size="23"
-              />
-              <InputBase
-                name="confirmPassword"
-                placeholder="Potwierdz hasło"
-                :type="typeConfirmPassword"
-                :hasError="errors?.confirmPassword"
-                  class="mb-3 md:mb-0"
-              />
+                size="23" />
+              <InputBase name="confirmPassword" placeholder="Potwierdz hasło" :type="typeConfirmPassword"
+                :hasError="errors?.confirmPassword" class="mb-3 md:mb-0" />
             </div>
           </div>
         </div>
-        <ButtonLoading
-          :disable="
-            !meta.valid ||
-            errorValue ||
-            !values.password ||
-            values.password.length === 0 ||
-            !values.name ||
-            values.name.length === 0 ||
-            !values.email ||
-            values.email.length === 0 ||
-            !values.confirmPassword ||
-            values.confirmPassword.length === 0
-          "
-          isLoading="false"
-          :loading="isLoadingButton"
-          text="Zarejestruj się"
-        />
+        <ButtonLoading :disable="!meta.valid ||
+          errorValue ||
+          !values.password ||
+          values.password.length === 0 ||
+          !values.name ||
+          values.name.length === 0 ||
+          !values.email ||
+          values.email.length === 0 ||
+          !values.confirmPassword ||
+          values.confirmPassword.length === 0
+          " isLoading="false" :loading="isLoadingButton" text="Zarejestruj się" />
       </Form>
-      <div
-        class="flex sm:flex-row flex-col w-full justify-center mt-10 pt-3 border-t-[1px] border-[#E6E8EA]"
-      >
+      <div class="flex sm:flex-row flex-col w-full justify-center mt-10 pt-3 border-t-[1px] border-[#E6E8EA]">
         <p class="text-des mr-2">Masz konto?</p>
         <NuxtLink to="/"><span class="navigate">Zaloguj się</span></NuxtLink>
       </div>
@@ -202,8 +153,8 @@ const registerUser = async (values: any) => {
   await new Promise((resolve) => setTimeout(resolve, 600));
   await auth.register(
     values.name,
-
     values.email,
+    values.invitationCode,
     values.password,
     values.confirmPassword
   );

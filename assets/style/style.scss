@@ -462,15 +462,12 @@
         
         .button-primary {
             background-color: $primary;
-            /* Kolor tła przycisku */
             color: #fff;
             font-weight: 500;
-            /* Kolor tekstu na przycisku */
-            border: none;
+            border: none !important;
             padding: 10px 23px;
             border-radius: 8px;
             transition: background-color 0.3s, transform 0.2s;
-            /* Dodajemy przejścia */
         }
         
         .button-primary:hover {

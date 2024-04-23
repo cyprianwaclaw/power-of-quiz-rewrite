@@ -83,7 +83,7 @@ const isClose = () => {
 }
 </style> -->
 <template>
-  <div>
+  <div class="w-full h-[50px] bg-white">
 dsdsd
   </div>
 </template>

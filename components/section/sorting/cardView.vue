@@ -25,7 +25,6 @@
 <script setup lang="ts">
 const emit = defineEmits<{
     (e: "changeView", value: string): void;
-
 }>();
 
 const cookie = useCookie('view')
@@ -36,7 +35,6 @@ const changeView = (newView: string) => {
     currentView.value = newView
     emit('changeView', newView)
 }
-
 </script>
 
 <style scoped lang="scss">
