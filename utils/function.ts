@@ -85,17 +85,12 @@ export function onInvalidSubmit() {
 export function RouteChange(name: string) {
   let result = "";
 
-  // aktywny domek - menu
   if (name == "/panel") {
     result = "home";
   }
-
-  // aktywne osoby - menu
   else if (name == "/panel/zaproszeni") {
     result = "invite";
   }
-
-  // aktywne konto - menu
   else if (name == "/panel/konto") {
     result = "account";
   }
@@ -106,7 +101,6 @@ export function RouteChange(name: string) {
   else if (name == "/panel/konto/srodki") {
     result = "account";
   }
-  // aktywny quiz - menu
   else if (name == "/panel/quiz") {
     result = "quiz";
   }

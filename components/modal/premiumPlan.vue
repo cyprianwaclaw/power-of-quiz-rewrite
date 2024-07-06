@@ -21,7 +21,7 @@
 </template>
 <script setup lang="ts">
 const emit = defineEmits<{
-  (e: "close", value: any): void;
+  (e: "close"): void;
 }>();
 
 const isOpen = ref(false)

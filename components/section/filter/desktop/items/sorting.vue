@@ -1,4 +1,7 @@
 <template>
+    <div>
+        asas
+    </div>
     <div class="overflow-y-scroll h-[275px] right-8 left-8 pr-4">
         <p class="mb-4 text-lg font-bold">Wybierz układ</p>
         <SectionFilterCardView @changeView="changeView" />
@@ -15,12 +18,13 @@
             </label>
         </div>
         <button class="button-primary w-full mt-9 mb-5" @click="saveChanges">
-            Sortuj quizy
+            Zapisz zmiany
         </button>
     </div>
 </template>
 
 <script setup lang="ts">
+
 const router = useRouter() as any;
 const view = ref('') as any
 const cookieView = useCookie('view')

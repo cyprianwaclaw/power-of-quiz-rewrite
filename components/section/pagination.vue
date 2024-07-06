@@ -1,29 +1,36 @@
 <template>
-  <div class="flex place-items-center md:justify-start justify-center mt-20" v-if="props.last_page != 1">
-    <button v-if="props.current_page != 1" @click="changePage(props.current_page - 1)" class="mr-2">
-      <Icon name="fluent:chevron-left-20-filled" size="27" class="-mt-1 text-gray-400 hover:text-black" />
-    </button>
-    <div v-if="props.last_page > 3 && props.current_page > 2" class="flex">
-      <p class="page-number" @click="changePage(1)" :class="{ active: 1 == props.current_page }">
-        1
-      </p>
-      <p class="cursor-default mx-2">...</p>
+  <div v-if="props.isLoading" class="flex place-items-center md:justify-start justify-center mt-12 md:mt-20">
+    <div class="card is-loading">
+      <div class="image" />
     </div>
-    <div v-for="(page, index) in pageNumbers(props.last_page, props.current_page)" :key="index">
-      <p class="page-number" @click="changePage(page)" :class="{ active: page == props.current_page }">
-        {{ page }}
-      </p>
+  </div>
+  <div v-else>
+    <div class="flex place-items-center md:justify-start justify-center mt-12 md:mt-20" v-if="props.last_page != 1">
+      <button v-if="props.current_page != 1" @click="changePage(props.current_page - 1)" class="mr-2">
+        <Icon name="fluent:chevron-left-20-filled" size="27" class="-mt-1 text-gray-400 hover:text-black" />
+      </button>
+      <div v-if="props.last_page > 3 && props.current_page > 2" class="flex">
+        <p class="page-number" @click="changePage(1)" :class="{ active: 1 == props.current_page }">
+          1
+        </p>
+        <p class="cursor-default mx-2">...</p>
+      </div>
+      <div v-for="(page, index) in pageNumbers(props.last_page, props.current_page)" :key="index">
+        <p class="page-number" @click="changePage(page)" :class="{ active: page == props.current_page }">
+          {{ page }}
+        </p>
+      </div>
+      <div v-if="props.last_page > 3 && props.current_page < props.last_page - 1" class="flex">
+        <p class="cursor-default mx-2">...</p>
+        <p class="page-number" @click="changePage(props.last_page)"
+          :class="{ active: props.last_page == props.current_page }">
+          {{ props.last_page }}
+        </p>
+      </div>
+      <button v-if="props.current_page != props.last_page" @click="changePage(props.current_page + 1)" class="ml-2">
+        <Icon name="fluent:chevron-right-20-filled" size="27" class="-mt-1 text-gray-400 hover:text-black" />
+      </button>
     </div>
-    <div v-if="props.last_page > 3 && props.current_page < props.last_page - 1" class="flex">
-      <p class="cursor-default mx-2">...</p>
-      <p class="page-number" @click="changePage(props.last_page)"
-        :class="{ active: props.last_page == props.current_page }">
-        {{ props.last_page }}
-      </p>
-    </div>
-    <button v-if="props.current_page != props.last_page" @click="changePage(props.current_page + 1)" class="ml-2">
-      <Icon name="fluent:chevron-right-20-filled" size="27" class="-mt-1 text-gray-400 hover:text-black" />
-    </button>
   </div>
 </template>
 
@@ -36,6 +43,10 @@ const props = defineProps({
   current_page: {
     type: Number,
     required: true
+  },
+  isLoading: {
+    type: Boolean,
+    required: true,
   },
 });
 
@@ -71,10 +82,11 @@ const pageNumbers = (lastPage: number, currentPage: number) => {
 
 const changePage = (pageNumber: number) => {
   const addParams = () => {
-    return { ...router.currentRoute.value.query, page: pageNumber };
-  };
-  router.push({ query: addParams() });
-};
+    return { ...router.currentRoute.value.query, page: pageNumber }
+  }
+  router.push({ query: addParams() })
+  scrollToTop()
+}
 </script>
 
 <style lang="scss" scoped>
@@ -100,6 +112,40 @@ const changePage = (pageNumber: number) => {
 
   &:hover {
     color: #211f1f;
+  }
+}
+
+
+.card.is-loading {
+
+  .image,
+  h2,
+  p {
+    background: #eee;
+    background: linear-gradient(110deg, #c7c7c7 8%, #d4d4d4 18%, #c7c7c7 33%);
+    border-radius: 5px;
+    background-size: 300% 100%;
+    animation: 1.6s shine linear infinite;
+  }
+
+  .image {
+    height: 35px;
+    width: 170px;
+    border-radius: 8px;
+  }
+
+  h2 {
+    height: 30px;
+  }
+
+  p {
+    height: 70px;
+  }
+}
+
+@keyframes shine {
+  to {
+    background-position-x: -200%;
   }
 }
 </style>

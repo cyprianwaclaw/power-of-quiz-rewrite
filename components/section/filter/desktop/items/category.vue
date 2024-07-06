@@ -34,8 +34,6 @@ onMounted(() => {
 
 const handleClick = () => {
     isLoadingButton.value = true
-    // console.log(categoriesArray.value)
-    // console.log(categoriesArray.value.filter((c) => c.selected == true).map((c) => c.name))
 
     const routeParams = { ...router.currentRoute.value.query };
     const changeQueryURL = () => {

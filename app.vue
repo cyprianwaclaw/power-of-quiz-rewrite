@@ -1,10 +1,17 @@
 <template>
   <div class="page-background family">
     <NuxtLayout name="page">
-    <NuxtPage />
+      <NuxtPage />
     </NuxtLayout>
   </div>
 </template>
+
+<script setup lang="ts">
+import { useUser } from "@/stores/useUser";
+const userState = useUser();
+const { user} = storeToRefs(userState);
+await userState.login();
+</script>
 
 <style scoped lang="scss">
 $one: red;

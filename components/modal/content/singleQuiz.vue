@@ -92,9 +92,7 @@ cookie.value = '0'
   position: absolute;
   background-color: rgba(0, 0, 0, 0.521);
 }
-.content {
-  height: 411px;
-}
+
 .send-link {
   background-color: #618dfb49;
   border-radius: 8px;
@@ -145,7 +143,9 @@ cookie.value = '0'
 .copy {
   margin: 5px;
 }
-
+.content {
+  height: 411px;
+}
 .image{
   border: 1px solid $border;
 border-radius: 12px;

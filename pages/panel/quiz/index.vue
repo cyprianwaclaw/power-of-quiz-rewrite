@@ -1,60 +1,62 @@
 <template>
-    <!-- <ModalDown :modalActive="filter" title="Filtruj quizy" @close="filterShow()">
+    <ModalDown :modalActive="filter" title="Filtruj quizy" @close="filterShow">
         <template #content>
-          <ModalContentQuizFilterView @close="filterShow" @category="category" />
+            <ModalContentFilter @close="filterShow" :categoriesArray="mapCategories" />
         </template>
-      </ModalDown> -->
-    <ModalDown :modalActive="sortingMobile" title="Sortowanie" @close="sortingShowMobile()">
+    </ModalDown>
+    <ModalDown :modalActive="sortingMobile" title="Sortowanie" @close="sortingShowMobile">
         <template #content>
             <ModalContentSorting @close="sortingShowMobile" @save="saveSort" />
         </template>
     </ModalDown>
-    <div class=" mt-4 md:mt-5 lg:mt-8 mb-2 md:mb-4 lg:mb-7">
+    <div class="md:mt-5 lg:mt-8 mb-2 md:mb-4 lg:mb-7">
         <h2 class="text-2xl md:text-3xl flex place-items-center font-medium">
             Quizy
         </h2>
     </div>
-    <div v-if="!isLoading" class="flex justify-center">
-        <p class="text-center">Ładowanie wyników...</p>
-    </div>
-    <div v-else class="-mb-14">
-        <div class="flex sm:hidden">
-            <button @click="sortingShowMobile">Sortuj Quizy</button>
+    <div class="-mb-24">
+        <div class="flex w-full justify-between mb-2 mt-3 place-items-center">
+            <div v-if="isLoading">
+                <div class="card is-loading">
+                    <div class="image" />
+                </div>
+            </div>
+            <div v-else class="flex gap-2 text-[15px]">
+                <p class="text-gray-400">
+                    Strona {{ route.query.page ? route.query.page : 1 }}/{{ allQuiz?.pagination?.last_page }}
+                </p>
+                <p class="text-gray-400">{{ allQuiz?.pagination.count }} wyników</p>
+            </div>
+            <div class="flex sm:hidden">
+                <button @click="sortingShowMobile">
+                    <p class="primary-color font-medium">Sortuj</p>
+                </button>
+            </div>
         </div>
-
         <div class="flex justify-between place-items-center mb-4">
         </div>
-        <div class="sm:flex hidden flex flex-col">
-            <SectionSortingDesktop :categories="mapCategories" />
-            <div class="flex gap-2">
-                <p class="text-gray-400">
-                    Strona {{ route.query.page ? route.query.page : 1 }}/{{ allQuiz.pagination.last_page }}
-                </p>
-                <p class="text-gray-400">{{ allQuiz.pagination.count }} wyników</p>
-            </div>
+        <div class="sm:flex hidden flex flex-col mb-[32px]">
+            <SectionFilterDesktop :categories="mapCategories" />
         </div>
-
-
-        <div v-if="sortingDesktop" ref="section" class="sm:flex hidden">
-            <SectionSortingTest :categories="mapCategories" />
+        <div class="fixed margin z-30 lg:hidden flex w-[12px] justify-end right-0 bottom-[160px]">
+            <div class="open-filter" @click="filterShow">
+                <Icon name="heroicons:adjustments-horizontal" size="32" color="white" />
+            </div>
         </div>
         <div v-if="cookieView == 'two'">
-            <div class="grid md:grid-cols-2 gap-6 w-full">
-                <CardForYou v-for="(quiz, index) in allQuiz.data" :key="index" :quizes="quiz"
-                    :plan="hasPremium?.has_premium" />
-            </div>
+            <CardTwoQuiz :quizes="allQuiz?.data" :plan="hasPremium?.has_premium" :isLoading="isLoading" :n="10" />
         </div>
         <div v-if="cookieView == 'three'">
-            trzy
-            <QuizSearchCard v-for="quiz in allQuiz" :key="quiz?.id" :quiz="quiz" />
+            <CardSearchQuiz :quizes="allQuiz?.data" :plan="hasPremium?.has_premium" :isLoading="isLoading" :n="10" />
         </div>
         <div v-if="cookieView == 'four'">
-            cztery
-            <div class="grid grid-cols-2 gap-6">
-                <QuizTwoQuiz v-for="quiz in allQuiz" :key="quiz?.id" :quiz="quiz" />
-            </div>
+            <CardFourQuiz :quizes="allQuiz?.data" :plan="hasPremium?.has_premium" :isLoading="isLoading" :n="10" />
         </div>
-        <SectionPagination :last_page="allQuiz.pagination.last_page" :current_page="allQuiz.pagination.current_page" />
+        <div v-if="allQuiz?.data.length == 0" class="flex justify-center mt-8">
+            Brak wyników
+        </div>
+        <SectionPagination :last_page="allQuiz?.pagination?.last_page" :current_page="allQuiz?.pagination?.current_page"
+            :isLoading="isLoading" />
     </div>
 </template>
 
@@ -64,43 +66,54 @@ const axiosInstance = useNuxtApp().$axiosInstance;
 
 definePageMeta({
     middleware: "auth",
-});
+})
+
 const userState = useUser();
-const router = useRouter()
-const route = useRoute()
-const isLoading = ref(true)
-const endpoint = ref('/quizzes/all')
-const allQuiz = ref()
-const cookieView = useCookie('view')
-const cookiePerPage = useCookie('perPage') as any
+const router = useRouter();
+const route = useRoute();
+const isLoading = ref(true);
+const endpoint = ref('/quizzes/all');
+const allQuiz = ref();
+const cookieView = useCookie('view');
+const cookiePerPage = useCookie('perPage') as any;
 const { hasPremium } = storeToRefs(userState);
-const sortingDesktop = ref(false)
-cookieView.value = cookieView.value ? cookieView.value : 'two'
-cookiePerPage.value = cookiePerPage.value ? cookiePerPage.value : 23
 
+const filter = ref(false);
+const sortingMobile = ref(false);
+const filterDesktop = ref(false);
+const sortingDesktop = ref(false);
 
-const sortingShowDesktop = () => {
-    filterDesktop.value = false
-    sortingDesktop.value = !sortingDesktop.value;
-}
+cookieView.value = cookieView.value || 'two';
+cookiePerPage.value = cookiePerPage.value || 23;
 
-const filterDesktop = ref(false)
-const filterShowDesktop = () => {
-    sortingDesktop.value = false
-    filterDesktop.value = !filterDesktop.value;
-}
+const filterShow = () => {
+    filter.value = !filter.value;
+};
 
-const sortingMobile = ref(false)
 const sortingShowMobile = () => {
     sortingMobile.value = !sortingMobile.value;
-}
+};
 
-const res = await axiosInstance.get(`${endpoint.value}?${formatQueryString(route.query)}&per_page=${cookiePerPage.value}`)
-allQuiz.value = res.data;
+const sortingShowDesktop = () => {
+    filterDesktop.value = false;
+    sortingDesktop.value = !sortingDesktop.value;
+};
 
-const categories = ref([]) as any;
-const resCategories = await axiosInstance.get('/categories')
+const filterShowDesktop = () => {
+    sortingDesktop.value = false;
+    filterDesktop.value = !filterDesktop.value;
+};
+
+onMounted(async () => {
+    const res = await axiosInstance.get(`${endpoint.value}?${formatQueryString(route.query)}&per_page=${cookiePerPage.value}`);
+    allQuiz.value = res.data;
+    isLoading.value = false;
+});
+
+const categories = ref([]);
+const resCategories = await axiosInstance.get('/categories');
 categories.value = resCategories.data.data;
+
 const mapCategories = categories.value.map((single: any) => ({
     id: single.id,
     name: single.name,
@@ -108,18 +121,67 @@ const mapCategories = categories.value.map((single: any) => ({
 }));
 
 const saveSort = async (value: any) => {
-    console.log(cookiePerPage.value)
-
-    const res = await axiosInstance.get(`${endpoint.value}?${formatQueryString(router.currentRoute.value.query)}&per_page=${cookiePerPage.value}`)
+    const res = await axiosInstance.get(`${endpoint.value}?${formatQueryString(router.currentRoute.value.query)}&per_page=${cookiePerPage.value}`);
     allQuiz.value = res.data;
-}
+};
 
 onBeforeRouteUpdate(async (to) => {
-    const res = await axiosInstance.get(`${endpoint.value}?${formatQueryString(to.query)}&per_page=${cookiePerPage.value}`)
+    // isLoading.value = true;
+    const res = await axiosInstance.get(`${endpoint.value}?${formatQueryString(to.query)}&per_page=${cookiePerPage.value}`);
     allQuiz.value = res.data;
-})
+    // isLoading.value = false;
+});
 
+function formatQueryString(query: any): string {
+    return Object.keys(query)
+        .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(query[key])}`)
+        .join('&');
+}
 </script>
+
+
+
 <style scoped lang="scss">
 @import "@/assets/style/variables.scss";
+
+.open-filter {
+    color: white;
+    background-color: #618cfb;
+    padding: 8px 6px 8px 9px;
+    border: 1px solid transparent;
+    border-radius: 14px 0px 0px 14px;
+}
+
+.card.is-loading {
+
+    .image,
+    h2,
+    p {
+        // background: #eee;
+        background: linear-gradient(110deg, #c7c7c7 8%, #d4d4d4 18%, #c7c7c7 33%);
+        border-radius: 5px;
+        // background-size: 300% 100%;
+        animation: 1.6s shine linear infinite;
+    }
+
+    .image {
+        height: 23px;
+        width: 160px;
+        border-radius: 7px;
+    }
+
+    h2 {
+        height: 30px;
+    }
+
+    p {
+        height: 70px;
+    }
+}
+
+@keyframes shine {
+    to {
+        background-position-x: -200%;
+    }
+}
 </style>

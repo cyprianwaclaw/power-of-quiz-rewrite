@@ -36,7 +36,7 @@
         </NuxtLink>
       </div>
       </div>
-      <div class="mt-5" @click="copyToken">
+      <div class="mt-5" @click="copyToken(user.invitation_token)">
         <div class="flex columns-2 w-full mb-2 place-items-center">
           <Icon
             name="ph:user-circle-plus-fill"
@@ -69,30 +69,33 @@
 </template>
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
-import { useUser } from "@/store/useUser";
+import { useUser } from "@/stores/useUser";
 
 const tooltip = ref<boolean>();
 
-
-const {invitationToken} = storeToRefs(useUser());
-// TODO: Do jednego copy a potem do utils
-const copyToken = async()=> {
-  await useUser().getInvitationToken()
-  let token:any = invitationToken.value;
-  navigator.clipboard.writeText(token);
-  tooltip.value = !tooltip.value;
-  // tooltip.value = true
-  setTimeout(() => (tooltip.value = false), 1700);
-}
+const userState = useUser();
+const { user } = storeToRefs(userState);
 const emit = defineEmits<{
-  (e: "close", value: any): void;
+  (e: "close"): void;
 }>();
 
+const copyToken = (token: any) => {
+  navigator.clipboard.writeText(token);
+  tooltip.value = !tooltip.value;
+  setTimeout(() => (tooltip.value = false), 500);
+  setTimeout(() => {
+    emit('close');
+  }, 900);
+}
+
+
 const { hasPremium } = storeToRefs(useUser())
-const isOpen = ref(false)
+  const isOpen = ref(false)
+
 const isClose = ()=>{
     isOpen.value =! isOpen.value
 }
+
 </script>
 <style scoped>
 

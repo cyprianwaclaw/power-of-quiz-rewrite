@@ -15,8 +15,9 @@
         <ModalContentPoints />
       </template>
     </ModalAlert>
+    <!-- <div class="w-[300px]"> -->
     <div class="w-full">
-      <h2 class="title-h2 mb-5 md:mt-3">Twoje statystyki</h2>
+      <h2 class="title-h2 mb-6 md:mt-3">Twoje statystyki</h2>
       <div class="white-retangle">
         <div class="row-table-start -mt-1">
           <h2 class="title">{{ user.points }}</h2>

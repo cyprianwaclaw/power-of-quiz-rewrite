@@ -4,7 +4,7 @@
     <div class="own-container min-h-screen page-background pb-[200px]">
       <slot />
     </div>
-    <div class="md:hidden fixed bottom-0 z-50 w-full">
+    <div class="md:hidden fixed bottom-0 z-30 w-full">
       <NavBottom />
     </div>
     <!-- <div class="hidden md:flex">
@@ -20,15 +20,15 @@ const router = useRouter();
 
 <style scoped>
 .own-container {
-  margin-left: 30px;
-  margin-right: 30px;
+  margin-left: 24px;
+  margin-right: 24px;
   padding-top: 100px;
 }
 
 @media (min-width: 640px) {
   .own-container {
-    margin-left: 30px;
-    margin-right: 30px;
+    padding-left: 30px;
+    padding-right: 30px;
     padding-top: 100px;
   }
 }
