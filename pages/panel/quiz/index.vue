@@ -13,9 +13,18 @@
         <h2 class="text-2xl md:text-3xl flex place-items-center font-medium">
             Quizy
         </h2>
+        <div v-if="router.currentRoute.value.query.searchTerm" class="mt-[23px]">
+            <div class="flex justify-between">
+                <p class="text-gray-600 font-medium text-[15px]">Wyszukiwanie dla:</p>
+                <p @click="clearSearchTerm()" class="primary-color text-[14px]">Wyczyść wyniki</p>
+            </div>
+            <p class="font-semibold text-[18px]">
+                {{ router.currentRoute.value.query.searchTerm }}
+            </p>
+        </div>
     </div>
     <div class="-mb-24">
-        <div class="flex w-full justify-between mb-2 mt-3 place-items-center">
+        <div class="flex w-full justify-between -mb-[1px] mt-[20px] place-items-center">
             <div v-if="isLoading">
                 <div class="card is-loading">
                     <div class="image" />
@@ -25,7 +34,7 @@
                 <p class="text-gray-400">
                     Strona {{ route.query.page ? route.query.page : 1 }}/{{ allQuiz?.pagination?.last_page }}
                 </p>
-                <p class="text-gray-400">{{ allQuiz?.pagination.count }} wyników</p>
+                <p class="text-gray-400">( {{ allQuiz?.pagination.count }} )</p>
             </div>
             <div class="flex sm:hidden">
                 <button @click="sortingShowMobile">
@@ -77,32 +86,21 @@ const allQuiz = ref();
 const cookieView = useCookie('view');
 const cookiePerPage = useCookie('perPage') as any;
 const { hasPremium } = storeToRefs(userState);
+const categories = ref([]);
 
 const filter = ref(false);
 const sortingMobile = ref(false);
-const filterDesktop = ref(false);
-const sortingDesktop = ref(false);
 
 cookieView.value = cookieView.value || 'two';
 cookiePerPage.value = cookiePerPage.value || 23;
 
 const filterShow = () => {
     filter.value = !filter.value;
-};
+}
 
 const sortingShowMobile = () => {
     sortingMobile.value = !sortingMobile.value;
-};
-
-const sortingShowDesktop = () => {
-    filterDesktop.value = false;
-    sortingDesktop.value = !sortingDesktop.value;
-};
-
-const filterShowDesktop = () => {
-    sortingDesktop.value = false;
-    filterDesktop.value = !filterDesktop.value;
-};
+}
 
 onMounted(async () => {
     const res = await axiosInstance.get(`${endpoint.value}?${formatQueryString(route.query)}&per_page=${cookiePerPage.value}`);
@@ -110,7 +108,7 @@ onMounted(async () => {
     isLoading.value = false;
 });
 
-const categories = ref([]);
+
 const resCategories = await axiosInstance.get('/categories');
 categories.value = resCategories.data.data;
 
@@ -126,17 +124,18 @@ const saveSort = async (value: any) => {
 };
 
 onBeforeRouteUpdate(async (to) => {
-    // isLoading.value = true;
+    isLoading.value = true;
     const res = await axiosInstance.get(`${endpoint.value}?${formatQueryString(to.query)}&per_page=${cookiePerPage.value}`);
     allQuiz.value = res.data;
-    // isLoading.value = false;
+    isLoading.value = false;
 });
 
-function formatQueryString(query: any): string {
-    return Object.keys(query)
-        .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(query[key])}`)
-        .join('&');
+
+const clearSearchTerm = () => {
+    router.push('/panel/quiz')
+
 }
+
 </script>
 
 

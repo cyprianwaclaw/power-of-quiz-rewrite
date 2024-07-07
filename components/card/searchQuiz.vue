@@ -3,7 +3,7 @@
   <ModalStandardPackage :modalActive="openAlert" @close="isClick" />
 
   <div v-if="props.isLoading">
-    <div class="grid md:grid-cols-2 gap-6 w-full">
+    <div class="grid md:grid-cols-2 gap-5 w-full">
       <div v-for=" item in props.n" :key="item">
         <div class="card is-loading">
           <div class="image" />
@@ -12,7 +12,7 @@
     </div>
   </div>
   <div v-else>
-    <div class="grid md:grid-cols-2 gap-6 w-full">
+    <div class="grid md:grid-cols-2 gap-5 w-full">
       <div v-for="(quiz, index) in props.quizes" :key="index"
         :style="`background-image: url(${quiz.image}); background-size: cover; border-radius:12px;`"
         @click="isClick(quiz)">

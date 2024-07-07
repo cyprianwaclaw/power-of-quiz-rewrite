@@ -1,6 +1,6 @@
 <template>
-    <ModalShowQuiz :modalActive="openQuiz" @close="isClick" :quiz="currentQuiz" />
-    <ModalStandardPackage :modalActive="openAlert" @close="isClick" />
+  <ModalShowQuiz :modalActive="openQuiz" @close="isClick" :quiz="currentQuiz" />
+  <ModalStandardPackage :modalActive="openAlert" @close="isClick" />
   <div v-if="props.isLoading">
     <div
       class="-ml-[24px] -mr-[24px] md:grid lg:static md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 lg:mx-0 lg:px-0 lg:gap-8 gap-8 flex flex-row overflow-auto overflow-x-scroll  scrollbar-hide">
@@ -26,9 +26,6 @@
           :style="`background-image: url(${quiz.image}); background-size: cover`" @click="isClick(quiz)">
           <div class="bg-image  w-[260px] rounded-[12px] lg:rounded-[12px] cursor-pointer">
             <div class="details">
-              <p class="des">
-                nie ma premium
-              </p>
               <h3 class="title hover:underline-offset-4">{{ quiz.title }}</h3>
               <div class="flex mt-2 gap-3 float-left">
                 <p class="des">{{ quiz.time }} min</p>

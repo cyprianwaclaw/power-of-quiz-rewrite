@@ -1,12 +1,10 @@
 <template>
-  <!-- <ModalSearch :modalActive="openSearch"/> -->
+  <SectionMobileSearch :modalActive="openModalSearch" @close="isClickSearch" />
   <div class="fixed z-20 w-full">
     <div
-      class="flex bg-white border place-items-center justify-between h-16 border-b-gray-300 z-40 px-6 xl:gap-[100px] md:gap-[24px]">
+      class="sticky flex bg-white border place-items-center justify-between h-16 border-b-gray-300 z-40 px-6 xl:gap-[100px] md:gap-[24px]">
       <div class="flex items-center shrink-0">
-        <NuxtLink to="/panel" class="md:mr-14">
-          <img src="@/assets/file/logo.png" class="w-[175px]" />
-        </NuxtLink>
+        <img @click="clickLogo" src="@/assets/file/logo.png" class="w-[175px] mr-14" />
         <div v-for="(page, index) in links" :key="index" class="mr-7 hidden lg:flex">
           <NuxtLink :to="page.link" class="flex gap-7">
             <p class="text-[#464646] font-semibold whitespace-nowrap hover:text-black">
@@ -15,21 +13,11 @@
           </NuxtLink>
         </div>
       </div>
-      <div class="flex place-items-center gap-[32px] -mt-[2px] shrink-1 w-[800px]">
-        <!-- <InputSearch/> -->
-        <div class=" shrink-0 lg:flex hidden">
-          <!-- <UserCard @open="openMenuDesktop" /> -->
-        </div>
+      <div class="flex md:hidden">
+        <button @click="isClickSearch" class="justify-end flex">
+          <Icon :name="openModalSearch ? 'carbon:close' : 'ph:magnifying-glass-light'" size="31" class="search-icon" />
+        </button>
       </div>
-      <!-- <NavOpenMenu class="hidden sm:flex lg:hidden" /> -->
-      <!-- <div class=" sm:hidden flex place-items-center">
-        <button @click="openSearch = !openSearch" v-if="!openSearch" class="justify-end flex">
-          <Icon name="ph:magnifying-glass-light" size="30" class="search-icon" />
-        </button>
-        <button @click="openSearch = !openSearch" v-else>
-          <Icon name="carbon:close" size="30" class="search-icon" />
-        </button>
-      </div> -->
     </div>
   </div>
 </template>
@@ -49,7 +37,7 @@ import { storeToRefs } from "pinia";
 //   // return value
 // };
 
-// const quiz = useQuiz();
+const router = useRouter();
 // const { allQuizName, popularQuiz, loadingQuiz, categories } = storeToRefs(quiz);
 // const openSearch = ref(false);
 // await quiz.getCategory();
@@ -59,6 +47,17 @@ import { storeToRefs } from "pinia";
 
 // let category = categories.value;
 // const allCategories: any = ref();
+
+const openModalSearch = ref(false);
+const isClickSearch = () => {
+  openModalSearch.value = !openModalSearch.value;
+}
+
+const clickLogo = () => {
+  if (!openModalSearch.value) {
+    router.push('/panel')
+  }
+}
 
 const links = [
   // { name: "Zaproś znajomych", link: "/panel/zaproszeni" },
@@ -181,6 +180,6 @@ const links = [
 }
 
 .search-icon {
-  color: #c4c4c4;
+  color: #adadad;
 }
 </style>

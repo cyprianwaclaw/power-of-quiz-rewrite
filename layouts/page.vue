@@ -7,9 +7,9 @@
     <div class="md:hidden fixed bottom-0 z-30 w-full">
       <NavBottom />
     </div>
-    <!-- <div class="hidden md:flex">
+    <div class="hidden md:flex">
       <NavBottomDesktop />
-    </div> -->
+    </div>
   </div>
 </template>
 

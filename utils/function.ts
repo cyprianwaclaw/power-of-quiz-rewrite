@@ -461,3 +461,14 @@ export const changeDateFormat = (date: any) => {
     .reverse()
     .join(".")
 }
+
+
+export const debounce = <T extends (...args: any[]) => void>(func: T, wait: number) => {
+  const timeout = ref<number | undefined>(undefined);
+  return function (this: ThisParameterType<T>, ...args: Parameters<T>) {
+    clearTimeout(timeout.value)
+    timeout.value = window.setTimeout(() => {
+      func.apply(this, args)
+    }, wait)
+  }
+}
