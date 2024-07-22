@@ -1,3 +1,4 @@
 {
-    "workbench.colorTheme": "GitHub Dark Dimmed"
+    "workbench.colorTheme": "GitHub Dark Dimmed",
+    "nuxt.isNuxtApp": false
 }

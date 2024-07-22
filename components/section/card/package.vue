@@ -59,7 +59,7 @@ import { useUser } from "@/stores/useUser";
 
 const userState = useUser();
 const { hasPremium } = storeToRefs(userState);
-await userState.userPlan()
+// await userState.userPlan()
 const date = ref("12.12.2024");
 </script>
 

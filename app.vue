@@ -14,9 +14,6 @@ await userState.login();
 </script>
 
 <style scoped lang="scss">
-$one: red;
 
-.test1 {
-  color: $one;
-}
+
 </style>

@@ -1,13 +1,26 @@
 <template>
-<div class="bg-white py-5 px-8 rounded-3xl relative">
-        <h3 class="font-medium text-2xl mb-2.5 mt-1 tracking-wide">Zaproś znajomych</h3>
+  <div v-if="router.currentRoute.value.name === 'panel-znajomi'"
+    class="bg-white py-5 px-8 rounded-3xl relative md:w-[600px]">
+    <p class="font-medium text-[18px]">Zaproszone osoby</p>
+    <div class="text pr-4 mt-[3px]">
+      Zyskaj bonus od 11 do 36 punktów, za każdego poleconego, który wykupi pakiet Premium
+    </div>
+    <div class="flex columns-2 mt-4 mb-2 place-items-center gap-1 cursor-pointer"
+      @click="copyToken(user.invitation_token)">
+      <Icon name="ic:round-content-copy" size="20" class="primary-color" />
+      <p class="primary-color font-semibold">Skopiuj kod polecający</p>
+      <div class="tooltip" v-if="tooltip">
+        <span ref="tooltip" class="tooltiptext family"> Skopiowano kod polecający </span>
+      </div>
+    </div>
+  </div>
+  <div v-else class="bg-white py-5 px-8 rounded-3xl relative">
+    <h3 class="font-medium text-2xl mb-2.5 mt-1 tracking-wide">Zaproś znajomych</h3>
     <div class="text pr-4">
       Zyskaj bonus od 11 do 36 punktów, za każdego poleconego, który wykupi pakiet Premium
     </div>
-    <div
-      class="flex columns-2 mt-4 mb-2 place-items-center gap-1 cursor-pointer"
-      @click="copyToken(user.invitation_token)"
-    >
+    <div class="flex columns-2 mt-4 mb-2 place-items-center gap-1 cursor-pointer"
+      @click="copyToken(user.invitation_token)">
       <Icon name="ic:round-content-copy" size="20" class="primary-color" />
       <p class="primary-color font-semibold">Skopiuj kod polecający</p>
       <div class="tooltip" v-if="tooltip">
@@ -20,6 +33,7 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import { useUser } from "@/stores/useUser";
+const router = useRouter();
 
 const isOpen = ref(false);
 const isClose = () => {
@@ -58,6 +72,7 @@ const copyToken = (token: any) => {
   position: absolute;
   display: inline-block;
 }
+
 .tooltip .tooltiptext {
   visibility: hidden;
   width: 165px;
@@ -79,6 +94,7 @@ const copyToken = (token: any) => {
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
   transition: opacity 0.4s;
 }
+
 .tooltip .tooltiptext::after {
   content: "";
   position: absolute;
@@ -89,6 +105,7 @@ const copyToken = (token: any) => {
   border-style: solid;
   border-color: #433d3d transparent transparent transparent;
 }
+
 .tooltip .tooltiptext {
   visibility: visible;
   opacity: 1;

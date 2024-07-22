@@ -29,8 +29,8 @@
                 size="20"
                 class=""
                 color="#618CFB"
-                @click="Modal"
-              />
+                />
+                <!-- @click="Modal" -->
             </button>
             <button class="hidden md:flex">
               <Icon
