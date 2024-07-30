@@ -2,29 +2,16 @@
   <Transition>
     <div class="fixed z-50 left-0 bottom-0 w-full">
       <div class="blur-background-update" v-if="props.modalActive"></div>
-      <Transition
-        @before-enter="onBeforeEnter"
-        @enter="onEnter"
-        @after-enter="onAfterEnter"
-        @enter-cancelled="onEnterCancelled"
-        @before-leave="onBeforeLeave"
-        @leave="onLeave"
-        @after-leave="onAfterLeave"
-        @leave-cancelled="onLeaveCancelled"
-        :css="false"
-      >
+      <Transition @enter="onEnter" @leave="onLeave" :css="false">
         <div class="modal-down" v-if="props.modalActive">
+          dsdsdsdsa
           <div class="justify-center flex -mt-[17px]">
             <hr class="w-9 close border-[2px] rounded-2xl" />
           </div>
           <div class="flex columns-2 w-full justify-between mb-7 mt-[13px] place-items-center">
             <p class="font-medium text-2xl">{{ title }}</p>
-            <Icon
-              name="carbon:close"
-              size="30"
-              class="close w-8 h-8 border-transparent rounded-[6px]"
-              @click="$emit('close')"
-            />
+            <Icon name="carbon:close" size="30" class="close w-8 h-8 border-transparent rounded-[6px]"
+              @click="$emit('close')" />
           </div>
           <div class="">
             <slot name="content" />
@@ -39,6 +26,8 @@
 import { defineProps, defineEmits } from 'vue'
 import gsap from 'gsap'
 
+const test = ref(false)
+
 const props = defineProps({
   title: {
     type: String,
@@ -52,21 +41,7 @@ const props = defineProps({
 
 const emit = defineEmits(['close'])
 
-const onBeforeEnter = (el: any) => {
-  // gsap.set(el, { opacity: 0, y: 50 })
-}
-
-// const onEnter = (el: any, done: any) => {
-//   gsap.from(el, {
-//     // opacity: 1,
-//     y: 300,
-//     duration: 0.3,
-//     onComplete: done,
-//   })
-// }
-
-
-const onEnter = (el:any, done:any) => {
+const onEnter = (el: any, done: any) => {
   let elementHeight = el.offsetHeight;
   gsap.from(el, {
     ease: "power1.out",
@@ -76,17 +51,6 @@ const onEnter = (el:any, done:any) => {
   });
 };
 
-const onAfterEnter = (el: any) => {
-  // Do something after enter animation
-}
-
-const onEnterCancelled = (el: any) => {
-  // Handle cancelled enter animation
-}
-
-const onBeforeLeave = (el: any) => {
-  // Do something before leave animation
-}
 
 const onLeave = (el: any, done: any) => {
   let elementHeight = el.offsetHeight;
@@ -98,13 +62,6 @@ const onLeave = (el: any, done: any) => {
   })
 }
 
-const onAfterLeave = (el: any) => {
-  // Do something after leave animation
-}
-
-const onLeaveCancelled = (el: any) => {
-  // Handle cancelled leave animation
-}
 </script>
 
 <style scoped lang="scss">
@@ -135,12 +92,12 @@ const onLeaveCancelled = (el: any) => {
 //   z-index: 100;
 // }
 
-.modal-down{
+.modal-down {
 
- background-color: white;
- border: solid transparent;
-   border-radius: 16px 16px 0px 0px;
-   padding: 24px 24px 12px 24px;
+  background-color: white;
+  border: solid transparent;
+  border-radius: 16px 16px 0px 0px;
+  padding: 24px 24px 12px 24px;
   // margin-left: 64px;
   // margin-right: 64px;
   position: absolute;

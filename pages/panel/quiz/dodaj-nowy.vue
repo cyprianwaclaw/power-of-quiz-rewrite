@@ -1,5 +1,5 @@
 <template>
-    sdds
+   Dodaj nowy
 </template>
 <script lang="ts" setup>
 
