@@ -253,21 +253,11 @@ export const dataURLtoBlob = (dataURL: any) => {
 
 
 export const truncateText = (text: any, maxLength: number) => {
-  let results: any = {
-    name: '',
-    symbol: '',
-    class: ''
-  }
+  let results: any = ''
   if (text?.length > maxLength) {
-    results = {
-      name: text.slice(0, maxLength),
-      symbol: '...',
-      class: 'text-gray'
-    }
+    results = text.slice(0, maxLength) + '...'
   } else {
-    results = {
-      name: text,
-    }
+    results = text
   }
   return results;
 };

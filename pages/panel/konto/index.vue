@@ -22,12 +22,38 @@
         <SectionCardPackage />
     </div>
     <SectionCardStatistic />
+    <div class="mt-8">
+        <div class="white-retangle">
+            <NuxtLink to="/panel/konto/ustawienia">
+                <div class="row-table-start flex place-items-center justify-between">
+                    <div class="flex place-items-center mb-2">
+                        <Icon name="ph:gear-light" size="26" class="primary-color" />
+                        <h2 class="title-menu-mobile ml-2">Ustawienia</h2>
+                    </div>
+                    <Icon name="ph:caret-right-light" size="20" class="text-gray mb-2" />
+                </div>
+            </NuxtLink>
+            <div class="row-table-end flex place-items-center justify-between">
+                <div class="flex place-items-center mb-2 mt-2">
+                    <Icon name="ph:paper-plane-right-light" size="26" class="primary-color" />
+                    <h2 class="title-menu-mobile ml-2">Napisz do nas</h2>
+                </div>
+                <Icon name="ph:caret-right-light" size="20" class="text-gray mb-2 mt-2" />
+            </div>
+        </div>
+    </div>
+    <div class="flex justify-end -mb-[100px] mt-8">
+        <div class="flex place-items-center gap-1.5" @click="logoutUser()">
+            <p class="one primary-color">Wyloguj się</p>
+            <Icon name="material-symbols:logout-rounded" size="18" class="primary-color margin-top" />
+        </div>
+    </div>
 </template>
 <script lang="ts" setup>
 definePageMeta({
-  pageTransition: {
-    name: 'rotate'
-  }
+    pageTransition: {
+        name: 'rotate'
+    }
 })
 </script>
 

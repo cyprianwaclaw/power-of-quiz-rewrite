@@ -263,7 +263,7 @@ const LeaveBg = (el: any) => {
     &:focus {
         background-color: #ffffff;
         border-color: #d0d0d0;
-        border-width: 2px;
+        border-width: 1px;
         color: #363636 !important;
         letter-spacing: 0.17px;
         font-weight: 500;

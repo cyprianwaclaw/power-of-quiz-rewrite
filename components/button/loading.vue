@@ -7,16 +7,12 @@
       </svg>
     </div>
   </div>
-  <button v-else :disabled="props.disable" :class="{
-    'button-primary-disabled': props.disable,
-  }" class="w-full button-primary h-[54px]">
+  <button v-else :disabled="props.disable" :class="props.disable ? 'button-primary-disabled' : 'button-primary'
+    " class="w-full h-[54px]">
     {{ props.text }}
   </button>
 </template>
 <script setup lang="ts">
-
-
-
 const props = defineProps({
   loading: {
     type: Boolean,
@@ -31,21 +27,30 @@ const props = defineProps({
     required: false,
     default: false,
   },
-});
-
-const handleClick = () => {
-  //   console.log(props.link)
-  // if (props.link) {
-  //   router.push(`/${props.link}`);
-  // }
-};
+})
 </script>
 
 <style scoped lang="scss">
+@import "@/assets/style/variables.scss";
+
 .loading-button {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.button-primary-disabled {
+  cursor: not-allowed !important;
+  background-color: #aec5ff !important;
+  padding: 10px 23px !important;
+  color: $white !important;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  font-size: 15px !important;
+  line-height: 22px !important;
+  letter-spacing: 0.05em !important;
+  display: block !important;
+  border-radius: 8px !important;
 }
 
 .spinner-container {
@@ -54,8 +59,6 @@ const handleClick = () => {
   justify-content: center;
   align-items: center;
 }
-
-// Here is where the magic happens
 
 $offset: 187;
 $duration: 1.2s;

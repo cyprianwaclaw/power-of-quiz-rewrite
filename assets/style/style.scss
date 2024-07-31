@@ -462,20 +462,6 @@ input:focus::placeholder {
             transform-origin: bottom left;
         }
     }
-    .button-primary-disabled {
-        cursor: not-allowed;
-        background-color: #aec5ff;
-        padding: 10px 23px;
-        color: $white;
-        font-family: "Manrope";
-        font-style: normal;
-        font-weight: 500;
-        font-size: 15px;
-        line-height: 22px;
-        letter-spacing: 0.05em;
-        display: block;
-        border-radius: 8px;
-    }
     // .button-primary {
     //     box-shadow: inset 0 0 0 1 $primary-hover;
     //     background-color: $primary;
