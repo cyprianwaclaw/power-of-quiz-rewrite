@@ -10,28 +10,28 @@ export const useUser = defineStore('user', {
     actions: {
         async login() {
             try {
-                const axiosInstance = useNuxtApp().$axiosInstance;
-                const res = await axiosInstance.get(`/user/current`);
+                const axiosInstance = useNuxtApp().$axiosInstance as any
+                const res = await axiosInstance.get(`/user/current`)
 
                 this.user = res.data;
             } catch (error) {
-                console.error("Błąd logowania:", error);
+                console.error("Błąd logowania:", error)
             }
         },
         async getUserSettings() {
             try {
-                const axiosInstance = useNuxtApp().$axiosInstance;
-                const res = await axiosInstance.get(`/user/settings`);
+                const axiosInstance = useNuxtApp().$axiosInstance as any
+                const res = await axiosInstance.get(`/user/settings`)
 
                 this.settings = res.data;
             } catch (error) {
-                console.error("Błąd logowania:", error);
+                console.error("Błąd logowania:", error)
             }
         },
         async userPlan() {
-            const axiosInstance = useNuxtApp().$axiosInstance;
-            const res = await axiosInstance.get(`/user/hasPremium`);
-            this.hasPremium = res.data;
+            const axiosInstance = useNuxtApp().$axiosInstance as any
+            const res = await axiosInstance.get(`/user/hasPremium`)
+            this.hasPremium = res.data
 
         }
     }

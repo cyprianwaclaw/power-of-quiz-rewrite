@@ -3218,6 +3218,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cropperjs@npm:^1.6.2":
+  version: 1.6.2
+  resolution: "cropperjs@npm:1.6.2"
+  checksum: 10c0/5002e0cc3a491ceb8a104b2cb7a7c335a03e109fe590653f3aeefa27ca7115466edae62afc8ba21105bbaad4134583f5057ebbf5e8d843c7b2c1c1f0779630e9
+  languageName: node
+  linkType: hard
+
 "cross-spawn@npm:^7.0.0, cross-spawn@npm:^7.0.3":
   version: 7.0.3
   resolution: "cross-spawn@npm:7.0.3"
@@ -4030,6 +4037,13 @@ __metadata:
   version: 1.0.0
   resolution: "file-uri-to-path@npm:1.0.0"
   checksum: 10c0/3b545e3a341d322d368e880e1c204ef55f1d45cdea65f7efc6c6ce9e0c4d22d802d5629320eb779d006fe59624ac17b0e848d83cc5af7cd101f206cb704f5519
+  languageName: node
+  linkType: hard
+
+"filepond@npm:^4.31.1":
+  version: 4.31.1
+  resolution: "filepond@npm:4.31.1"
+  checksum: 10c0/201cb5b978882d7b1929ece3c17a08db6575a6f692953b602fb48bf6bf1d0d1b3a54615712cff08d39d607c144d072d1a8b3d15f72bc3142666b756d70f76ea8
   languageName: node
   linkType: hard
 
@@ -6145,6 +6159,8 @@ __metadata:
     "@pinia-plugin-persistedstate/nuxt": "npm:^1.2.0"
     "@pinia/nuxt": "npm:^0.5.1"
     axios: "npm:^1.6.7"
+    cropperjs: "npm:^1.6.2"
+    filepond: "npm:^4.31.1"
     gsap: "npm:^3.12.5"
     nuxt: "npm:^3.10.3"
     nuxt-icon: "npm:^0.6.9"

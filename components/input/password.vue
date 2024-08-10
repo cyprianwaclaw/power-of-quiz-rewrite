@@ -1,7 +1,10 @@
 <template>
   <div class="relative flex flex-col w-full">
-    <textarea class="scrollbar-hide" v-on="handlers" :value="textValue" row="1" :type="type" :placeholder="placeholder"
-      :class="props.hasError ? 'isError' : null" wrap="soft" rows="1" ref="textarea" @input="resizeTextarea" />
+    <input v-on="handlers" :value="textValue" :type="loginType" :placeholder="placeholder"
+      :class="props.hasError ? 'isError' : null" wrap="soft" />
+    <Icon :name="iconType" @click="changeType(loginType)"
+      class="absolute z-10 top-[20px] right-[24px] text-[#b7b6b6] hover:text-[#878787] hover:duration-150 cursor-pointer"
+      size="23" />
     <p v-if="props?.hasError" class="text-[#c22b3a] text-[13px] bg-white mt-1">
       {{ props?.hasError }}
     </p>
@@ -11,15 +14,22 @@
 <script setup lang="ts">
 import { useField } from "vee-validate";
 import { modes } from "@/functions";
-import { ref, onMounted, computed } from 'vue';
 
-const textarea = ref<HTMLTextAreaElement | null>(null);
+const loginType = ref<string>("password");
+const iconType = ref<string>("ph:eye");
+
+const changeType = (typeName: string) => {
+  if (typeName == "password") {
+    loginType.value = "text";
+    iconType.value = "ph:eye-slash";
+  } else {
+    loginType.value = "password";
+    iconType.value = "ph:eye";
+  }
+};
 
 const props = defineProps({
   name: {
-    type: String,
-  },
-  type: {
     type: String,
   },
   placeholder: {
@@ -70,22 +80,22 @@ const handlers = computed(() => {
 });
 
 
-const resizeTextarea = () => {
-  if (textarea.value) {
-    textarea.value.style.height = 'auto';
-    textarea.value.style.height = `${textarea.value.scrollHeight}px`
-  }
-};
+// const resizeTextarea = () => {
+//   if (textarea.value) {
+//     textarea.value.style.height = 'auto';
+//     textarea.value.style.height = `${textarea.value.scrollHeight}px`
+//   }
+// };
 
-onMounted(() => {
-  resizeTextarea()
-})
+// onMounted(() => {
+//   resizeTextarea()
+// })
 </script>
 
 <style scoped lang="scss">
 @import "@/assets/style/variables.scss";
 
-textarea {
+input {
   background-color: #ECECEC;
   padding: 14px 16px;
   width: 100%;
@@ -119,8 +129,8 @@ textarea {
   }
 
   &:focus::placeholder {
-   font-weight: 400;
-   color: #d9d9d9;
+    font-weight: 400;
+    color: #d9d9d9;
   }
 
   &::-ms-clear {

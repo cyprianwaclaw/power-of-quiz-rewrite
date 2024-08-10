@@ -1,9 +1,9 @@
 <template>
     <ModalUpdateSettings :modalActive="isAlert" @close="showAlert()" />
 
-    <NuxtLayout name="account" arrowText="Ustawienia" title="Dane bankowe do wypłaty środków">
+    <NuxtLayout name="account" arrowText="Ustawienia" title="Dane banku">
         <div class="white-retangle px-[21px] mt-6" @click="handleClick()">
-            <Form @submit="updateFinancial" :initial-values="settings.financial" class=" flex gap-[10px] flex-col">
+            <Form @submit="updateFinancial" :initial-values="settings.financial" class=" flex gap-[10px] flex-col mt-[3px]">
                 <InputSettings name="iban" placeholder="Numer IBAN"
                     :hasError="showError?.iban || showError?.errors?.iban?.message" />
                 <InputSettings name="bank_name" placeholder="Nazwa banku" :hasError="showError?.bank_name" />
