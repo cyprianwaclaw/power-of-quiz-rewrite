@@ -71,7 +71,7 @@
 
 <script setup lang="ts">
 import { useUser } from "@/stores/useUser";
-const axiosInstance = useNuxtApp().$axiosInstance;
+const axiosInstance = useNuxtApp().$axiosInstance as any;
 
 definePageMeta({
     middleware: "auth",
@@ -87,6 +87,7 @@ const cookieView = useCookie('view');
 const cookiePerPage = useCookie('perPage') as any;
 const { hasPremium } = storeToRefs(userState);
 const categories = ref([]);
+
 
 const filter = ref(false);
 const sortingMobile = ref(false);

@@ -85,11 +85,11 @@
 
 <script setup lang="ts">
 import gsap from 'gsap'
-const axiosInstance = useNuxtApp().$axiosInstance;
-import { useUser } from "@/stores/useUser";
-const router = useRouter();
-const userState = useUser();
-const { user } = storeToRefs(userState);
+const axiosInstance = useNuxtApp().$axiosInstance as any
+import { useUser } from "@/stores/useUser"
+const router = useRouter()
+const userState = useUser()
+const { user } = storeToRefs(userState)
 
 const props = defineProps({
   modalActive: {
@@ -120,7 +120,8 @@ const itemsArray = reactive([{
 
 const takeAction = (index: number) => {
   if (index === 0) {
-    if (user.value?.plan === "Premium") {
+    // !Zmienic po tetsach na premium
+    if (user.value?.plan === "Standard") {
       emit('close');
       router.push('/panel/quiz/dodaj-nowy');
     } else {

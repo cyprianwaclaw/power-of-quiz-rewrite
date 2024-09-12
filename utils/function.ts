@@ -462,3 +462,71 @@ export const debounce = <T extends (...args: any[]) => void>(func: T, wait: numb
     }, wait)
   }
 }
+
+export const selectedAnswer = (questionIndex: number, answerIndex: number, array: any) => {
+  array[questionIndex].answers.forEach((answer: any) => {
+    answer.isCorrect = false;
+  })
+  array[questionIndex].answers[answerIndex].isCorrect = true;
+}
+
+
+export const validateQuestions = (array: any) => {
+
+  const results = ({
+    titleError: [] as Array<boolean>,
+    answerErrors: [] as Array<boolean>,
+    errors: false,
+  })
+
+  array.forEach((single: any) => {
+    if (single.title.length < 3) {
+      results.titleError.push(true);
+      results.errors = true;
+    }
+
+    single.answers.forEach((answer: any) => {
+      if (answer.answer.length < 3) {
+        results.answerErrors.push(true);
+        results.errors = true;
+      }
+      if (answer.answer.length > 150) {
+        results.answerErrors.push(true);
+        results.errors = true;
+      }
+    })
+
+  })
+
+  return results
+}
+
+export const checkAllAnswersFalse = (question: any) => {
+  return question.answers.every((answer: any) => answer.isCorrect === false);
+}
+
+export const hasAtLeastOneCorrectAnswer = (questionsArray: any) => {
+  return questionsArray.every((question: any) => {
+    return question.answers.some((answer: any) => answer.isCorrect === true);
+  })
+}
+
+
+
+export const resizeTextarea = (textareas:any, questionIndex: any, answerIndex: number) => {
+  const key = `${questionIndex}-${answerIndex}`;
+  const textarea = textareas[key] as any
+  // if (textarea) {
+  textarea.style.height = 'auto';
+  textarea.style.height = `${textarea.scrollHeight}px`;
+  // }
+};
+
+// Dostosowanie wysokości textarea tytułu pytania
+export const resizeTitleTextarea = (titleTextareas:any, questionIndex:any) => {
+  const textarea = titleTextareas[questionIndex] as any
+  // if (textarea) {
+  textarea.style.height = 'auto';
+  textarea.style.height = `${textarea.scrollHeight}px`;
+  // }
+};

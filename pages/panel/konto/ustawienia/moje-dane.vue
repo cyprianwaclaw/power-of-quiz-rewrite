@@ -59,7 +59,7 @@
 </template>
 <script lang="ts" setup>
 import { storeToRefs } from "pinia"
-import * as yup from "yup"
+import * as yup from "yup"  
 import { Form } from "vee-validate"
 import { useUser } from "@/stores/useUser"
 const axiosInstance = useNuxtApp().$axiosInstance as any

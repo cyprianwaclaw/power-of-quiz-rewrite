@@ -10,6 +10,7 @@ export default defineNuxtPlugin(() => {
         baseURL: API_URL,
         headers: {
             'Content-Type': 'application/json',
+            'Accept': 'application/json',
             'Access-Control-Allow-Origin': 'http://localhost:3000/',
             'Access-Control-Allow-Headers': '*',
             Authorization: `Bearer ${token || ''}`,
