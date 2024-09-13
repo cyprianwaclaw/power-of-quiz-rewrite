@@ -1,12 +1,12 @@
 <template>
-    <div class="mb-10">
+    <div class="mb-11">
         <div v-for="(single, questionIndex) in questionsArray" :key="questionIndex"
             class=" bg-white pt-7 pb-8 px-2 mt-7 rounded-[24px] relative">
             <div class="flex justify-between place-items-center mx-[21px]">
                 <p class="font-semibold text-[18px]">Pytanie {{ questionIndex + 1 }}</p>
-                <div class="w-[48px] h-[48px] absolute right-5 mt-3 " v-if="questionsArray.length >= 2"
+                <div class="w-[48px] h-[48px] absolute right-3 mt-3 " v-if="questionsArray.length >= 2"
                     @click="removeQuestion(questionIndex)">
-                    <Icon name="carbon:close" size="35"
+                    <Icon name="carbon:close" size="30"
                         class="text-error-notification close border-transparent rounded-[6px]" />
                 </div>
             </div>
@@ -122,6 +122,7 @@ const validateAllQuestions = (): boolean => {
 const addQuestion = () => {
     isSend.value = true
     if (validateAllQuestions()) {
+        errorState.value = true;
         isSend.value = false
         questionsArray.value.push({
             title: '',

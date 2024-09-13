@@ -4,19 +4,19 @@
             <div class="row-table-start">
                 <textarea v-model="title" wrap="soft" rows="1" class=" w-full -mt-3 " ref="autoResizeTextarea"
                     @input="autoResize" placeholder="Nazwa" />
-                <p class="text-error-notification">{{ validateField('title') }}</p>
+                <p v-if="props.error" class="text-error-notification">{{ validateField('title') }}</p>
             </div>
             <div class="row-table-start">
                 <Dropdown v-model="categorySelect" :options="categoriesArray" option-label="name"
                     placeholder="Wybierz kategorię" class="w-full my-1 -ml-[1px]" :pt="dropdownPt(0)" filter
                     filter-placeholder="Wyszukaj..." @show="toggleRotation(0, true)" @hide="toggleRotation(0, false)" />
-                <p class="text-error-notification">{{ validateField('category') }}</p>
+                <p v-if="props.error" class="text-error-notification">{{ validateField('category') }}</p>
             </div>
             <div class="row-table-start">
                 <Dropdown v-model="difficultySelect" :options="difficultyArray" option-label="name"
                     placeholder="Poziom trudności" class="w-full my-1 -ml-[1px]" :pt="dropdownPt(1)"
                     @show="toggleRotation(1, true)" @hide="toggleRotation(1, false)" />
-                <p class="text-error-notification">{{ validateField('difficulty') }}</p>
+                <p v-if="props.error" class="text-error-notification">{{ validateField('difficulty') }}</p>
             </div>
             <div class="row-table-start">
                 <p class="text-[14px] mb-[6px] text-[#9a9a9a]">Czas trwania</p>
@@ -24,12 +24,12 @@
                     <input type="number" min="0" max="99" class="w-[56px]" placeholder="0" v-model="time" />
                     <p>minuty</p>
                 </div>
-                <p class="text-error-notification">{{ validateField('time') }}</p>
+                <p v-if="props.error" class="text-error-notification">{{ validateField('time') }}</p>
             </div>
             <div class="row-table-end">
                 <textarea v-model="description" wrap="soft" rows="3" class=" w-full mt-1" ref="autoResizeTextarea1"
                     @input="autoResize" placeholder="Opis..." />
-                <p class="text-error-notification">{{ validateField('description') }}</p>
+                <p v-if="props.error" class="text-error-notification">{{ validateField('description') }}</p>
             </div>
         </div>
     </div>
@@ -46,7 +46,8 @@ const props = defineProps({
     },
     error: {
         type: Boolean,
-        required: true
+        required: true,
+        default: true,
     }
 })
 
@@ -57,7 +58,7 @@ const difficultyArray = reactive([
 ])
 
 const quizState = useQuiz()
-const { errorState, title, time, description, category_id, difficulty } = storeToRefs(quizState)
+const { errorState, isSendSuccess, title, time, description, category_id, difficulty } = storeToRefs(quizState)
 const rotationStates = ref<boolean[]>([false, false])
 
 const toggleRotation = (index: number, isVisible: boolean) => {
@@ -115,6 +116,7 @@ const validateField = (field: string): string | null => {
     } as any
 
     if (props.error && errors[field]()) {
+    // if (true && errors[field]()) {
         errorState.value = true
         return errorMessages[field]
     } else {
@@ -140,18 +142,23 @@ watch(difficultySelect, (newValue: any) => {
 
 watch(categoryNew, (newValue: any) => {
     if (category_id.value !== undefined && category_id.value !== null) {
-        const categoryId = category_id.value; 
-        // !Znowu zjebałem typy zmiennych i przerównuje stringi do number
+        const categoryId = category_id.value;
         const foundCategory = props.categoriesArray.find((category: any) => category.id == categoryId);
         categorySelect.value = foundCategory
-    } 
+    }
 })
 
 watch(categorySelect, (newValue: any) => {
     category_id.value = newValue.id
 })
 
+watch(isSendSuccess, (newValue: any) => {
+    difficultySelect.value = {}
+    categorySelect.value = {}
+})
+
 onMounted(() => {
+    errorState.value = true;
     difficultyNew.value = difficulty
     categoryNew.value = category_id
 

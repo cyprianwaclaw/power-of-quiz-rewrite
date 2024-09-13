@@ -2,7 +2,8 @@ import { defineStore } from 'pinia';
 
 export const useQuiz = defineStore('quiz', {
     state: () => ({
-        errorState: false as boolean,
+        errorState: true as boolean,
+        isSendSuccess: false as boolean,
         title: '',
         description: '',
         time: '',
@@ -20,7 +21,7 @@ export const useQuiz = defineStore('quiz', {
     }),
 
     actions: {
-        apiData() {
+        apiDataQuiz() {
             return {
                 title: this.title,
                 description: this.description,
