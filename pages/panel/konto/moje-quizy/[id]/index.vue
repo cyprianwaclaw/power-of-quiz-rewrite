@@ -1,11 +1,10 @@
 <template>
     <NuxtLayout name="account" arrowText="Moje quizy">
-        <!-- <div class="bg-white rounded-[18px] p-[30px]"> -->
-        <p class="font-bold text-[13px] mt-8"
+        <p class="font-bold text-[13px] mt-10"
             :class="singleQuiz?.data.status == true ? 'text-[#4BB21A]' : 'text-[#E1A817]'">
             {{ singleQuiz?.data.status
                 ? 'Aktywny' : 'W oczekiwaniu' }}</p>
-        <p class="font-semibold text-[23px] leading-[28px] mt-[4px]"> {{ singleQuiz?.data.title }}</p>
+        <p class="font-semibold text-[23px] leading-[28px] mt-[6px]"> {{ singleQuiz?.data.title }}</p>
         <div class="w-full">
             <div v-if="isLoading">
                 <div class="is-loading">
@@ -50,10 +49,7 @@
             <p class="text-[17px] font-semibold">Opis</p>
             <p class="text pr-6 text-gray-600 mt-[5px] leading-[23px]">{{ singleQuiz?.data.description }}</p>
         </div>
-
-        <!-- <p class="text-[22px] font-medium mb-[21px]  mt-[32px]">Pytania</p> -->
         <div class="bg-white rounded-[18px] p-[30px] mt-[27px]">
-            <!-- <p class="text-[21px] font-medium mb-[21px]">Pytania</p> -->
             <CardQuizQuestions :questions="quizQuestions?.data" :n="14" :isLoading="isLoading" />
         </div>
         <div class="flex justify-end items-end mt-8 gap-[2px]">
@@ -69,7 +65,7 @@
 <script lang="ts" setup>
 import { storeToRefs } from "pinia"
 import { useUser } from "@/stores/useUser"
-const axiosInstance = useNuxtApp().$axiosInstance;
+const axiosInstance = useNuxtApp().$axiosInstance as any
 
 const route = useRoute()
 const router = useRouter()
@@ -85,6 +81,10 @@ onMounted(async () => {
     const quiz = await axiosInstance.get(`quiz/${router.currentRoute.value.params.id}`);
     singleQuiz.value = quiz.data;
     quizQuestions.value = questions.data;
+
+    localStorage.setItem('quizData', JSON.stringify(quiz.data.data));
+    localStorage.setItem('quizQuestions', JSON.stringify(questions.data.data));
+
     setTimeout(async () => {
         isLoading.value = false;
     }, 200);
@@ -105,7 +105,7 @@ const removeModal = () => {
     margin-top: 24px;
     object-fit: cover;
     width: 100%;
-    height: 220px;
+    height: 260px;
 
     @media only screen and (min-width: 640px) {
         height: 100%;
@@ -124,7 +124,7 @@ const removeModal = () => {
     .image {
         border-radius: 12px;
         width: 100%;
-        height: 220px;
+        height: 260px;
 
         @media only screen and (min-width: 640px) {
             height: 538px;

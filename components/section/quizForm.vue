@@ -1,13 +1,13 @@
 <template>
     <div>
-        <div class="bg-white pt-7 pb-8 px-2 mt-7 rounded-[24px] relative">
+        <div class="bg-white pt-7 pb-8 px-2 mt-10 rounded-[24px] relative">
             <div class="row-table-start">
                 <textarea v-model="title" wrap="soft" rows="1" class=" w-full -mt-3 " ref="autoResizeTextarea"
                     @input="autoResize" placeholder="Nazwa" />
                 <p v-if="props.error" class="text-error-notification">{{ validateField('title') }}</p>
             </div>
             <div class="row-table-start">
-                <Dropdown v-model="categorySelect" :options="categoriesArray" option-label="name"
+                <Dropdown v-model="categorySelect" :options="categories" option-label="name"
                     placeholder="Wybierz kategorię" class="w-full my-1 -ml-[1px]" :pt="dropdownPt(0)" filter
                     filter-placeholder="Wyszukaj..." @show="toggleRotation(0, true)" @hide="toggleRotation(0, false)" />
                 <p v-if="props.error" class="text-error-notification">{{ validateField('category') }}</p>
@@ -38,18 +38,18 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
 import { useQuiz } from "@/stores/useQuiz"
+const axiosInstance = useNuxtApp().$axiosInstance as any
 
 const props = defineProps({
-    categoriesArray: {
-        type: Object,
-        required: true
-    },
     error: {
         type: Boolean,
         required: true,
         default: true,
     }
 })
+const categories = ref([]);
+const resCategories = await axiosInstance.get('/categories');
+categories.value = resCategories.data.data;
 
 const difficultyArray = reactive([
     { id: 'easy', name: 'Łatwy' },
@@ -143,7 +143,7 @@ watch(difficultySelect, (newValue: any) => {
 watch(categoryNew, (newValue: any) => {
     if (category_id.value !== undefined && category_id.value !== null) {
         const categoryId = category_id.value;
-        const foundCategory = props.categoriesArray.find((category: any) => category.id == categoryId);
+        const foundCategory = categories.value.find((category: any) => category.id == categoryId);
         categorySelect.value = foundCategory
     }
 })

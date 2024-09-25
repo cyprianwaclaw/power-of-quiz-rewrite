@@ -435,13 +435,6 @@ export const mapInvitedUsers = (allInvited: any) => {
     is_premium: user.plan_subscriptions[0] ? true : false,
   }));
 }
-// const mapUser = users.data.map((user: any) => ({
-//   is_photo: user.avatar_path,
-//   photo: " https://powerofquizlogin.com.pl/storage/user-avatar/" + user.avatar_path,
-//   id: user.id,
-//   name: user.name,
-//   is_premium: user.plan_subscriptions[0] ? true : false,
-
 
 export const changeDateFormat = (date: any) => {
   return new Date(date)
@@ -513,20 +506,101 @@ export const hasAtLeastOneCorrectAnswer = (questionsArray: any) => {
 
 
 
-export const resizeTextarea = (textareas:any, questionIndex: any, answerIndex: number) => {
+export const resizeTextarea = (textareas: any, questionIndex: any, answerIndex: number) => {
   const key = `${questionIndex}-${answerIndex}`;
   const textarea = textareas[key] as any
-  // if (textarea) {
   textarea.style.height = 'auto';
   textarea.style.height = `${textarea.scrollHeight}px`;
-  // }
-};
-
-// Dostosowanie wysokości textarea tytułu pytania
-export const resizeTitleTextarea = (titleTextareas:any, questionIndex:any) => {
+}
+export const resizeTitleTextarea = (titleTextareas: any, questionIndex: any) => {
   const textarea = titleTextareas[questionIndex] as any
-  // if (textarea) {
   textarea.style.height = 'auto';
   textarea.style.height = `${textarea.scrollHeight}px`;
-  // }
-};
+}
+
+export const mapDataQuizQuestions = (data: any) => {
+  return data.map((question: any) => ({
+    id: question.id,
+    title: question.question,
+    answers: question.answers.map((answer: any) => ({
+      id: answer.id,
+      answer: answer.text,
+      isCorrect: answer.correct
+    }))
+  }))
+}
+
+
+export const updateQuizData = (quizState: any) => {
+  if (process) {
+    const quizData = JSON.parse(localStorage.getItem('quizData') as string);
+    const quizQuestions = JSON.parse(localStorage.getItem('quizQuestions') as string);
+
+    quizState.updateQuizData({
+      id: quizData.id,
+      title: quizData.title,
+      image: quizData.image,
+      description: quizData.description,
+      time: quizData.time,
+      difficulty: quizData.difficulty_id,
+      category_id: quizData.category_id,
+      questionsArray: mapDataQuizQuestions(quizQuestions)
+    })
+  }
+}
+
+export const getModifiedQuestions = (questionsArray: any[], quizQuestions: any[]): any[] => {
+  const modifiedQuestions: any[] = [];
+  for (const newQuestion of questionsArray) {
+    const originalQuestion = quizQuestions.find((q: any) => q.id === newQuestion.id);
+    if (originalQuestion) {
+      if (newQuestion.title !== originalQuestion.question) {
+        modifiedQuestions.push(newQuestion); 
+      }
+    }
+  }
+
+  return modifiedQuestions
+}
+
+export const getModifiedAnswers = (questionsArray: any[], quizQuestions: any[]): any[] => {
+  const modifiedAnswers: any[] = [];
+  for (const newQuestion of questionsArray) {
+    const originalQuestion = quizQuestions.find((q: any) => q.id === newQuestion.id);
+    if (originalQuestion && newQuestion.answers && originalQuestion.answers) {
+      for (const newAnswer of newQuestion.answers) {
+        const originalAnswer = originalQuestion.answers.find((a: any) => a.id === newAnswer.id);
+        if (originalAnswer) {
+          if (newAnswer.answer !== originalAnswer.text || newAnswer.isCorrect !== originalAnswer.correct) {
+            modifiedAnswers.push(newAnswer);
+          }
+        }
+      }
+    }
+  }
+
+  return modifiedAnswers;
+}
+
+
+export const getModifiedQuizData = (quizObject: any, quizState: any) => {
+  const modifiedData: any = {};
+
+  if (quizObject.title !== quizState.title) {
+    modifiedData.title = quizState.title;
+  }
+  if (quizObject.description != quizState.description) {
+    modifiedData.description = quizState.description;
+  }
+  if (quizObject.time != quizState.time) {
+    modifiedData.time = quizState.time;
+  }
+  if (quizObject.difficulty_id != quizState.difficulty) {
+    modifiedData.difficulty = quizState.difficulty;
+  }
+  if (quizObject.category_id != quizState.category_id) {
+    modifiedData.category_id = quizState.category_id;
+  }
+
+  return modifiedData
+}

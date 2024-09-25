@@ -1,99 +1,115 @@
 <template>
-    <NuxtLayout name="account" arrowText="Moje quizy">
-        <div class="bg-white rounded-[18px] p-[30px]">
-            <p class="font-bold text-[13px]" :class="singleQuiz?.data.status == true ? 'text-[#4BB21A]' : 'text-[#E1A817]'">
-                {{ singleQuiz?.data.status
-                    ? 'Aktywny' : 'W oczekiwaniu' }}</p>
-            <p class="font-semibold text-[21px] leading-[26px] mt-[3px]"> {{ singleQuiz?.data.title }}</p>
-
-            <div class="w-full">
-                <div v-if="isLoading">
-                    <div class="is-loading">
-                        <div class="image" />
-                    </div>
-                </div>
-                <img v-show="!isLoading" :src="singleQuiz?.data.image" class="image" />
-            </div>
-            <div class="mt-5 mb-[28px] gap-[5px] flex flex-col">
-                <div class="flex gap-[7px]">
-                    <p class="text-gray-600">Kategoria:</p>
-                    <p class="text-base primary-color font-medium">
-                        {{ singleQuiz?.data.category }}
-                    </p>
-                </div>
-                <div class="flex gap-[7px]">
-                    <p class="text-gray-600">Trudność:</p>
-                    <p class="text-base primary-color font-medium">
-                        {{ singleQuiz?.data.difficulty }}
-                    </p>
-                </div>
-                <div class="flex gap-[7px]">
-                    <p class="text-gray-600">Pytania:</p>
-                    <p class="text-base primary-color font-medium">
-                        {{ quizQuestions?.count }}
-                    </p>
-                </div>
-                <div class="flex gap-[7px]">
-                    <p class="text-gray-600">Czas trwania:</p>
-                    <p class="text-base primary-color font-medium">
-                        {{ singleQuiz?.data.time }} min
-                    </p>
-                </div>
-                <div class="flex gap-[7px]">
-                    <p class="text-gray-600">Dodano:</p>
-                    <p class="text-base primary-color font-medium">
-                        {{ singleQuiz?.data.date }}
-                    </p>
-                </div>
-            </div>
-            <p class="text-[17px] font-semibold">Opis</p>
-            <p class="text pr-6 text-gray-600 mt-[5px] leading-[23px]">{{ singleQuiz?.data.description }}</p>
+    <NuxtLayout name="account" :arrowText="truncateText(title, 26)">
+        <SectionQuizForm :error="showErrorMessage" />
+        <SectionChangeQuizImage />
+        <SectionQuestionsForms :error="showErrorMessage" />
+        <div class="-mt-4">
+            <SectionQuestionsFormsNew :error="showErrorMessage" />
         </div>
-        <div class="bg-white rounded-[18px] p-[30px] mt-[21px]">
-            <p class="text-[21px] font-medium mb-[21px]">Pytania</p>
-            <CardQuizQuestions :questions="quizQuestions?.data" :n="14" :isLoading="isLoading" />
-        </div>
-        <div class="flex justify-end items-end mt-8 gap-[2px]">
-            <p class="text-red-600 px-[23px] py-[10px]" @click="removeModal()">Usuń</p>
-            <NuxtLink :to="`/panel/konto/moje-quizy/${router.currentRoute.value.params.id}/edycja`">
-                <button class="button-primary">
-                    Edytuj
-                </button>
-            </NuxtLink>
+        <div class="w-full -mb-[70px]">
+            <ButtonLoading isLoading="false" @click="onSubmit" :loading="isLoadingButton"
+                :text="isButtonText ? isButtonText : 'Zapisz zmiany'"
+                :class="[isButtonText ? 'button-send-success' : 'button-send']" />
         </div>
     </NuxtLayout>
 </template>
 <script lang="ts" setup>
-import { storeToRefs } from "pinia"
-import { useUser } from "@/stores/useUser"
-const axiosInstance = useNuxtApp().$axiosInstance;
+import { storeToRefs } from 'pinia';
+import { useQuiz } from "@/stores/useQuiz";
+const axiosInstance = useNuxtApp().$axiosInstance as any
 
-const route = useRoute()
-const router = useRouter()
-const isLoading = ref(true)
-const singleQuiz = ref() as any
+const quizState = useQuiz()
+const { errorState, title, id, newImageFile, questionsArray, removedQuestionIndexArray, questionsArrayNew, isSendSuccess } = storeToRefs(quizState);
+const showErrorMessage = ref<boolean>(false);
+const updatedQuiz = ref(false)
+const isLoadingButton = ref(false)
+const isButtonText = ref()
 const quizQuestions = ref() as any
-const userState = useUser();
-const { user } = storeToRefs(userState);
-const isRemove = ref(false)
+const quizObject = ref() as any
 
-onMounted(async () => {
-    const questions = await axiosInstance.get(`quizzes/${router.currentRoute.value.params.id}/data`);
-    const quiz = await axiosInstance.get(`quiz/${router.currentRoute.value.params.id}`);
-    singleQuiz.value = quiz.data;
-    quizQuestions.value = questions.data;
+onMounted(() => {
+    quizQuestions.value = JSON.parse(localStorage.getItem('quizQuestions') as string);
+    quizObject.value = JSON.parse(localStorage.getItem('quizData') as string);
+    updateQuizData(quizState)
+})
+
+const onSubmit = async () => {
+    isLoadingButton.value = true
+
+    if (newImageFile.value) {
+        const formData = new FormData();
+        formData.append("image", newImageFile.value);
+        await axiosInstance.post(`/quizzes/${id.value}/image`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            }
+        })
+    }
+    const modifiedData = getModifiedQuizData(quizObject.value, quizState.apiDataQuiz());
+    if (Object.keys(modifiedData).length > 0) {
+        await axiosInstance.patch(`/quizzes/${id.value}`, modifiedData);
+    }
+
+    if (removedQuestionIndexArray.value.length > 0) {
+        for (const removed of removedQuestionIndexArray.value) {
+            await axiosInstance.delete(`/questions/${removed}`)
+        }
+    }
+
+    if (questionsArrayNew.value.length > 0) {
+        quizState.addQuestionsAndAnswers(questionsArrayNew.value)
+    }
+
+    if (getModifiedQuestions(questionsArray.value, quizQuestions.value)?.length > 0) {
+        const modifiedQuestions = getModifiedQuestions(questionsArray.value, quizQuestions.value);
+        for (const question of modifiedQuestions) {
+            const newQuestionData = { "question": question.title, "quiz_id": id.value };
+            await axiosInstance.patch(`/questions/${question.id}`, newQuestionData);
+        }
+    }
+
+    if (getModifiedAnswers(questionsArray.value, quizQuestions.value)?.length > 0) {
+        const modifiedAnswer = getModifiedAnswers(questionsArray.value, quizQuestions.value);
+        for (const answers of modifiedAnswer) {
+            const newQuestionData = { "answer": answers.answer, "correct": answers.isCorrect, };
+            await axiosInstance.patch(`/answers/${answers.id}`, newQuestionData);
+        }
+    }
+
+
     setTimeout(async () => {
-        isLoading.value = false;
-    }, 200);
-});
-
-const removeModal = () => {
-    isRemove.value = !isRemove.value
+        isLoadingButton.value = false
+    }, 500)
+    setTimeout(async () => {
+        isButtonText.value = "Zapisano wszystkie zmiany"
+    }, 200)
+    setTimeout(async () => {
+        isButtonText.value = ""
+    }, 2500)
 }
+
+
+
+watch(updatedQuiz, (newValue) => {
+    if (newValue === true) {
+        questionsArray.value.push(...questionsArrayNew.value);
+        questionsArrayNew.value = []
+    }
+})
 </script>
 
 <style scoped lang="scss">
 @import "@/assets/style/variables.scss";
+
+.button-send-success {
+    background: $color-success !important;
+    transition: background-color 0.4s ease-in-out;
+}
+
+.button-send {
+    background-color: $primary;
+    transition: background-color 0.4s ease-in-out;
+}
 
 .image {
     border: 1px solid $border;

@@ -1,0 +1,434 @@
+<template>
+    <div class="fixed z-50 left-0 bottom-0 w-full">
+        <Transition @enter="EnterBg" @leave="LeaveBg" :css="false">
+            <div class="blur-background-update" v-if="props.modalActive" />
+        </Transition>
+        <div class="flex sm:hidden">
+            <Transition @enter="onEnterMobile" @leave="onLeaveMobile" :css="false">
+                <div class="modal-down" v-if="props.modalActive">
+                    <div class="justify-center flex -mt-[17px]">
+                        <hr class="w-9 close border-[2px] rounded-2xl" />
+                    </div>
+                    <div class="flex columns-2 w-full justify-between mb-4 mt-[17px] place-items-start gap-[24px]">
+                        <p class="font-medium text-[20px] leading-[25px] "> {{ image ? 'Zmień zdjęcie' : 'Dodaj nowe' }}</p>
+                        <Icon name="carbon:close" size="30" class="close w-8 h-8 border-transparent rounded-[6px]"
+                            @click="removeImage()" />
+                    </div>
+                    <div class="content">
+                        <div v-if="!selectedImageValue"
+                            class="image-retangle h-[260px] md:mt-3 md:w-[350px] lg:w-[450px] 2xl:w-[550px] w-full">
+                            <Icon name="carbon:cloud-upload" size="82" color="618CFB"
+                                class="justify-center flex w-full -mb-[21px] mt-3 md:mt-12" />
+                            <input type="file" ref="input" accept="image/*" class="default-file-input"
+                                @change="handleFileInputChange" />
+                            <div class="flex w-full justify-center items-center">
+                                <p class="flex md:hidden cursor-pointer">Kliknij tutaj aby dodać zdjęcie</p>
+                                <p class="hidden md:flex justify-center cursor-pointer">Kliknij tutaj aby dodać zdjęcie,<br>
+                                    lub
+                                    upuść tutaj zdjęcie</p>
+                            </div>
+                        </div>
+                        <div class="w-full">
+                            <div v-if="isLoading">
+                                <div class="is-loading">
+                                    <div class="image" />
+                                </div>
+                            </div>
+                            <div v-else>
+                                <div v-if="croppedImage">
+                                    <img :src="croppedImage" alt="Cropped Result" class="image" />
+                                    <div class="w-full flex justify-end mt-[14px] gap-[18px]">
+                                        <button @click="removeImage()"
+                                            class="text-[16px] font-medium text-red-500">Usuń</button>
+                                        <button @click="saveImage()" class="button-primary">Zapisz</button>
+                                    </div>
+                                </div>
+                                <div v-else>
+                                    <Cropper v-show="!isLoading" ref="cropper" :src="selectedImageValue"
+                                        :stencil-props="{ aspectRatio: 10 / 7, size: { width: 260, height: 260 } }"
+                                        :class="['cropper']" :auto-zoom="true" :auto-detect-crop-area="false"
+                                        :style="{ height: '260px', width: '100%', borderRadius: '12px', overflow: 'hidden' }" />
+                                    <div class="w-full flex justify-end mt-[14px]">
+                                        <button @click="getCroppedImage" class="button-primary">Gotowe</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <img :src="croppedImage" alt="Cropped Result" /> -->
+
+                        </div>
+                        <!-- <div class="mt-5 mb-6 gap-[5px] flex flex-col">
+                            <div class="flex gap-[7px]">
+                                <p class="text-gray-600">Kategoria:</p>
+                                <p class="text-base primary-color font-medium">
+                                    {{ quiz.category }}
+                                </p>
+                            </div>
+                            <div class="flex gap-[7px]">
+                                <p class="text-gray-600">Trudność:</p>
+                                <p class="text-base primary-color font-medium">
+                                    {{ quiz.difficulty }}
+                                </p>
+                            </div>
+                            <div class="flex gap-[7px]">
+                                <p class="text-gray-600">Pytania:</p>
+                                <p class="text-base primary-color font-medium">
+                                    {{ quiz.questions_count }}
+                                </p>
+                            </div>
+                            <div class="flex gap-[7px]">
+                                <p class="text-gray-600">Czas trwania:</p>
+                                <p class="text-base primary-color font-medium">
+                                    {{ quiz.time }} min
+                                </p>
+                            </div>
+                            <div class="flex gap-[7px]">
+                                <p class="text-gray-600">Dodano:</p>
+                                <p class="text-base primary-color font-medium">
+                                    {{ quiz.date }}
+                                </p>
+                            </div>
+                        </div> -->
+                        <!-- <p class="text-[17px] font-semibold">Opis</p>
+                        <p class="text pr-6 mb-5 text-gray-600 mt-[4px]">{{ quiz.description }}</p>
+                        <button class="button-primary w-full mb-6 mt-7">
+                            <NuxtLink :to="`/panel/quiz/${quiz?.id}`">
+                                <p class="text-center">Zagraj w quiz</p>
+                            </NuxtLink>
+                        </button> -->
+                    </div>
+                </div>
+            </Transition>
+        </div>
+        <!-- Dekstop view  -->
+        <!-- <div class="sm:flex hidden">
+            <Transition @enter="onEnterDesktop" :css="false">
+                <div class="modal-desktop" v-if="props.modalActive">
+                    <div class="w-full h-full">
+                        <div v-if="isLoading">
+                            <div class="is-loading">
+                                <div class="image" />
+                            </div>
+                        </div>
+                        <img v-show="!isLoading" :src="props.quiz.image" class="image" />
+                    </div>
+                    <div class="w-full flex flex-col">
+                        <div class="flex absolute right-[21px] top-[21px]">
+                            <Icon name="carbon:close" size="30" class="close w-8 h-8 border-transparent rounded-[6px]"
+                                @click="$emit('close')" />
+                        </div>
+                        <p class="font-medium text-[20px] leading-[25px] mt-[64px] ">{{ quiz.title }}</p>
+
+                        <div class="mt-[18px] mb-6 flex flex-col">
+                            <div class="flex gap-[7px]">
+                                <p class="text-gray-600">Kategoria:</p>
+                                <p class="text-base primary-color font-medium">
+                                    {{ quiz.category }}
+                                </p>
+                            </div>
+                            <div class="flex gap-[7px] mt-[5px]">
+                                <p class="text-gray-600">Trudność:</p>
+                                <p class="text-base primary-color font-medium">
+                                    {{ quiz.difficulty }}
+                                </p>
+                            </div>
+                            <div class="flex gap-[7px] mt-[5px]">
+                                <p class="text-gray-600">Pytania:</p>
+                                <p class="text-base primary-color font-medium">
+                                    {{ quiz.questions_count }}
+                                </p>
+                            </div>
+                            <div class="flex gap-[7px] mt-[5px]">
+                                <p class="text-gray-600">Czas trwania:</p>
+                                <p class="text-base primary-color font-medium">
+                                    {{ quiz.time }} min
+                                </p>
+                            </div>
+                            <div class="flex gap-[7px] mt-[5px]">
+                                <p class="text-gray-600">Dodano:</p>
+                                <p class="text-base primary-color font-medium">
+                                    {{ quiz.date }}
+                                </p>
+                            </div>
+                            <p class="text-[17px] font-semibold mt-[18px]">Opis</p>
+                            <p class="text pr-6 mb-5 text-gray-600 mt-[4px]">{{ quiz.description }}</p>
+                            <button class="button-primary w-[260px] absolute bottom-10">
+                                <NuxtLink :to="`/panel/quiz/${quiz?.id}`">
+                                    <p class="text-center">Zagraj w quiz</p>
+                                </NuxtLink>
+                            </button>
+                        </div> -->
+        <!-- </div> -->
+        <!-- </div> -->
+        <!-- </Transition> -->
+        <!-- </div> -->
+    </div>
+</template>
+
+<script setup lang="ts">
+import gsap from 'gsap'
+import { storeToRefs } from 'pinia';
+import { Cropper } from 'vue-advanced-cropper';
+import 'vue-advanced-cropper/dist/style.css';
+import { useQuiz } from "@/stores/useQuiz";
+
+const quizState = useQuiz()
+const { image, newImageFile, newImage } = storeToRefs(quizState)
+const imageFile = ref(null) as any
+const croppedImage = ref(null) as any
+const cropper = ref()
+
+const props = defineProps({
+    selectedImage: {
+        type: String,
+        required: true,
+    },
+    modalActive: {
+        type: Boolean,
+        required: true,
+    },
+})
+
+const emit = defineEmits(['close'])
+const isLoading = ref(false)
+const selectedImageValue = ref() as any
+
+const getCroppedImage = async () => {
+    isLoading.value = true
+    croppedImage.value = cropper.value.getCanvas().toDataURL()
+    // selectedImageValue.value = croppedImage.value
+    const blob = dataURLtoBlob(croppedImage.value);
+    imageFile.value = new File([blob], "cropcvxgvxvped_image.jpg", { type: blob.type });
+    setTimeout(() => {
+        isLoading.value = false
+    }, 250)
+}
+
+const removeImage = () => {
+    croppedImage.value = null
+    newImageFile.value = ''
+    newImageFile.value = ''
+    emit('close')
+}
+
+watch(props, (newValue) => {
+    if (newValue.modalActive == true) {
+        croppedImage.value = null
+        selectedImageValue.value = props.selectedImage
+    } else {
+        selectedImageValue.value = ''
+        croppedImage.value = null
+    }
+})
+
+const saveImage = () => {
+    // console.log(croppedImage.value)
+    newImageFile.value = imageFile.value
+    newImage.value = croppedImage.value
+    emit('close');
+    selectedImageValue.value = ''
+
+}
+
+
+
+const handleFileInputChange = (event: Event) => {
+    const fileInput = event.target as HTMLInputElement;
+    if (fileInput.files && fileInput.files.length > 0) {
+        const file = fileInput.files[0];
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            selectedImageValue.value = e.target?.result as string;
+        }
+        reader.readAsDataURL(file)
+    }
+}
+
+
+const onEnterDesktop = (el: any) => {
+    gsap.from(el, {
+        duration: 0.28,
+        y: 24,
+    });
+};
+
+
+const onEnterMobile = (el: any, done: any) => {
+    let elementHeight = el.offsetHeight;
+    gsap.from(el, {
+        ease: "power1.out",
+        y: elementHeight,
+        duration: 0.3,
+        onComplete: done,
+    });
+};
+
+const onLeaveMobile = (el: any, done: any) => {
+    let elementHeight = el.offsetHeight;
+    gsap.to(el, {
+        ease: "power1.out",
+        y: elementHeight,
+        duration: 0.3,
+        onComplete: done,
+    })
+}
+
+const EnterBg = (el: any) => {
+    gsap.to(el, {
+        opacity: 1,
+        duration: 0.6,
+    });
+};
+const LeaveBg = (el: any) => {
+    gsap.to(el, {
+        opacity: 0,
+        duration: 0.4,
+    });
+    gsap.set(el, {
+        delay: 0.4,
+        display: "none",
+    });
+};
+
+</script>
+
+<style scoped lang="scss">
+@import "@/assets/style/variables.scss";
+
+.image-retangle {
+    display: flex;
+    flex-direction: column;
+    padding: 45px 37px;
+    background: #f7f7f7;
+    border: 2px dashed #9f9f9f;
+    border-radius: 12px;
+}
+
+
+input[type="file"]::file-selector-button {
+    display: hidden;
+}
+
+input[type="file"] {
+    border: none;
+    display: flex;
+    justify-content: center;
+}
+
+.image-retangle p {
+    text-align: center;
+    font-weight: 500;
+    font-size: 17px;
+    color: #9c9c9c;
+}
+
+input {
+    outline: none;
+    font-size: 16px;
+    width: 100%;
+    overflow: hidden;
+    min-height: 30px;
+    padding: 0px;
+    height: 40px;
+    font-weight: 500;
+    border-color: white;
+}
+
+.default-file-input {
+    opacity: 0;
+}
+
+
+.vue-advanced-cropper__background,
+.vue-advanced-cropper__foreground {
+    opacity: 1;
+    background: black;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    top: 50%;
+    border-radius: 12px;
+    left: 50%;
+}
+
+.modal-down {
+    background-color: white;
+    border: solid transparent;
+    border-radius: 16px 16px 0px 0px;
+    padding: 24px 24px 0px 24px;
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    z-index: 100;
+}
+
+.close {
+    color: rgb(209, 209, 209);
+
+    &:hover {
+        color: rgb(131, 131, 131);
+        background-color: #c7c7c71d;
+        cursor: pointer;
+    }
+}
+
+
+.content {
+    height: 359px;
+    padding-top: 16px;
+}
+
+.image {
+    border: 1px solid $border;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    object-fit: cover;
+    width: 100%;
+    height: 260px;
+
+    @media only screen and (min-width: 640px) {
+        height: 100%;
+    }
+}
+
+.is-loading {
+
+    .image {
+        background: linear-gradient(110deg, #c7c7c7 8%, #d4d4d4 18%, #c7c7c7 33%);
+        border-radius: 12px;
+        background-size: 300% 100%;
+        animation: 1.6s shine linear infinite;
+    }
+
+    .image {
+        border-radius: 12px;
+        width: 100%;
+        height: 260px;
+
+        @media only screen and (min-width: 640px) {
+            height: 538px;
+        }
+    }
+}
+
+@keyframes shine {
+    to {
+        background-position-x: -200%;
+    }
+}
+
+.modal-desktop {
+    background-color: white;
+    border: solid transparent;
+    border-radius: 12px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+    width: 740px;
+    height: 580px;
+    padding: 21px;
+    display: flex;
+    gap: 28px;
+    columns: 2;
+}
+</style>

@@ -25,7 +25,8 @@
             <div class="row-table-start flex place-items-center justify-between">
                 <div class="flex flex-col">
                     <p class=" text-gray-500 text-[13px]">Nazwa działalności</p>
-                    <p class="font-semibold text-[16px]">{{ truncateText(settings?.company?.name ? settings?.company?.name : 'Brak', 34) }}</p>
+                    <p class="font-semibold text-[16px]">{{ truncateText(settings?.company?.name ? settings?.company?.name :
+                        'Brak', 34) }}</p>
                 </div>
             </div>
             <NuxtLink to="/panel/konto/ustawienia/firma">
@@ -40,19 +41,22 @@
             <div class="row-table-start flex place-items-center justify-between">
                 <div class="flex flex-col">
                     <p class="text-gray-500 text-[13px]">Numer IBAN</p>
-                    <p class="font-semibold text-[16px]">{{ settings?.financial?.iban ? settings?.financial?.iban  : 'Brak' }}</p>
+                    <p class="font-semibold text-[16px]">{{ settings?.financial?.iban ? settings?.financial?.iban : 'Brak'
+                    }}</p>
                 </div>
             </div>
             <div class="row-table-start flex place-items-center justify-between">
                 <div class="flex flex-col">
                     <p class=" text-gray-500 text-[13px]">Nazwa banku</p>
-                    <p class="font-semibold text-[16px]">{{ truncateText(settings?.financial?.bank_name ? settings?.financial?.bank_name : 'Brak' , 34) }} </p>
+                    <p class="font-semibold text-[16px]">{{ truncateText(settings?.financial?.bank_name ?
+                        settings?.financial?.bank_name : 'Brak', 34) }} </p>
                 </div>
             </div>
             <div class="row-table-start flex place-items-center justify-between">
                 <div class="flex flex-col">
                     <p class=" text-gray-500 text-[13px]">Numer SWIFT</p>
-                    <p class="font-semibold text-[16px]">{{ settings?.financial?.swift ? settings?.financial?.swift : 'Brak' }}</p>
+                    <p class="font-semibold text-[16px]">{{ settings?.financial?.swift ? settings?.financial?.swift : 'Brak'
+                    }}</p>
                 </div>
             </div>
             <NuxtLink to="/panel/konto/ustawienia/bank">
@@ -74,5 +78,4 @@ const { user, settings } = storeToRefs(userState);
 
 <style scoped lang="scss">
 @import "@/assets/style/variables.scss";
-
 </style>

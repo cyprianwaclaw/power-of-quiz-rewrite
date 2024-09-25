@@ -8,8 +8,8 @@
          <p class="text-[#ef142a] text-[15px] mt-[3px]">Uzupełnij wszystkie
             dane</p>
       </div>
-      <SectionQuizForm :categoriesArray="categories" :error="showErrorMessage" />
-      <LazySectionQuestionsForms :array="Array" :error="showErrorMessage" />
+      <SectionQuizForm  :error="showErrorMessage" />
+      <SectionQuestionsForms :array="Array" :error="showErrorMessage" />
    </div>
    <div class="w-full -mb-[70px]">
       <ButtonLoading isLoading="false" @click="onSubmit" :loading="isLoadingButton"
@@ -22,14 +22,10 @@
 import { storeToRefs } from 'pinia';
 import { useQuiz } from "@/stores/useQuiz";
 const axiosInstance = useNuxtApp().$axiosInstance as any
-
 const quizState = useQuiz()
 const { errorState, questionsArray, isSendSuccess } = storeToRefs(quizState);
 
 const showErrorMessage = ref<boolean>(false);
-const categories = ref([]);
-const resCategories = await axiosInstance.get('/categories');
-categories.value = resCategories.data.data;
 const isLoadingButton = ref(false)
 const isButtonText = ref()
 
@@ -72,20 +68,7 @@ const onSubmit = async () => {
 }
 
 onMounted(() => {
-   // const id = 2
-   const id = null
-   if (id) {
-      quizState.updateQuizData({
-         title: "Example Quiz Title",
-         description: "This is an example description",
-         time: '30',
-         difficulty: "easy",
-         category_id: '5',
-         questionsArray: [{ "title": "gfdggdfgf", "answers": [{ "answer": "gfgfdgdfg", "isCorrect": true }, { "answer": "dfgddf", "isCorrect": false }, { "answer": "gfdg", "isCorrect": false }, { "answer": "fdgdfgdfg", "isCorrect": false }] }, { "title": "vcxvcxv", "answers": [{ "answer": "vcxvcxvcx", "isCorrect": false }, { "answer": "vcvcvc", "isCorrect": true }, { "answer": "xcvcxv", "isCorrect": false }, { "answer": "cvcbfghgh", "isCorrect": false }] }, { "title": "gfdggdfgf", "answers": [{ "answer": "gfgfdgdfg", "isCorrect": true }, { "answer": "dfgddf", "isCorrect": false }, { "answer": "gfdg", "isCorrect": false }, { "answer": "fdgdfgdfg", "isCorrect": false }] }, { "title": "vcxvcxv", "answers": [{ "answer": "vcxvcxvcx", "isCorrect": false }, { "answer": "vcvcvc", "isCorrect": true }, { "answer": "xcvcxv", "isCorrect": false }, { "answer": "cvcbfghgh", "isCorrect": false }] }, { "title": "gfdggdfgf", "answers": [{ "answer": "gfgfdgdfg", "isCorrect": true }, { "answer": "dfgddf", "isCorrect": false }, { "answer": "gfdg", "isCorrect": false }, { "answer": "fdgdfgdfg", "isCorrect": false }] }, { "title": "vcxvcxv", "answers": [{ "answer": "vcxvcxvcx", "isCorrect": false }, { "answer": "vcvcvc", "isCorrect": true }, { "answer": "xcvcxv", "isCorrect": false }, { "answer": "cvcbfghgh", "isCorrect": false }] }]
-      });
-   } else {
       quizState.$reset()
-   }
 })
 
 </script>

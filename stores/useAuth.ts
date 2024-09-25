@@ -16,6 +16,7 @@ export const useAuth = defineStore('auth', {
         async login(email: string, password: string) {
             const API_URL = useRuntimeConfig().public.API_URL;
             try {
+                
                 this.isLoadingButton = true;
                 await new Promise((resolve) => setTimeout(resolve, 600));
                 const res = await axios.post(`${API_URL}/login`, { email, password });

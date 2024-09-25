@@ -2,9 +2,10 @@
   <SectionMobileSearch :modalActive="openModalSearch" @close="isClickSearch" />
   <div class="fixed z-20 w-full">
     <div
-      class="sticky flex bg-white border place-items-center justify-between h-16 border-b-gray-300 z-40 px-6 xl:gap-[100px] md:gap-[24px]">
+      class="sticky flex bg-white  place-items-center justify-between h-16 border-own z-40 px-6 xl:gap-[100px] md:gap-[24px]">
       <div class="flex items-center shrink-0">
-        <img @click="clickLogo" src="@/assets/file/logo.png" class="w-[175px] mr-14" />
+        <NavLogo/>
+        <!-- <img @click="clickLogo" src="@/assets/file/logo.png" class="w-[175px] mr-14" /> -->
         <div v-for="(page, index) in links" :key="index" class="mr-7 hidden lg:flex">
           <NuxtLink :to="page.link" class="flex gap-7">
             <p class="text-[#464646] font-semibold whitespace-nowrap hover:text-black">
@@ -22,32 +23,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-// import { useQuiz } from "@/store/useQuiz";
-// import { usePersistCart } from "@/utils/hooks";
-
-// const isOpen = ref(false);
-// const Modal = () => {
-//   isOpen.value = !isOpen.value;
-// };
-
-// const openMenu = ref(false);
-// const openMenuDesktop = (value: any) => {
-//   openMenu.value = value;
-//   // return value
-// };
-
 const router = useRouter();
-// const { allQuizName, popularQuiz, loadingQuiz, categories } = storeToRefs(quiz);
-// const openSearch = ref(false);
-// await quiz.getCategory();
-// const results = ref(false);
-// const search: any = ref();
-// usePersistCart();
-
-// let category = categories.value;
-// const allCategories: any = ref();
-
 const openModalSearch = ref(false);
 const isClickSearch = () => {
   openModalSearch.value = !openModalSearch.value;
@@ -60,48 +36,18 @@ const clickLogo = () => {
 }
 
 const links = [
-  // { name: "Zaproś znajomych", link: "/panel/zaproszeni" },
-  // { name: "Dodaj nowy", link: "/panel/quiz/dodaj-nowy" },
   { name: "Quizy", link: "/panel/quiz" },
-
   { name: "Zaproś znajomych", link: "/" },
   { name: "Dodaj nowy", link: "/" },
-];
-
-// const searchInput: any = computed(() => {
-//   return allQuizName.value.filter((quiz: any) =>
-//     quiz.title.toLowerCase().includes(search.value)
-//   );
-// });
-
-// watch(search, async (newValue: any) => {
-//   if (newValue.length > 0) {
-//     await quiz.getAllName();
-//   }
-// });
-
-// watch(searchInput, async (newValue: any) => {
-//   if (newValue.length) {
-//     results.value = false;
-//   } else {
-//     results.value = true;
-//   }
-// });
-
-// watch(openSearch, async (newValue: any) => {
-//   if (newValue) {
-//     await quiz.getPopularQuiz();
-//     document.body.style.overflow = "hidden";
-//     document.body.style.userSelect = "none";
-//   } else {
-//     document.body.style.overflow = "auto";
-//     document.body.style.userSelect = "auto";
-//   }
-// });
+]
 
 </script>
 <style scoped lang="scss">
 @import "@/assets/style/variables.scss";
+
+.border-own{
+  border-bottom:1px solid  rgb(229 231 235);
+}
 
 @media only screen and (max-width: 770px) {
   .size-logo {

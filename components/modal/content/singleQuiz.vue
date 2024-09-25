@@ -45,7 +45,6 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import { useQuiz } from "@/store/useQuiz";
-// import { Quiz } from "@/types";
 
 const props = defineProps<{ quiz: Object}>();
 const {categories } = storeToRefs(useQuiz());
