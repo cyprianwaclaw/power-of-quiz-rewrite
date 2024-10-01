@@ -35,6 +35,7 @@ const avatarImage = ref(props.avatar)
 
 onMounted(() => {
   avatarImage.value = props.avatar;
+   isLoading.value = false;
   loadAvatarImage(props.avatar)
 })
 
