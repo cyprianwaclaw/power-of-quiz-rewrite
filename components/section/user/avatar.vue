@@ -10,7 +10,7 @@
     <!-- fsdfdf -->
     <div v-else>
       <!-- {{ typeof(avatarImage) }} -->
-      <img v-if="!avatarImage" :src="avatarImage" :style="{ width: props.size + 'px', height: props.size + 'px' }"
+      <img v-if="avatarImage" :src="avatarImage" :style="{ width: props.size + 'px', height: props.size + 'px' }"
         class="border-[#EDEDED] rounded-full" @load="isLoading = false" @error="isLoading = false" />
       <div v-else :style="{ width: props.size + 'px', height: props.size + 'px' }">
         <Icon name="carbon:user-avatar-filled" :size="props.size + 3" color="#B6C4E9"/>
