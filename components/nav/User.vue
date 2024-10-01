@@ -5,7 +5,6 @@
       class="sticky flex bg-white  place-items-center justify-between h-16 border-own z-40 px-6 xl:gap-[100px] md:gap-[24px]">
       <div class="flex items-center shrink-0">
         <NavLogo/>
-        <!-- <img @click="clickLogo" src="@/assets/file/logo.png" class="w-[175px] mr-14" /> -->
         <div v-for="(page, index) in links" :key="index" class="mr-7 hidden lg:flex">
           <NuxtLink :to="page.link" class="flex gap-7">
             <p class="text-[#464646] font-semibold whitespace-nowrap hover:text-black">
