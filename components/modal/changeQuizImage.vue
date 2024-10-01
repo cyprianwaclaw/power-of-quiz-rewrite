@@ -10,7 +10,9 @@
                         <hr class="w-9 close border-[2px] rounded-2xl" />
                     </div>
                     <div class="flex columns-2 w-full justify-between mb-4 mt-[17px] place-items-start gap-[24px]">
-                        <p class="font-medium text-[20px] leading-[25px] "> {{ image ? 'Zmień zdjęcie' : 'Dodaj nowe' }}</p>
+                        <p class="font-medium text-[20px] leading-[25px] ">
+                            {{ routeName === 'panel-konto-ustawienia-moje-dane' ? 'Zdjęcie profilowe' : 'Zdjęcie quizu' }}
+                        </p>
                         <Icon name="carbon:close" size="30" class="close w-8 h-8 border-transparent rounded-[6px]"
                             @click="removeImage()" />
                     </div>
@@ -45,7 +47,7 @@
                                 </div>
                                 <div v-else>
                                     <Cropper v-show="!isLoading" ref="cropper" :src="selectedImageValue"
-                                        :stencil-props="{ aspectRatio: 10 / 7, size: { width: 260, height: 260 } }"
+                                        :stencil-props="{ aspectRatio: routeName === 'panel-konto-ustawienia-moje-dane' ? 1 : 10 / 7 }"
                                         :class="['cropper']" :auto-zoom="true" :auto-detect-crop-area="false"
                                         :style="{ height: '260px', width: '100%', borderRadius: '12px', overflow: 'hidden' }" />
                                     <div class="w-full flex justify-end mt-[14px]">
@@ -53,114 +55,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- <img :src="croppedImage" alt="Cropped Result" /> -->
-
                         </div>
-                        <!-- <div class="mt-5 mb-6 gap-[5px] flex flex-col">
-                            <div class="flex gap-[7px]">
-                                <p class="text-gray-600">Kategoria:</p>
-                                <p class="text-base primary-color font-medium">
-                                    {{ quiz.category }}
-                                </p>
-                            </div>
-                            <div class="flex gap-[7px]">
-                                <p class="text-gray-600">Trudność:</p>
-                                <p class="text-base primary-color font-medium">
-                                    {{ quiz.difficulty }}
-                                </p>
-                            </div>
-                            <div class="flex gap-[7px]">
-                                <p class="text-gray-600">Pytania:</p>
-                                <p class="text-base primary-color font-medium">
-                                    {{ quiz.questions_count }}
-                                </p>
-                            </div>
-                            <div class="flex gap-[7px]">
-                                <p class="text-gray-600">Czas trwania:</p>
-                                <p class="text-base primary-color font-medium">
-                                    {{ quiz.time }} min
-                                </p>
-                            </div>
-                            <div class="flex gap-[7px]">
-                                <p class="text-gray-600">Dodano:</p>
-                                <p class="text-base primary-color font-medium">
-                                    {{ quiz.date }}
-                                </p>
-                            </div>
-                        </div> -->
-                        <!-- <p class="text-[17px] font-semibold">Opis</p>
-                        <p class="text pr-6 mb-5 text-gray-600 mt-[4px]">{{ quiz.description }}</p>
-                        <button class="button-primary w-full mb-6 mt-7">
-                            <NuxtLink :to="`/panel/quiz/${quiz?.id}`">
-                                <p class="text-center">Zagraj w quiz</p>
-                            </NuxtLink>
-                        </button> -->
                     </div>
                 </div>
             </Transition>
         </div>
-        <!-- Dekstop view  -->
-        <!-- <div class="sm:flex hidden">
-            <Transition @enter="onEnterDesktop" :css="false">
-                <div class="modal-desktop" v-if="props.modalActive">
-                    <div class="w-full h-full">
-                        <div v-if="isLoading">
-                            <div class="is-loading">
-                                <div class="image" />
-                            </div>
-                        </div>
-                        <img v-show="!isLoading" :src="props.quiz.image" class="image" />
-                    </div>
-                    <div class="w-full flex flex-col">
-                        <div class="flex absolute right-[21px] top-[21px]">
-                            <Icon name="carbon:close" size="30" class="close w-8 h-8 border-transparent rounded-[6px]"
-                                @click="$emit('close')" />
-                        </div>
-                        <p class="font-medium text-[20px] leading-[25px] mt-[64px] ">{{ quiz.title }}</p>
-
-                        <div class="mt-[18px] mb-6 flex flex-col">
-                            <div class="flex gap-[7px]">
-                                <p class="text-gray-600">Kategoria:</p>
-                                <p class="text-base primary-color font-medium">
-                                    {{ quiz.category }}
-                                </p>
-                            </div>
-                            <div class="flex gap-[7px] mt-[5px]">
-                                <p class="text-gray-600">Trudność:</p>
-                                <p class="text-base primary-color font-medium">
-                                    {{ quiz.difficulty }}
-                                </p>
-                            </div>
-                            <div class="flex gap-[7px] mt-[5px]">
-                                <p class="text-gray-600">Pytania:</p>
-                                <p class="text-base primary-color font-medium">
-                                    {{ quiz.questions_count }}
-                                </p>
-                            </div>
-                            <div class="flex gap-[7px] mt-[5px]">
-                                <p class="text-gray-600">Czas trwania:</p>
-                                <p class="text-base primary-color font-medium">
-                                    {{ quiz.time }} min
-                                </p>
-                            </div>
-                            <div class="flex gap-[7px] mt-[5px]">
-                                <p class="text-gray-600">Dodano:</p>
-                                <p class="text-base primary-color font-medium">
-                                    {{ quiz.date }}
-                                </p>
-                            </div>
-                            <p class="text-[17px] font-semibold mt-[18px]">Opis</p>
-                            <p class="text pr-6 mb-5 text-gray-600 mt-[4px]">{{ quiz.description }}</p>
-                            <button class="button-primary w-[260px] absolute bottom-10">
-                                <NuxtLink :to="`/panel/quiz/${quiz?.id}`">
-                                    <p class="text-center">Zagraj w quiz</p>
-                                </NuxtLink>
-                            </button>
-                        </div> -->
-        <!-- </div> -->
-        <!-- </div> -->
-        <!-- </Transition> -->
-        <!-- </div> -->
     </div>
 </template>
 
@@ -171,6 +70,7 @@ import { Cropper } from 'vue-advanced-cropper';
 import 'vue-advanced-cropper/dist/style.css';
 import { useQuiz } from "@/stores/useQuiz";
 
+const router = useRouter() as any
 const quizState = useQuiz()
 const { image, newImageFile, newImage } = storeToRefs(quizState)
 const imageFile = ref(null) as any
@@ -180,7 +80,7 @@ const cropper = ref()
 const props = defineProps({
     selectedImage: {
         type: String,
-        required: true,
+        required: false,
     },
     modalActive: {
         type: Boolean,
@@ -195,7 +95,6 @@ const selectedImageValue = ref() as any
 const getCroppedImage = async () => {
     isLoading.value = true
     croppedImage.value = cropper.value.getCanvas().toDataURL()
-    // selectedImageValue.value = croppedImage.value
     const blob = dataURLtoBlob(croppedImage.value);
     imageFile.value = new File([blob], "cropcvxgvxvped_image.jpg", { type: blob.type });
     setTimeout(() => {
@@ -221,15 +120,13 @@ watch(props, (newValue) => {
 })
 
 const saveImage = () => {
-    // console.log(croppedImage.value)
     newImageFile.value = imageFile.value
     newImage.value = croppedImage.value
-    emit('close');
-    selectedImageValue.value = ''
+    emit('close', imageFile.value);
+    selectedImageValue.value = null
+    croppedImage.value = null
 
 }
-
-
 
 const handleFileInputChange = (event: Event) => {
     const fileInput = event.target as HTMLInputElement;
@@ -243,6 +140,12 @@ const handleFileInputChange = (event: Event) => {
     }
 }
 
+
+const routeName = ref<string>()
+onMounted(() => {
+    console.log(router.currentRoute.value.name)
+    routeName.value = router.currentRoute.value.name
+})
 
 const onEnterDesktop = (el: any) => {
     gsap.from(el, {

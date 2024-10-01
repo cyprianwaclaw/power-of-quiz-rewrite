@@ -105,7 +105,7 @@ const removeModal = () => {
     margin-top: 24px;
     object-fit: cover;
     width: 100%;
-    height: 260px;
+    height: 275px;
 
     @media only screen and (min-width: 640px) {
         height: 100%;

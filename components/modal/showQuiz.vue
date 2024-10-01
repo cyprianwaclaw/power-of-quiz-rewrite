@@ -58,9 +58,10 @@
                         <p class="text-[17px] font-semibold">Opis</p>
                         <p class="text pr-6 mb-5 text-gray-600 mt-[4px]">{{ quiz.description }}</p>
                         <button class="button-primary w-full mb-6 mt-7">
-                            <NuxtLink :to="`/panel/quiz/${quiz?.id}`">
-                                <p class="text-center">Zagraj w quiz</p>
-                            </NuxtLink>
+                            <!-- <NuxtLink :to="`/panel/quiz/${quiz?.id}`"> -->
+                                <!-- dsada -->
+                                <p class="text-center" @click="startGame(quiz?.id)">Zagraj w quiz</p>
+                            <!-- </NuxtLink> -->
                         </button>
                     </div>
                 </div>
@@ -134,6 +135,11 @@
 <script setup lang="ts">
 import { defineProps, defineEmits } from 'vue'
 import gsap from 'gsap'
+const axiosInstance = useNuxtApp().$axiosInstance as any
+const router = useRouter()
+
+
+const quizSubmissionCookie = useCookie('quiz_submission') as any
 
 const props = defineProps({
     quiz: {
@@ -148,6 +154,17 @@ const props = defineProps({
 
 const emit = defineEmits(['close'])
 const isLoading = ref(true)
+
+const startGame = async (id: number) => {
+    const newQuiz = await axiosInstance.get('/quiz/2/start')
+    const submissionData = {
+        submission_id: newQuiz.data.data.submission_id,
+        quiz_id: id
+    }
+    quizSubmissionCookie.value = JSON.stringify(submissionData)
+    router.push(`/panel/quiz/${id}`)
+}
+
 
 watch(props, (newVal) => {
     if (newVal.modalActive === true) {
@@ -261,10 +278,10 @@ const LeaveBg = (el: any) => {
     .image {
         border-radius: 12px;
         width: 100%;
-        height: 220px; 
+        height: 220px;
 
         @media only screen and (min-width: 640px) {
-                height: 538px; 
+            height: 538px;
         }
     }
 }

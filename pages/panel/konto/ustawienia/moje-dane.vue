@@ -1,11 +1,11 @@
 <template>
     <ModalUpdateSettings :modalActive="isAlert" @close="showAlert()" />
-    <ModalChangeAvatar :modalActive="isOpen" @close="isClick" :avatar="user.avatar" />
+    <ModalChangeQuizImage :modalActive="isModal" @close="isModalShow1" />
     <NuxtLayout name="account" arrowText="Ustawienia">
         <div class="w-full flex flex-col items-center mt-12 mb-10">
             <div class="relative mb-[8px]">
-                <SectionUserAvatar :size="112" :avatar="user.avatar" />
-                <div class="absolute right-0 bottom-3 bg-[#6b7280] w-8 h-8 rounded-full" @click="isClick">
+                <SectionUserAvatar :size="112" :avatar="avatar" />
+                <div class="absolute right-0 bottom-3 bg-[#6b7280] w-8 h-8 rounded-full" @click="isModalShow()">
                     <div class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
                         <Icon name="ph:camera" size="22" color="white" class="-mt-[3px]" />
                     </div>
@@ -59,7 +59,7 @@
 </template>
 <script lang="ts" setup>
 import { storeToRefs } from "pinia"
-import * as yup from "yup"  
+import * as yup from "yup"
 import { Form } from "vee-validate"
 import { useUser } from "@/stores/useUser"
 const axiosInstance = useNuxtApp().$axiosInstance as any
@@ -71,6 +71,32 @@ const isAlert = ref(false)
 const userState = useUser()
 const { settings, user } = storeToRefs(userState) as any;
 const showError = ref<boolean | any>(false)
+
+const avatar = ref(user.value.avatar) as any
+
+const isModal = ref(false)
+const isModalShow = () => {
+    isModal.value = !isModal.value
+}
+
+const isModalShow1 = async (value: any) => {
+    isModalShow()
+    if (value) {
+        const formData = new FormData()
+        formData.append("avatar", value)
+        try {
+            const res = await axiosInstance.post('/user/uploadAvatar', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                }
+            })
+            userState.updateUserAvatarState(res.data.avatar_url);
+            avatar.value = res.data.avatar_url
+        } catch (error) {
+            console.error('Błąd podczas przesyłania awatara:', error);
+        }
+    }
+}
 
 const schemaChangePassword = yup.object().shape({
     current_password: yup

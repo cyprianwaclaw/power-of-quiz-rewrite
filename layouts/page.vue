@@ -1,7 +1,10 @@
 <template>
   <div class="w-full">
     <NavUser />
-    <div class="own-container min-h-screen page-background pb-[200px]">
+    <div class="min-h-screen page-background"
+      :class="router.currentRoute.value.matched[0]?.name === 'panel-quiz-id' ? 'game-container' : 'own-container'">
+      <!-- pb-[200px] -->
+      <!-- {{ isQuizGamePage }} -->
       <slot />
     </div>
     <div class="md:hidden fixed bottom-0 z-30 w-full">
@@ -16,6 +19,7 @@
 <script setup lang="ts">
 const router = useRouter();
 
+// const isQuizGamePage = router.currentRoute.value.matched[0].name === "panel-quiz-id" ? true : false;
 </script>
 
 <style scoped>
@@ -23,6 +27,12 @@ const router = useRouter();
   margin-left: 24px;
   margin-right: 24px;
   padding-top: 100px;
+}
+
+.game-container {
+  /* margin-left: 24px;
+  margin-right: 24px; */
+  padding-top: 64px;
 }
 
 @media (min-width: 640px) {

@@ -19,7 +19,7 @@ import { useQuiz } from "@/stores/useQuiz";
 const axiosInstance = useNuxtApp().$axiosInstance as any
 
 const quizState = useQuiz()
-const { errorState, title, id, newImageFile, questionsArray, removedQuestionIndexArray, questionsArrayNew, isSendSuccess } = storeToRefs(quizState);
+const { errorState, title, id, newImageFile, questionsArray, removedQuestionIndexArray, questionsArrayNew, isSendSuccess, image } = storeToRefs(quizState);
 const showErrorMessage = ref<boolean>(false);
 const updatedQuiz = ref(false)
 const isLoadingButton = ref(false)

@@ -8,7 +8,8 @@
          <p class="text-[#ef142a] text-[15px] mt-[3px]">Uzupełnij wszystkie
             dane</p>
       </div>
-      <SectionQuizForm  :error="showErrorMessage" />
+      <SectionQuizForm :error="showErrorMessage" />
+      <SectionChangeQuizImage />
       <SectionQuestionsForms :array="Array" :error="showErrorMessage" />
    </div>
    <div class="w-full -mb-[70px]">
@@ -68,7 +69,7 @@ const onSubmit = async () => {
 }
 
 onMounted(() => {
-      quizState.$reset()
+   quizState.$reset()
 })
 
 </script>

@@ -18,6 +18,11 @@ export const useUser = defineStore('user', {
                 console.error("Błąd logowania:", error)
             }
         },
+
+        updateUserAvatarState(avatarLink: string) {
+            this.user.avatar = avatarLink
+        },
+        
         async getUserSettings() {
             try {
                 const axiosInstance = useNuxtApp().$axiosInstance as any
