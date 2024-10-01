@@ -5,6 +5,7 @@
       <div class="image" />
     </div>
     fsdfdf
+    {{ avatarImage }}
     <!-- <div v-else>
        <img v-if="avatarImage" :src="avatarImage" :style="{ width: props.size + 'px', height: props.size + 'px' }"
         class="border-[#EDEDED] rounded-full" @load="isLoading = false" @error="isLoading = false" />
