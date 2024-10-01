@@ -4,9 +4,9 @@
     <div v-if="isLoading" class="is-loading" :style="{ width: props.size + 'px', height: props.size + 'px' }">
       <div class="image" />
     </div>
-    fsdfdf
-    {{ avatarImage }}
-    <!-- <div v-else>
+    <!-- fsdfdf -->
+    <!-- {{ avatarImage }} -->
+    <div v-else>
        <img v-if="avatarImage" :src="avatarImage" :style="{ width: props.size + 'px', height: props.size + 'px' }"
         class="border-[#EDEDED] rounded-full" @load="isLoading = false" @error="isLoading = false" />
       <div v-else :style="{ width: props.size + 'px', height: props.size + 'px' }">
@@ -14,7 +14,7 @@
           <path d="M34.0299 31.5319C36.0046 ... z" fill="#B6C4E9" />
         </svg>
       </div>
-    </div> -->
+    </div>
   </div>
 </template>
 
