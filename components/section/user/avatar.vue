@@ -10,12 +10,13 @@
     <!-- fsdfdf -->
     <div v-else>
       <!-- {{ typeof(avatarImage) }} -->
-      <img v-if="avatarImage" :src="avatarImage" :style="{ width: props.size + 'px', height: props.size + 'px' }"
+      <img v-if="!avatarImage" :src="avatarImage" :style="{ width: props.size + 'px', height: props.size + 'px' }"
         class="border-[#EDEDED] rounded-full" @load="isLoading = false" @error="isLoading = false" />
       <div v-else :style="{ width: props.size + 'px', height: props.size + 'px' }">
-        <svg width="100%" height="100%" viewBox="0 0 39 39" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <Icon name="carbon:user-avatar-filled" :size="props.size + 3" color="#B6C4E9"/>
+        <!-- <svg width="100%" height="100%" viewBox="0 0 39 39" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M34.0299 31.5319C36.0046 ... z" fill="#B6C4E9" />
-        </svg>
+        </svg> -->
       </div>
     </div>
   </div>
