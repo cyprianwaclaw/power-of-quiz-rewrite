@@ -27,6 +27,7 @@ const router = useRouter();
   margin-left: 24px;
   margin-right: 24px;
   padding-top: 100px;
+  padding-bottom: 200px;
 }
 
 .game-container {

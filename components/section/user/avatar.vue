@@ -9,8 +9,8 @@
     </div>
     <!-- fsdfdf -->
     <div v-else>
-      {{ typeof(avatarImage) }}
-      <img v-if="avatarImage != 'false'" :src="avatarImage" :style="{ width: props.size + 'px', height: props.size + 'px' }"
+      <!-- {{ typeof(avatarImage) }} -->
+      <img v-if="avatarImage" :src="avatarImage" :style="{ width: props.size + 'px', height: props.size + 'px' }"
         class="border-[#EDEDED] rounded-full" @load="isLoading = false" @error="isLoading = false" />
       <div v-else :style="{ width: props.size + 'px', height: props.size + 'px' }">
         <svg width="100%" height="100%" viewBox="0 0 39 39" fill="none" xmlns="http://www.w3.org/2000/svg">
