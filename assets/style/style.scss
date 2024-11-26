@@ -423,12 +423,12 @@ input:focus::placeholder {
 @media only screen and (max-width: 520px) {
     .navigate {
         font-size: 16px;
-        // padding-bottom: px;
+        // padding-bottom: px;m
         color: $primary;
         text-decoration: underline;
         text-underline-offset: 4px;
         text-decoration-color: $primary;
-        text-decoration-thickness: 2px;
+        text-decoration-thickness: px;
         font-weight: 700;
         .text {
             font-size: 16px;

@@ -9,10 +9,13 @@
             <ModalContentSorting @close="sortingShowMobile" @save="saveSort" />
         </template>
     </ModalDown>
-    <div class="md:mt-5 lg:mt-8 mb-2 md:mb-4 lg:mb-7">
-        <h2 class="text-2xl md:text-3xl flex place-items-center font-medium">
-            Quizy
+    <div class="md:mt-5 lg:mt-8">
+        <h2 class="text-[27px] md:text-3xl flex place-items-center font-medium">
+            {{ router.currentRoute.value.query.searchTerm ? 'Quizy' : ' Wszystkie gry' }}
         </h2>
+        <div v-if="!router.currentRoute.value.query.searchTerm" class="mt-[24px] -mb-[1px]">
+            <ButtonSecondary :array="buttonsArray" />
+        </div>
         <div v-if="router.currentRoute.value.query.searchTerm" class="mt-[23px]">
             <div class="flex justify-between">
                 <p class="text-gray-600 font-medium text-[15px]">Wyszukiwanie dla:</p>
@@ -24,7 +27,7 @@
         </div>
     </div>
     <div class="-mb-24">
-        <div class="flex w-full justify-between -mb-[1px] mt-[20px] place-items-center">
+        <div class="flex w-full justify-between mb-[14px] place-items-center">
             <div v-if="isLoading">
                 <div class="card is-loading">
                     <div class="image" />
@@ -32,40 +35,48 @@
             </div>
             <div v-else class="flex gap-2 text-[15px]">
                 <p class="text-gray-400">
-                    Strona {{ route.query.page ? route.query.page : 1 }}/{{ allQuiz?.pagination?.last_page }}
+                    Strona {{ route.query.page ? route.query.page : 1 }}/{{ last_page }}
                 </p>
-                <p class="text-gray-400">( {{ allQuiz?.pagination.count }} )</p>
+                <p class="text-gray-400">( {{ dataCount }} )</p>
             </div>
-            <div class="flex sm:hidden">
+            <div v-if="router.currentRoute.value.query.section === 'konkursy' ? false : true" class="flex sm:hidden">
                 <button @click="sortingShowMobile">
                     <p class="primary-color font-medium">Sortuj</p>
                 </button>
             </div>
         </div>
-        <div class="flex justify-between place-items-center mb-4">
-        </div>
-        <div class="sm:flex hidden flex flex-col mb-[32px]">
+        <div class="sm:flex hidden flex-col mb-[32px]">
             <SectionFilterDesktop :categories="mapCategories" />
         </div>
-        <div class="fixed margin z-30 lg:hidden flex w-[12px] justify-end right-0 bottom-[160px]">
+        <div v-if="router.currentRoute.value.query.section === 'konkursy' ? false : true"
+            class="fixed margin z-30 lg:hidden flex w-[12px] justify-end right-0 bottom-[160px]">
             <div class="open-filter" @click="filterShow">
                 <Icon name="heroicons:adjustments-horizontal" size="32" color="white" />
             </div>
         </div>
-        <div v-if="cookieView == 'two'">
-            <CardTwoQuiz :quizes="allQuiz?.data" :plan="hasPremium?.has_premium" :isLoading="isLoading" :n="10" />
+        <div v-if="router.currentRoute.value.query.section === 'konkursy' ? false : true">
+            <div v-if="cookieView == 'two'">
+                <CardTwoQuiz :quizes="allQuiz?.data" :plan="hasPremium?.has_premium" :isLoading="isLoading" :n="10" />
+            </div>
+            <div v-if="cookieView == 'three'">
+                <CardSearchQuiz :quizes="allQuiz?.data" :plan="hasPremium?.has_premium" :isLoading="isLoading" :n="10" />
+            </div>
+            <div v-if="cookieView == 'four'">
+                <CardFourQuiz :quizes="allQuiz?.data" :plan="hasPremium?.has_premium" :isLoading="isLoading" :n="10" />
+            </div>
+            <div v-if="allQuiz?.data.length == 0" class="flex justify-center mt-8">
+                Brak wyników
+            </div>
         </div>
-        <div v-if="cookieView == 'three'">
-            <CardSearchQuiz :quizes="allQuiz?.data" :plan="hasPremium?.has_premium" :isLoading="isLoading" :n="10" />
+        <div v-else>
+            <CardCompetition :competitions="allCompetitions?.data" :plan="true" :isLoading="isLoading" :n="10" />
         </div>
-        <div v-if="cookieView == 'four'">
-            <CardFourQuiz :quizes="allQuiz?.data" :plan="hasPremium?.has_premium" :isLoading="isLoading" :n="10" />
-        </div>
-        <div v-if="allQuiz?.data.length == 0" class="flex justify-center mt-8">
-            Brak wyników
-        </div>
-        <SectionPagination :last_page="allQuiz?.pagination?.last_page" :current_page="allQuiz?.pagination?.current_page"
+        <SectionPagination v-if="router.currentRoute.value.query.section === 'konkursy' ? false : true"
+            :last_page="allQuiz?.pagination?.last_page" :current_page="allQuiz?.pagination?.current_page"
             :isLoading="isLoading" />
+        <SectionPagination v-else :last_page="allCompetitions?.pagination?.last_page"
+            :current_page="allCompetitions?.pagination?.current_page" :isLoading="isLoading" />
+
     </div>
 </template>
 
@@ -83,17 +94,31 @@ const route = useRoute();
 const isLoading = ref(true);
 const endpoint = ref('/quizzes/all');
 const allQuiz = ref();
+const allCompetitions = ref();
 const cookieView = useCookie('view');
 const cookiePerPage = useCookie('perPage') as any;
 const { hasPremium } = storeToRefs(userState);
 const categories = ref([]);
-
+const last_page = ref()
+const dataCount = ref()
 
 const filter = ref(false);
 const sortingMobile = ref(false);
 
 cookieView.value = cookieView.value || 'two';
 cookiePerPage.value = cookiePerPage.value || 23;
+
+const buttonsArray = reactive([
+    {
+        title: "Quizy",
+        link: ""
+    },
+    {
+        title: "Konkursy",
+        link: "konkursy"
+    }
+])
+
 
 const filterShow = () => {
     filter.value = !filter.value;
@@ -104,11 +129,19 @@ const sortingShowMobile = () => {
 }
 
 onMounted(async () => {
-    const res = await axiosInstance.get(`${endpoint.value}?${formatQueryString(route.query)}&per_page=${cookiePerPage.value}`);
-    allQuiz.value = res.data;
-    isLoading.value = false;
-});
-
+    if (route.query.section === 'konkursy') {
+        const res = await axiosInstance.get(`/competition/all?${formatQueryString(route.query)}&per_page=1`);
+        allCompetitions.value = res.data;
+        last_page.value = res.data?.pagination?.last_page
+        dataCount.value = res.data.pagination.count
+    } else {
+        const res = await axiosInstance.get(`${endpoint.value}?${formatQueryString(route.query)}&per_page=${cookiePerPage.value}`);
+        allQuiz.value = res.data;
+        last_page.value = res.data.pagination.last_page;
+        dataCount.value = res.data.pagination.count
+    }
+    isLoading.value = false
+})
 
 const resCategories = await axiosInstance.get('/categories');
 categories.value = resCategories.data.data;
@@ -121,20 +154,28 @@ const mapCategories = categories.value.map((single: any) => ({
 
 const saveSort = async (value: any) => {
     const res = await axiosInstance.get(`${endpoint.value}?${formatQueryString(router.currentRoute.value.query)}&per_page=${cookiePerPage.value}`);
-    allQuiz.value = res.data;
+    allQuiz.value = res.data
 };
 
 onBeforeRouteUpdate(async (to) => {
-    isLoading.value = true;
-    const res = await axiosInstance.get(`${endpoint.value}?${formatQueryString(to.query)}&per_page=${cookiePerPage.value}`);
-    allQuiz.value = res.data;
-    isLoading.value = false;
-});
+    isLoading.value = true
+    if (to.query.section === 'konkursy') {
+        const res = await axiosInstance.get(`/competition/all?${formatQueryString(to.query)}&per_page=1`);
+        allCompetitions.value = res.data;
+        last_page.value = res.data?.pagination?.last_page
+        dataCount.value = res.data.pagination.count
+    } else {
+        const res = await axiosInstance.get(`${endpoint.value}?${formatQueryString(to.query)}&per_page=${cookiePerPage.value}`);
+        allQuiz.value = res.data;
+        last_page.value = res.data.pagination.last_page;
+        dataCount.value = res.data.pagination.count
+    }
+    isLoading.value = false
+})
 
-
+ 
 const clearSearchTerm = () => {
     router.push('/panel/quiz')
-
 }
 
 </script>

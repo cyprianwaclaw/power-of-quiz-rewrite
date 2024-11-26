@@ -3,18 +3,75 @@
         <Transition @enter="EnterBg" @leave="LeaveBg" :css="false">
             <div class="blur-background-update" @click="$emit('close')" v-if="props.modalActive" />
         </Transition>
+        <!-- Mobile view  -->
         <div class="flex sm:hidden">
             <Transition @enter="onEnterMobile" @leave="onLeaveMobile" :css="false">
                 <div class="modal-down" v-if="props.modalActive">
                     <div class="justify-center flex -mt-[17px]">
                         <hr class="w-9 close border-[2px] rounded-2xl" />
                     </div>
-                    <div class="flex columns-2 w-full justify-between mb-4 mt-[17px] place-items-start gap-[24px]">
-                        <p class="font-medium text-[20px] leading-[25px] ">{{ quiz.title }}</p>
+                    <div class="flex columns-2 w-full justify-between mb-5 mt-[17px] place-items-start gap-[24px]">
+                        <div class="flex flex-col">
+                            <p class="font-medium text-[14px] primary-color">Konkurs</p>
+                            <p class="font-medium text-[20px] leading-[25px] ">{{ competition.title }}</p>
+                        </div>
                         <Icon name="carbon:close" size="30" class="close w-8 h-8 border-transparent rounded-[6px]"
                             @click="$emit('close')" />
                     </div>
                     <div class="content overflow-y-scroll">
+                        <div class="w-full">
+                            <div v-if="isLoading">
+                                <div class="is-loading">
+                                    <div class="image" />
+                                </div>
+                            </div>
+                            <img v-show="!isLoading" :src="competition.image" class="image" />
+                        </div>
+                        <div class="mb-6 gap-[5px] flex flex-col">
+                            <div class="flex gap-[7px] mt-2">
+                                <p class="text-gray-600">Rozpoczęcie:</p>
+                                <p class="text-base primary-color font-medium">
+                                    {{ competition.date }}
+                                </p>
+                            </div>
+                            <div class="flex gap-[7px] mb-3">
+                                <p class="text-gray-600">Czas trwania:</p>
+                                <p class="text-base primary-color font-medium">
+                                    {{ competition.time }} min
+                                </p>
+                            </div>
+                            <div class="flex gap-[7px]">
+                                <p class="text-gray-600">Kategoria:</p>
+                                <p class="text-base primary-color font-medium">
+                                    {{ competition.category }}
+                                </p>
+                            </div>
+                            <div class="flex gap-[7px]">
+                                <p class="text-gray-600">Trudność:</p>
+                                <p class="text-base primary-color font-medium">
+                                    {{ competition.difficulty }}
+                                </p>
+                            </div>
+                            <div class="flex gap-[7px]">
+                                <p class="text-gray-600">Liczba pytań:</p>
+                                <p class="text-base primary-color font-medium">
+                                    {{ competition.questions_count }}
+                                </p>
+                            </div>
+                        </div>
+                        <p class="text-[17px] font-semibold">Opis</p>
+                        <p class="text pr-6 mb-5 text-gray-600 mt-[4px]"> {{ competition.description }}</p>
+                        <label class="flex w-full mb-5 mt-12">
+                            <input type="checkbox" class="w-5 flex mb-[4px]" v-model="checkbox" />
+                            <p class="ml-2">Akceptuje <NuxtLink to="/regulamin" class="link">regulamin</NuxtLink>
+                            </p>
+                        </label>
+                        <button class=" w-full mb-6 " :class="checkbox ? 'button-primary' : 'button-primary-disabled'">
+                            <p class="text-center" @click="startGame(competition.id)">Zagraj</p>
+                        </button>
+                    </div>
+
+                    <!-- <div class="content overflow-y-scroll">
                         <div class="w-full">
                             <div v-if="isLoading">
                                 <div class="is-loading">
@@ -58,17 +115,16 @@
                         <p class="text-[17px] font-semibold">Opis</p>
                         <p class="text pr-6 mb-5 text-gray-600 mt-[4px]">{{ quiz.description }}</p>
                         <button class="button-primary w-full mb-6 mt-7">
-                            <!-- <NuxtLink :to="`/panel/quiz/${quiz?.id}`"> -->
-                                <!-- dsada -->
-                                <p class="text-center" @click="startGame(quiz?.id)">Zagraj w quidsdz</p>
-                            <!-- </NuxtLink> -->
+                     
+                            <p class="text-center" @click="startGame(quiz?.id)">Zagraj w quidsdz</p>
+
                         </button>
-                    </div>
+                    </div> -->
                 </div>
             </Transition>
         </div>
         <!-- Dekstop view  -->
-        <div class="sm:flex hidden">
+        <!-- <div class="sm:flex hidden">
             <Transition @enter="onEnterDesktop" :css="false">
                 <div class="modal-desktop" v-if="props.modalActive">
                     <div class="w-full h-full">
@@ -128,7 +184,7 @@
                     </div>
                 </div>
             </Transition>
-        </div>
+        </div> -->
     </div>
 </template>
 
@@ -138,11 +194,10 @@ import gsap from 'gsap'
 const axiosInstance = useNuxtApp().$axiosInstance as any
 const router = useRouter()
 
-
-const quizSubmissionCookie = useCookie('quiz_submission') as any
+const quizSubmissionCookie = useCookie('competition_submission') as any
 
 const props = defineProps({
-    quiz: {
+    competition: {
         type: Object,
         required: true,
     },
@@ -154,15 +209,20 @@ const props = defineProps({
 
 const emit = defineEmits(['close'])
 const isLoading = ref(true)
-
+const checkbox = ref(false)
 const startGame = async (id: number) => {
-    const newQuiz = await axiosInstance.get(`/quiz/${id}/start`)
-    const submissionData = {
-        submission_id: newQuiz.data.data.submission_id,
-        quiz_id: id
+    if (checkbox.value === true) {       
+        const newCompetition = await axiosInstance.get(`/competition/${id}/start`)
+        const submissionData = {
+            submission_id: newCompetition.data.submission_id,
+            competition_id: id,
+            first_question: newCompetition.data.next_question,
+            info: newCompetition.data.competition_info,
+
+        }
+        quizSubmissionCookie.value = JSON.stringify(submissionData)
+        router.push(`/panel/konkurs/${id}`)
     }
-    quizSubmissionCookie.value = JSON.stringify(submissionData)
-    router.push(`/panel/quiz/${id}`)
 }
 
 
@@ -226,6 +286,28 @@ const LeaveBg = (el: any) => {
 <style scoped lang="scss">
 @import "@/assets/style/variables.scss";
 
+.link {
+    font-size: 16px;
+    margin-left: 1px;
+    color: $primary;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: $primary;
+    text-decoration-thickness: 1px;
+    font-weight: 400;
+}
+
+.button-primary-disabled {
+    cursor: not-allowed !important;
+    background-color: #aec5ff !important;
+    color: #fff;
+    font-weight: 500;
+    border: none !important;
+    padding: 10px 23px;
+    border-radius: 8px;
+    transition: background-color 0.23s ease;
+}
+
 .modal-down {
     background-color: white;
     border: solid transparent;
@@ -250,7 +332,7 @@ const LeaveBg = (el: any) => {
 
 .content {
     height: 359px;
-    padding-top: 16px;
+    // padding-top: 16px;
 }
 
 .image {
