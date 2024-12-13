@@ -19,12 +19,26 @@
                 <p v-if="props.error" class="text-error-notification">{{ validateField('difficulty') }}</p>
             </div>
             <div class="row-table-start">
-                <p class="text-[14px] mb-[6px] text-[#9a9a9a]">Czas trwania</p>
-                <div class="flex place-items-center gap-[12px] mb-1.5">
-                    <input type="number" min="0" max="99" class="w-[56px]" placeholder="0" v-model="time" />
-                    <p>minuty</p>
+                <input class="border-none pl-0" placeholder="Punkty za pierwsze miejsce" v-model="first_points"
+                    type="number" />
+            </div>
+            <div class="row-table-start">
+                <input class="border-none pl-0" placeholder="Punkty za drugie miejsce" v-model="second_points"
+                    type="number" />
+            </div>
+            <div class="row-table-start">
+                <input class="border-none pl-0" placeholder="Punkty za trzecie miejsce" v-model="third_points"
+                    type="number" />
+            </div>
+            <div class="row-table-start">
+                <Calendar v-model="time" class="w-full my-1 -ml-[1px]" dateFormat="dd.mm.yy" placeholder="Data konkursu"
+                    :pt="dropdownPt(1)" />
+                <div class="flex gap-[12px]">
+                    <Calendar v-model="time_start" class="w-[100px] my-1 -ml-[1px]" showTime timeOnly
+                        placeholder="Rozpoczęcie" :pt="dropdownPt(1)" />
+                    <Calendar v-model="time_end" class="w-[100px] my-1 -ml-[1px]" showTime timeOnly
+                        placeholder="Zakończenie" :pt="dropdownPt(1)" />
                 </div>
-                <p v-if="props.error" class="text-error-notification">{{ validateField('time') }}</p>
             </div>
             <div class="row-table-end">
                 <textarea v-model="description" wrap="soft" rows="3" class=" w-full mt-1" ref="autoResizeTextarea1"
@@ -57,7 +71,7 @@ const difficultyArray = reactive([
 ])
 
 const quizState = useCompetition()
-const { errorState, isSendSuccess, title, time, description, category_id, difficulty } = storeToRefs(quizState)
+const { errorState, isSendSuccess, title, description, category_id, difficulty, first_points, second_points, third_points, time, time_start, time_end } = storeToRefs(quizState)
 const rotationStates = ref<boolean[]>([false, false])
 
 const toggleRotation = (index: number, isVisible: boolean) => {
@@ -103,7 +117,7 @@ const validateField = (field: string): string | null => {
         title: () => !title.value || title.value.length < 3,
         category: () => !category_id.value,
         difficulty: () => !difficulty.value,
-        time: () => !time.value || time.value == '0',
+        // time: () => !time.value || time.value == '0',
         description: () => !description.value || description.value.length < 10,
     } as any
     const errorMessages = {

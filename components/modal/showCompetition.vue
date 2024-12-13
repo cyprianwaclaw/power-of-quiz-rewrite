@@ -29,15 +29,16 @@
                         </div>
                         <div class="mb-6 gap-[5px] flex flex-col">
                             <div class="flex gap-[7px] mt-2">
-                                <p class="text-gray-600">Rozpoczęcie:</p>
+                                <p class="text-gray-600">Data:</p>
                                 <p class="text-base primary-color font-medium">
-                                    {{ competition.date }}
+                                    <!-- {{ competition.time }} -->
+                                    {{ competition.time.data }}
                                 </p>
                             </div>
                             <div class="flex gap-[7px] mb-3">
-                                <p class="text-gray-600">Czas trwania:</p>
+                                <p class="text-gray-600">Godziny</p>
                                 <p class="text-base primary-color font-medium">
-                                    {{ competition.time }} min
+                                    {{ competition.time.start_format }} - {{ competition.time.end_format }}
                                 </p>
                             </div>
                             <div class="flex gap-[7px]">

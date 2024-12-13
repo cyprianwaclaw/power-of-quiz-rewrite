@@ -11,6 +11,11 @@ export const useCompetition = defineStore('competition', {
         time: '',
         difficulty: '',
         category_id: '',
+        first_points: '',
+        second_points: '',
+        third_points: '',
+        time_start: '',
+        time_end: '',
         questionsArray: [{
             id: '',
             title: '',
@@ -30,12 +35,29 @@ export const useCompetition = defineStore('competition', {
 
     actions: {
         apiDataQuiz() {
+            const formatDateTime = (date: Date, time: Date): string => {
+                const pad = (num: number) => String(num).padStart(2, '0');
+
+                const year = time.getFullYear();
+                const month = pad(time.getMonth() + 1);
+                const day = pad(time.getDate());
+                const hours = pad(date.getHours());
+                const minutes = pad(date.getMinutes());
+                const seconds = pad(date.getSeconds());
+
+                return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+            };
+
             return {
                 title: this.title,
                 description: this.description,
-                time: this.time,
                 difficulty: this.difficulty,
-                category_id: this.category_id
+                category_id: this.category_id,
+                time_start: this.time_start ? formatDateTime(new Date(this.time_start), new Date(this.time)) : null,
+                time_end: this.time_end ? formatDateTime(new Date(this.time_end), new Date(this.time)) : null,
+                first_points: this.first_points,
+                second_points: this.second_points,
+                third_points: this.third_points,
             };
         },
 
@@ -44,7 +66,7 @@ export const useCompetition = defineStore('competition', {
             this.title = data.title;
             this.image = data.image;
             this.description = data.description;
-            this.time = data.time;
+            // this.time = data.time;
             this.difficulty = data.difficulty;
             this.category_id = data.category_id;
             this.questionsArray = data.questionsArray;
@@ -53,7 +75,7 @@ export const useCompetition = defineStore('competition', {
         saveImage(image: any) {
             this.image = image;
         },
-        
+
         async questionsAndAnswersSubmit1(axiosMethod: 'post' | 'patch', questionsArray: any[]) {
             try {
                 const axiosInstance = useNuxtApp().$axiosInstance as any;

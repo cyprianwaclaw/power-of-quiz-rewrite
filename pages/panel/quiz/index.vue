@@ -130,7 +130,7 @@ const sortingShowMobile = () => {
 
 onMounted(async () => {
     if (route.query.section === 'konkursy') {
-        const res = await axiosInstance.get(`/competition/all?${formatQueryString(route.query)}&per_page=1`);
+        const res = await axiosInstance.get(`/competition/all?${formatQueryString(route.query)}&per_page=14`);
         allCompetitions.value = res.data;
         last_page.value = res.data?.pagination?.last_page
         dataCount.value = res.data.pagination.count
@@ -160,7 +160,7 @@ const saveSort = async (value: any) => {
 onBeforeRouteUpdate(async (to) => {
     isLoading.value = true
     if (to.query.section === 'konkursy') {
-        const res = await axiosInstance.get(`/competition/all?${formatQueryString(to.query)}&per_page=1`);
+        const res = await axiosInstance.get(`/competition/all?${formatQueryString(to.query)}&per_page=14`);
         allCompetitions.value = res.data;
         last_page.value = res.data?.pagination?.last_page
         dataCount.value = res.data.pagination.count

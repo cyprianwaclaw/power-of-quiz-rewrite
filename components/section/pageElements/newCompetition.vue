@@ -5,12 +5,14 @@
             <p class="text-[#ef142a] text-[15px] mt-[3px]">Uzupełnij wszystkie
                 dane</p>
         </div> -->
+        <!-- {{ quizState.apiDataQuiz() }} -->
         <SectionCompetitionForm :error="showErrorMessage" />
-        plus data
+        <!-- plus data -->
         <SectionChangeQuizImage />
         <SectionCompetitionQuestionsForms :array="Array" :error="showErrorMessage" />
     </div>
-    {{  questionsArray }}
+
+    <!-- {{  questionsArray }} -->
     <div class="w-full -mb-[70px]">
         <ButtonLoading isLoading="false" @click="onSubmit" :loading="isLoadingButton"
             :text="isButtonText ? isButtonText : 'Dodaj quiz'"
@@ -30,11 +32,25 @@ const showErrorMessage = ref<boolean>(false);
 const isLoadingButton = ref(false)
 const isButtonText = ref()
 
+// const formatDateTime = (date: Date): any => {
+//     const pad = (num: number) => String(num).padStart(2, '0');
+
+//     const year = date.getFullYear();
+//     const month = pad(date.getMonth() + 1); // Miesiące zaczynają się od 0
+//     const day = pad(date.getDate());
+//     const hours = pad(date.getHours());
+//     const minutes = pad(date.getMinutes());
+//     const seconds = pad(date.getSeconds());
+
+//     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+// };
+
 const onSubmit = async () => {
     showErrorMessage.value = true
     isLoadingButton.value = true
 
     if (errorState.value == false) {
+
         const newQuiz = await axiosInstance.post('/competition/new', quizState.apiDataQuiz())
         for (const question of questionsArray.value) {
             const newQuestionData = ref({ "question": question.title, "competition_id": newQuiz.data.competition_id });

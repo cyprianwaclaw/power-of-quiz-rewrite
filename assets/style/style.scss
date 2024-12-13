@@ -223,14 +223,13 @@ input:focus {
 }
 
 input::placeholder {
-    font-size: 15px;
+    font-size: 16px;
     color: $text-gray
 }
 
-input:focus::placeholder {
-    font-size: 0px;
-}
-
+// input:focus::placeholder {
+//     // font-size: 0px;
+// }
 .help-message {
     // position: absolute;
     margin-top: 2px;

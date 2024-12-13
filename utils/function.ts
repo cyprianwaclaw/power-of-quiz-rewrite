@@ -604,3 +604,4 @@ export const getModifiedQuizData = (quizObject: any, quizState: any) => {
 
   return modifiedData
 }
+
