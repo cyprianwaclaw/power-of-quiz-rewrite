@@ -15,13 +15,15 @@
                     isClick === answer.id && isGoodAnswer === true ? 'good-answer' : '',
                 ]">
                     {{ answer.answer }}
+                    {{ isGoodAnswer }}
                 </div>
             </div>
         </div>
         <div v-else class="bg-white p-[21px] rounded-xl">
             <p class="primary-color font-medium text-[18px]">Rozwiązano konkurs</p>
             <p class="mt-[7px]">
-                Po zakończymym konkursie zostaną ogłoszone wyniki, śledź informacje <NuxtLink to="/panel/konto/konkursy" class="underline">TUTAJ
+                Po zakończymym konkursie zostaną ogłoszone wyniki, śledź informacje <NuxtLink to="/panel/konto/konkursy"
+                    class="underline">TUTAJ
                 </NuxtLink>
             </p>
         </div>
@@ -38,32 +40,16 @@ const isLoading = ref(true)
 const isClick = ref<number | null>(null)
 const isGoodAnswer = ref<boolean | null>(null)
 const currentQuestionsArray = ref() as any
-// const getSingleQuizById = await axiosInstance.get(`/quizzes/${quizId.value}`)
 const isNextQuestions = ref()
-const correctAnswer = ref<number>(0)
 
 onMounted(async () => {
-    // if (competitionSubmissionCookie.value?.competitionId_id == competitionId.value) {
     // ! rozwizaujemu konkurs
-    // const getNextQuestion = await axiosInstance.get(`/quiz/submission/${quizSubmissionCookie.value.submission_id}/getNextQuestion`)
     currentQuestionsArray.value = competitionSubmissionCookie.value.first_question
     setTimeout(() => {
         isLoading.value = false
     }, 300)
-    // } 
 
     // ! nie wolno grac
-    //     const newQuiz = await axiosInstance.get(`/quiz/${quizId.value}/start`)
-    //     const submissionData = {
-    //         submission_id: newQuiz.data.data.submission_id,
-    //         quiz_id: router.currentRoute.value.params.id
-    //     }
-    //     competitionSubmissionCookie.value = JSON.stringify(submissionData)
-    //     currentQuestionsArray.value = newQuiz.data.data.next_question
-    //     setTimeout(() => {
-    //         isLoading.value = false
-    //     }, 300)
-    // }
 })
 
 const sendAnswer = async (questionId: number, answerId: number) => {
@@ -73,8 +59,7 @@ const sendAnswer = async (questionId: number, answerId: number) => {
         answer_id: answerId
     })
     isNextQuestions.value = sendQuestion.data
-    isGoodAnswer.value = sendQuestion.data.is_correct === 1 ? true : false
-    isGoodAnswer.value == true ? correctAnswer.value++ : ''
+    isGoodAnswer.value = sendQuestion.data.is_correct
     setTimeout(() => {
         isClick.value = null
         isGoodAnswer.value = null

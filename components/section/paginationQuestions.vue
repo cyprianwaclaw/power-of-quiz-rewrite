@@ -1,40 +1,23 @@
 <template>
-  <div v-if="props.isLoading" class="flex place-items-center md:justify-start justify-center mt-12 md:mt-20">
+  <div v-if="props.isLoading" class="flex place-items-center md:justify-start justify-center -mt-[19px]">
     <div class="card is-loading">
       <div class="image" />
     </div>
   </div>
   <div v-else>
-
-    <div class="flex place-items-center md:justify-start justify-center mt-12 md:mt-20" v-if="props.last_page != 1">
-      <button v-if="props.current_page != 1" @click="changePage(props.current_page - 1)" class="mr-2">
-        <Icon name="fluent:chevron-left-20-filled" size="27" class="-mt-1 text-gray-400 hover:text-black" />
+    <div class="flex place-items-center mt-[2px]" v-if="props.last_page != 1">
+      <button v-if="props.current_page != 1" @click="changePage(props.current_page - 1)" class="mr-1.5">
+        <Icon name="fluent:chevron-left-20-filled" size="30" class=" hover:text-black -mr-1" color="#618cfb"/>
       </button>
-      <div v-if="props.last_page > 3 && props.current_page > 2" class="flex">
-        <p class="page-number" @click="changePage(1)" :class="{ active: 1 == props.current_page }">
-          1
-        </p>
-        <p class="cursor-default mx-2">...</p>
-      </div>
-      <div v-for="(page, index) in pageNumbers(props.last_page, props.current_page)" :key="index">
-        <p class="page-number" @click="changePage(page)" :class="{ active: page == props.current_page }">
-          {{ page }}
-        </p>
-      </div>
-      <div v-if="props.last_page > 3 && props.current_page < props.last_page - 1" class="flex">
-        <p class="cursor-default mx-2">...</p>
-        <p class="page-number" @click="changePage(props.last_page)"
-          :class="{ active: props.last_page == props.current_page }">
-          {{ props.last_page }}
-        </p>
-      </div>
-      <button v-if="props.current_page != props.last_page" @click="changePage(props.current_page + 1)" class="ml-2">
-        <Icon name="fluent:chevron-right-20-filled" size="27" class="-mt-1 text-gray-400 hover:text-black" />
+        <p class="text-center text-[16px]">
+            {{ props.current_page }}
+          </p>
+      <button v-if="props.current_page != props.last_page" @click="changePage(props.current_page + 1)" class="ml-1.5">
+        <Icon name="fluent:chevron-right-20-filled" size="30" class=" hover:text-black -ml-1" color="#618cfb"/>
       </button>
     </div>
   </div>
 </template>
-
 <script setup lang="ts">
 const props = defineProps({
   last_page: {
@@ -86,7 +69,7 @@ const changePage = (pageNumber: number) => {
     return { ...router.currentRoute.value.query, page: pageNumber }
   }
   router.push({ query: addParams() })
-  scrollToTop()
+  // scrollToTop()
 }
 </script>
 
@@ -130,8 +113,8 @@ const changePage = (pageNumber: number) => {
   }
 
   .image {
-    height: 35px;
-    width: 170px;
+    height: 32px;
+    width: 80px;
     border-radius: 8px;
   }
 

@@ -14,15 +14,16 @@
                 <textarea v-model="single.title" wrap="soft" rows="1" class=" w-full mt-3 "
                     :ref="(el) => setTitleTextareaRef(questionIndex, el)"
                     @input="resizeTitleTextarea(titleTextareas, questionIndex)" placeholder="Pytanie..." />
-                <div v-if="(isSend || props.error) && single.title.length < 3" class="mt-2 mb-1">
-                    <p class="text-error-notification">Wprowadź min 3 znaki</p>
-                </div>
                 <div v-if="(isSend || props.error) && single.title.length > 120" class="mt-2 mb-1">
                     <p class="text-error-notification">Pytanie nie moźe być dłuższe niż 120 znaków</p>
                 </div>
+                   <div v-if="single.title.length > 0 && single.answers.filter((answer) => answer.answer.trim().length > 0).length == 0" class="mt-2 mb-1">
+                        <p class="text-error-notification">Uzupełnij odpowiedzi i zaznacz poprawną</p>
+                    </div>
             </div>
             <div v-for="(answer, answerIndex) in single.answers" :key="answerIndex"
                 :class="answerIndex === 3 ? 'row-table-end' : 'row-table-start'">
+                <!-- {{ answer.answer }} -->
                 <div class="flex place-items-center mr-[23px]">
                     <div class="w-[44px] h-[44px] mr-[7px] flex justify-center items-center"
                         @click="selectAnswer(questionIndex, answerIndex)">
@@ -32,16 +33,13 @@
                     <textarea class="scrollbar-hide" v-model="answer.answer" wrap="soft" rows="1"
                         :ref="(el) => setTextareaRef(questionIndex, answerIndex, el)"
                         @input="resizeTextarea(textareas, questionIndex, answerIndex)" placeholder="Odpowiedź..." />
+                    </div>
+                    <div v-if="(isSend || props.error) && answer.answer.length > 120" class="mt-2 mb-1">
+                        <p class="text-error-notification">Odpowiedź nie moźe być dłuższa niż 120 znaków</p>
+                    </div>
                 </div>
-                <div v-if="(isSend || props.error) && answer.answer.length < 3" class="mt-2 mb-1">
-                    <p class="text-error-notification">Wprowadź min 3 znaki</p>
-                </div>
-                <div v-if="(isSend || props.error) && answer.answer.length > 120" class="mt-2 mb-1">
-                    <p class="text-error-notification">Odpowiedź nie moźe być dłuższa niż 120 znaków</p>
-                </div>
-            </div>
             <div class="mt-3 ml-[28px]" v-if="(isSend || props.error) && isAllFalse(questionIndex)">
-                <p class="text-error-notification">Zaznacz poprawną odpowiedź</p>
+                <p class="text-error-notification">Uzupełnij tytuł, odpowiedzi i zaznacz poprawną</p>
             </div>
         </div>
         <div  class="w-full flex justify-end mt-8">
@@ -88,18 +86,27 @@ const selectAnswer = (questionIndex: any, answerIndex: any) => {
 const validateQuestion = (questionIndex: number): boolean => {
     const question = questionsArray.value[questionIndex];
 
-    if (question.title.length < 3 || question.title.length > 120) {
+    // Sprawdzenie, czy tytuł jest za długi
+    if (question.title.length > 120) {
         errorState.value = true;
         return false;
     }
 
+    // Sprawdzenie, czy którakolwiek odpowiedź jest za długa
     for (const answer of question.answers) {
-        if (answer.answer.length < 3 || answer.answer.length > 120) {
+        if (answer.answer.length > 120) {
             errorState.value = true;
             return false;
         }
     }
 
+    // Sprawdzenie, czy tytuł jest podany, ale wszystkie odpowiedzi są puste
+    if (question.title.length > 0 && question.answers.filter((answer) => answer.answer.trim().length > 0).length === 0) {
+        errorState.value = true;
+        return false;
+    }
+
+    // Sprawdzenie, czy żadna odpowiedź nie jest zaznaczona jako poprawna
     if (isAllFalse(questionIndex)) {
         errorState.value = true;
         return false;
@@ -110,14 +117,16 @@ const validateQuestion = (questionIndex: number): boolean => {
 
 const validateAllQuestions = (): boolean => {
     errorState.value = false;
+    // Przechodzimy przez wszystkie pytania i walidujemy każde z osobna
     for (let i = 0; i < questionsArray.value.length; i++) {
         if (!validateQuestion(i)) {
+            // Jeśli któreś pytanie nie przejdzie walidacji, zwracamy fałsz
             return false;
         }
     }
-
     return true;
 };
+
 
 const addQuestion = () => {
     isSend.value = true
@@ -138,8 +147,42 @@ const addQuestion = () => {
 }
 
 const isAllFalse = (questionIndex: any): boolean => {
-    return questionsArray.value[questionIndex].answers.every((answer: any) => !answer.isCorrect);
+    const question = questionsArray.value[questionIndex];
+    const answers = question.answers;
+
+    // Wyświetlenie odpowiedzi w konsoli
+    console.log("Odpowiedzi:", answers.map((answer: any) => answer.answer));
+
+    // Sprawdzenie, ile odpowiedzi jest uzupełnionych
+    const filledAnswersCount = answers.filter((answer: any) => answer.answer.trim().length > 0).length;
+
+    // Sprawdzenie, czy wszystkie odpowiedzi są uzupełnione
+    const allFilled = filledAnswersCount === answers.length;
+
+    // Sprawdzenie, czy żadna odpowiedź nie jest poprawna
+    const allIncorrect = answers.every((answer: any) => !answer.isCorrect);
+
+    // Zwracanie błędu, jeśli chociaż jedna odpowiedź jest uzupełniona, a inne nie
+    if (filledAnswersCount > 0 && !allFilled) {
+        console.log("Błąd: Nie wszystkie odpowiedzi są uzupełnione.");
+        return true; // Zwraca błąd
+    }
+
+    // Zwrócenie błędu, jeśli wszystkie odpowiedzi są uzupełnione, ale żadna nie jest poprawna
+    if (allFilled && allIncorrect) {
+        console.log("Błąd: Wszystkie odpowiedzi są uzupełnione, ale żadna nie jest poprawna.");
+        return true; // Zwraca błąd
+    }
+
+    // Sprawdzenie, czy tytuł pytania jest pusty tylko jeśli są uzupełnione odpowiedzi
+    if (filledAnswersCount > 0 && question.title.trim().length === 0) {
+        console.log("Błąd: Tytuł pytania nie jest uzupełniony.");
+        return true; // Zwraca błąd, jeśli tytuł jest pusty
+    }
+
+    return false; // Brak błędów
 };
+
 
 const removeQuestion = (index: any) => {
     const removedQuestionIndex = questionsArray.value[index].id

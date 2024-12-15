@@ -21,14 +21,17 @@
             <div class="row-table-start">
                 <input class="border-none pl-0" placeholder="Punkty za pierwsze miejsce" v-model="first_points"
                     type="number" />
+                <p v-if="props.error && !first_points" class="text-error-notification">Uzupełnij wygraną</p>
             </div>
             <div class="row-table-start">
                 <input class="border-none pl-0" placeholder="Punkty za drugie miejsce" v-model="second_points"
                     type="number" />
+                <p v-if="props.error && !second_points" class="text-error-notification">Uzupełnij wygraną</p>
             </div>
             <div class="row-table-start">
                 <input class="border-none pl-0" placeholder="Punkty za trzecie miejsce" v-model="third_points"
                     type="number" />
+                <p v-if="props.error && !third_points" class="text-error-notification">Uzupełnij wygraną</p>
             </div>
             <div class="row-table-start">
                 <Calendar v-model="time" class="w-full my-1 -ml-[1px]" dateFormat="dd.mm.yy" placeholder="Data konkursu"
@@ -39,6 +42,8 @@
                     <Calendar v-model="time_end" class="w-[100px] my-1 -ml-[1px]" showTime timeOnly
                         placeholder="Zakończenie" :pt="dropdownPt(1)" />
                 </div>
+                <p v-if="props.error && (!time || !time_end || !time_start)" class="text-error-notification">Uzupełnij datę
+                    oraz godziny konkursu</p>
             </div>
             <div class="row-table-end">
                 <textarea v-model="description" wrap="soft" rows="3" class=" w-full mt-1" ref="autoResizeTextarea1"
@@ -117,7 +122,6 @@ const validateField = (field: string): string | null => {
         title: () => !title.value || title.value.length < 3,
         category: () => !category_id.value,
         difficulty: () => !difficulty.value,
-        // time: () => !time.value || time.value == '0',
         description: () => !description.value || description.value.length < 10,
     } as any
     const errorMessages = {

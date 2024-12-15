@@ -6,86 +6,41 @@
                 <div class="image" />
             </div>
         </div>
-        <!-- {{ image }} -->
-        <!-- {{ croppedImage }} -->
-        <!-- <SectionUserAvatar :size="112" :avatar="avatar" /> -->
-        <img v-if="croppedImage" :src="croppedImage" :key="croppedImage" />
-
-        <div class="image-retangle h-[260px] md:mt-3 md:w-[350px] lg:w-[450px] 2xl:w-[550px] w-full">
-            <Icon name="carbon:cloud-upload" size="82" color="618CFB"
-                class="justify-center flex w-full -mb-[21px] mt-3 md:mt-12" />
-            <input type="file" ref="input" accept="image/*" class="default-file-input" @change="handleFileInputChange" />
-            <div class="flex w-full justify-center items-center">
-                <p class="flex md:hidden cursor-pointer">Kliknij tutaj aby dodać zdjęcie</p>
-                <p class="hidden md:flex justify-center cursor-pointer">Kliknij tutaj aby dodać zdjęcie,<br> lub
-                    upuść tutaj zdjęcie</p>
+        <div v-else>
+            <div v-if="croppedImage">
+                <img :src="croppedImage" :key="croppedImage" class="image" />
+                <div class="flex w-full justify-end -mt-[10px]">
+                    <p @click="deletePhoto()" class="text-red-600 px-5 py-3">Usuń</p>
+                    <button @click="handleFileInputChange" class="button-primary">Edytuj</button>
+                </div>
             </div>
+            <label v-else for="file-upload">
+                <div class="image-retangle h-[260px] md:mt-3 md:w-[350px] lg:w-[450px] 2xl:w-[550px] w-full">
+                    <Icon name="carbon:cloud-upload" size="82" color="618CFB"
+                        class="justify-center flex w-full -mb-[21px] mt-3 md:mt-12" />
+                    <input type="file" id="file-upload" ref="input" accept="image/*" class="default-file-input"
+                        @change="handleFileInputChange" />
+                    <div class="flex w-full justify-center items-center">
+                        <p class="flex md:hidden cursor-pointer">Kliknij tutaj aby dodać zdjęcie</p>
+                        <p class="hidden md:flex justify-center cursor-pointer">Kliknij tutaj aby dodać zdjęcie,<br> lub
+                            upuść tutaj zdjęcie</p>
+                    </div>
+                </div>
+            </label>
         </div>
-
     </div>
 </template>
 
-<!-- <script lang="ts" setup>
-import { storeToRefs } from 'pinia';
-import { useQuiz } from "@/stores/useQuiz";
-
-const quizState = useQuiz()
-const { image, newImage } = storeToRefs(quizState)
-const isLoading = ref(true)
-const isModal = ref(false)
-const selectedImage = ref()
-const croppedImage = ref()
-const quizImage = ref()
-
-const isModalShow = () => {
-    isModal.value = !isModal.value
-}
-
-function loadAvatarImage(url: any) {
-    const img = new Image()
-    img.src = url;
-    img.onload = () => {
-        isLoading.value = false
-    }
-}
-const changePhoto = (value: any) => {
-    // croppedImage.value = null
-    isModalShow()
-    croppedImage.value = URL.createObjectURL(value)
-}
-onMounted(() => {
-    // loadAvatarImage(image)
-    setTimeout(() => {
-        isLoading.value = false
-    }, 220);
-})
-
-const handleFileInputChange = (event: Event) => {
-    const fileInput = event.target as HTMLInputElement;
-    if (fileInput.files && fileInput.files.length > 0) {
-        const file = fileInput.files[0];
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            selectedImage.value = e.target?.result as string;
-        }
-        reader.readAsDataURL(file)
-        isModalShow()
-    }
-}
-
-</script> -->
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia';
-import { useQuiz } from "@/stores/useQuiz";
-import { watch } from 'vue';
+import { storeToRefs } from 'pinia'
+import { useImage } from "@/stores/imageStore"
 
-const quizState = useQuiz()
-const { image, newImage } = storeToRefs(quizState)
+const imageState = useImage()
+const {newImage, newImageFile } = storeToRefs(imageState)
 const isLoading = ref(true)
 const isModal = ref(false)
 const selectedImage = ref<string | undefined>()
 const croppedImage = ref<string | undefined>()
-const quizImage = ref<string | undefined>()
 
 const isModalShow = () => {
     isModal.value = !isModal.value
@@ -98,21 +53,6 @@ function loadAvatarImage(url: string) {
         isLoading.value = false
     }
 }
-
-// watch(() => props.avatar, (newValue) => {
-//     isLoading.value = true;
-//     avatarImage.value = newValue;
-//     loadAvatarImage(newValue);
-// });
-
-
-// function loadAvatarImage(url: string) {
-//     const img = new Image()
-//     img.src = url;
-//     img.onload = () => {
-//         isLoading.value = false
-//     }
-// }
 
 const changePhoto = (value: any) => {
     isModalShow();
@@ -145,7 +85,7 @@ onMounted(() => {
 })
 
 const handleFileInputChange = (event: Event) => {
-    const fileInput = event.target as HTMLInputElement;
+    const fileInput = event.target as HTMLInputElement
     if (fileInput.files && fileInput.files.length > 0) {
         const file = fileInput.files[0];
         const reader = new FileReader();
@@ -154,9 +94,18 @@ const handleFileInputChange = (event: Event) => {
         }
         reader.readAsDataURL(file)
         isModalShow()
+    } else {
+        isModalShow()
+        console.log(fileInput)
     }
 }
 
+const deletePhoto = () => {
+    newImageFile.value = null
+    newImage.value = ''
+    croppedImage.value = ''
+
+}
 // Dodajemy watch, żeby reagować na zmiany w selectedImage
 // watch(selectedImage, (newVal) => {
 //     if (newVal) {

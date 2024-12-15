@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
     <div>
         <h1>Image Cropper Example</h1>
         <Cropper ref="cropper" :src="imageUrl" :stencil-props="{ aspectRatio: 1 }" :class="['cropper']" :auto-zoom="true"
@@ -85,4 +85,71 @@ const getCroppedImage = async () => {
     height: 400px;
     border: 1px solid #ccc;
 }
-</style>
+</style> -->
+<template>
+    <div>
+        <!-- Wyświetlanie błędów dla testów -->
+        <pre>{{ errors }}</pre>
+
+        <!-- Pole tekstowe: Nazwa -->
+        <div class="row-table-start">
+            <textarea v-model="values.title" wrap="soft" rows="1" class="w-full -mt-3" placeholder="Nazwa" />
+            <p v-if="errors.title" class="text-error-notification">{{ errors.title }}</p>
+        </div>
+
+        <!-- Dropdown: Kategorie -->
+        <div class="row-table-start">
+            <Dropdown v-model="values.category" :options="categories" option-label="name" placeholder="Wybierz kategorię"
+                class="w-full my-1 -ml-[1px]" />
+            <p v-if="errors.category" class="text-error-notification">{{ errors.category }}</p>
+        </div>
+
+        <!-- Dropdown: Poziom trudności -->
+        <div class="row-table-start">
+            <Dropdown v-model="values.difficulty" :options="difficultyArray" option-label="name"
+                placeholder="Poziom trudności" class="w-full my-1 -ml-[1px]" />
+            <p v-if="errors.difficulty" class="text-error-notification">{{ errors.difficulty }}</p>
+        </div>
+
+        <!-- Opis -->
+        <div class="row-table-start">
+            <textarea v-model="values.description" rows="3" class="w-full my-1" placeholder="Opis" />
+            <p v-if="errors.description" class="text-error-notification">{{ errors.description }}</p>
+        </div>
+    </div>
+</template>
+
+<script lang="ts" setup>
+import { useForm } from 'vee-validate';
+import * as yup from 'yup';
+
+// Przykładowe opcje dla dropdownów
+const categories = [
+    { id: 1, name: 'Sport' },
+    { id: 2, name: 'Kultura' },
+];
+const difficultyArray = [
+    { id: 'easy', name: 'Łatwy' },
+    { id: 'medium', name: 'Średni' },
+    { id: 'hard', name: 'Trudny' },
+];
+
+// Schemat walidacji
+const schema = yup.object({
+    title: yup.string().min(3, 'Wprowadź min 3 znaki').required('Pole jest wymagane'),
+    category: yup.object().nullable().required('Wybierz kategorię'),
+    difficulty: yup.object().nullable().required('Wybierz poziom trudności'),
+    description: yup.string().min(10, 'Wprowadź min 10 znaków').required('Pole jest wymagane'),
+});
+
+// Formularz
+const { values, errors } = useForm({
+    validationSchema: schema,
+    initialValues: {
+        title: '',
+        category: null,
+        difficulty: null,
+        description: '',
+    },
+});
+</script>

@@ -2,11 +2,10 @@ import { defineStore } from 'pinia';
 
 export const useCompetition = defineStore('competition', {
     state: () => ({
-        errorState: true as boolean,
+        errorState: null as boolean | null,
         isSendSuccess: false as boolean,
         id: '',
         title: '',
-        image: '',
         description: '',
         time: '',
         difficulty: '',
@@ -28,9 +27,6 @@ export const useCompetition = defineStore('competition', {
         }],
         questionsArrayNew: [] as any,
         removedQuestionIndexArray: [] as any,
-        newImageFile: '' as any,
-        newImage: '' as any,
-
     }),
 
     actions: {
@@ -50,6 +46,7 @@ export const useCompetition = defineStore('competition', {
 
             return {
                 title: this.title,
+                // image: image._object.newImageFile,
                 description: this.description,
                 difficulty: this.difficulty,
                 category_id: this.category_id,
@@ -64,16 +61,12 @@ export const useCompetition = defineStore('competition', {
         updateQuizData(data: { id: any, title: string; image: any; description: string; time: any; difficulty: string; category_id: any, questionsArray: any }) {
             this.id = data.id;
             this.title = data.title;
-            this.image = data.image;
+            // this.image = data.image;
             this.description = data.description;
             // this.time = data.time;
             this.difficulty = data.difficulty;
             this.category_id = data.category_id;
             this.questionsArray = data.questionsArray;
-        },
-
-        saveImage(image: any) {
-            this.image = image;
         },
 
         async questionsAndAnswersSubmit1(axiosMethod: 'post' | 'patch', questionsArray: any[]) {

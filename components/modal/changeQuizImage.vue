@@ -68,14 +68,15 @@ import gsap from 'gsap'
 import { storeToRefs } from 'pinia';
 import { Cropper } from 'vue-advanced-cropper';
 import 'vue-advanced-cropper/dist/style.css';
-import { useQuiz } from "@/stores/useQuiz";
+import { useImage } from "@/stores/imageStore"
 
-const router = useRouter() as any
-const quizState = useQuiz()
-const { image, newImageFile, newImage } = storeToRefs(quizState)
+const imageState = useImage()
+const { newImage, newImageFile } = storeToRefs(imageState)
+const router = useRouter()
 const imageFile = ref(null) as any
 const croppedImage = ref(null) as any
 const cropper = ref()
+const routeName = ref() as any
 
 const props = defineProps({
     selectedImage: {
@@ -140,8 +141,6 @@ const handleFileInputChange = (event: Event) => {
     }
 }
 
-
-const routeName = ref<string>()
 onMounted(() => {
     console.log(router.currentRoute.value.name)
     routeName.value = router.currentRoute.value.name
