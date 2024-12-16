@@ -2,7 +2,6 @@ import { defineStore } from 'pinia';
 
 export const useCompetition = defineStore('competition', {
     state: () => ({
-        errorState: null as boolean | null,
         isSendSuccess: false as boolean,
         id: '',
         title: '',

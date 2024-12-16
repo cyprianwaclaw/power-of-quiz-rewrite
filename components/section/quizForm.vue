@@ -21,7 +21,7 @@
             <div class="row-table-start">
                 <p class="text-[14px] mb-[6px] text-[#9a9a9a]">Czas trwania</p>
                 <div class="flex place-items-center gap-[12px] mb-1.5">
-                    <input type="number" min="0" max="99" class="w-[56px]" placeholder="0" v-model="time" />
+                    <input type="number" min="0" max="99" class="w-[56px] px-[12px] py-[8px]" placeholder="0" v-model="time" />
                     <p>minuty</p>
                 </div>
                 <p v-if="quizState.isAllData() === true ? false : true && props.error" class="text-error-notification">{{ validateField('time') }}</p>

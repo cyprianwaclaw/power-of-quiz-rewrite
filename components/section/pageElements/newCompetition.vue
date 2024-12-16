@@ -51,7 +51,7 @@ const { newImageFile, newImage } = storeToRefs(imageState)
 const axiosInstance = useNuxtApp().$axiosInstance as any;
 const axiosInstanceData = useNuxtApp().$axiosInstanceData as any;
 const quizState = useCompetition();
-const { errorState, questionsArray, isSendSuccess } = storeToRefs(quizState);
+const { questionsArray, isSendSuccess } = storeToRefs(quizState);
 const route = useRoute();
 const showErrorMessage = ref<boolean>(false);
 const isLoadingButton = ref(false);
@@ -90,54 +90,54 @@ const fetchQuestions = async (query = route.query) => {
 }
 
 const onSubmit = async () => {
-    showErrorMessage.value = true
-    isLoadingButton.value = true
+    // showErrorMessage.value = true
+    // isLoadingButton.value = true
 
-    if (errorState.value === false && (newImageFile.value ? true : false)) {
+    // if (errorState.value === false && (newImageFile.value ? true : false)) {
 
-        const competitionData = {
-            ...quizState.apiDataQuiz(),
-            image: newImageFile.value
-        }
-        const newQuiz = await axiosInstanceData.post('/competition/new', competitionData)
-        for (const question of questionsArray.value) {
-            const newQuestionData = ref({ "question": question.title, "competition_id": newQuiz.data.competition_id });
-            try {
-                const newQuestion = await axiosInstance.post('/questions', newQuestionData.value);
+    //     const competitionData = {
+    //         ...quizState.apiDataQuiz(),
+    //         image: newImageFile.value
+    //     }
+    //     const newQuiz = await axiosInstanceData.post('/competition/new', competitionData)
+    //     for (const question of questionsArray.value) {
+    //         const newQuestionData = ref({ "question": question.title, "competition_id": newQuiz.data.competition_id });
+    //         try {
+    //             const newQuestion = await axiosInstance.post('/questions', newQuestionData.value);
 
-                for (const answer of question.answers) {
-                    const newAnswerData = ref({ "answer": answer.answer, "question_id": newQuestion.data.data.id, "correct": answer.isCorrect });
-                    await axiosInstance.post('/answers', newAnswerData.value);
-                }
-                await axiosInstance.post(`competition/${newQuiz.data.competition_id}/addQuestions`, {
-                    "questions": selectedQuestionsArray.value
-                })
+    //             for (const answer of question.answers) {
+    //                 const newAnswerData = ref({ "answer": answer.answer, "question_id": newQuestion.data.data.id, "correct": answer.isCorrect });
+    //                 await axiosInstance.post('/answers', newAnswerData.value);
+    //             }
+    //             await axiosInstance.post(`competition/${newQuiz.data.competition_id}/addQuestions`, {
+    //                 "questions": selectedQuestionsArray.value
+    //             })
 
-                setTimeout(() => {
-                    isLoadingButton.value = false;
-                    setTimeout(async () => {
-                        isLoading.value = true;
-                        await fetchQuestions();
-                        isLoading.value = false;
-                        isButtonText.value = "Wysłano!";
-                        quizState.$reset();
-                        newImageFile.value = null
-                        showErrorMessage.value = false;
-                        isSendSuccess.value = true;
-                    }, 20);
-                }, 1000);
+    //             setTimeout(() => {
+    //                 isLoadingButton.value = false;
+    //                 setTimeout(async () => {
+    //                     isLoading.value = true;
+    //                     await fetchQuestions();
+    //                     isLoading.value = false;
+    //                     isButtonText.value = "Wysłano!";
+    //                     quizState.$reset();
+    //                     newImageFile.value = null
+    //                     showErrorMessage.value = false;
+    //                     isSendSuccess.value = true;
+    //                 }, 20);
+    //             }, 1000);
 
-                setTimeout(() => {
-                    isButtonText.value = "";
-                }, 3100);
-            } catch (error) {
-                console.error("Error:", error);
-            }
-        }
-    } else {
-        scrollToTop();
-        isLoadingButton.value = false;
-    }
+    //             setTimeout(() => {
+    //                 isButtonText.value = "";
+    //             }, 3100);
+    //         } catch (error) {
+    //             console.error("Error:", error);
+    //         }
+    //     }
+    // } else {
+    //     scrollToTop();
+    //     isLoadingButton.value = false;
+    // }
 };
 
 onMounted(async () => {

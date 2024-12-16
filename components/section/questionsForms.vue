@@ -55,7 +55,7 @@ import { storeToRefs } from 'pinia'
 import { useQuiz } from "@/stores/useQuiz"
 
 const quizState = useQuiz()
-const { errorState, questionsArray, removedQuestionIndexArray } = storeToRefs(quizState)
+const { questionsArray, removedQuestionIndexArray } = storeToRefs(quizState)
 const router = useRouter()
 const textareas = ref<Record<string, HTMLTextAreaElement | null>>({});
 const titleTextareas = ref<Record<number, HTMLTextAreaElement | null>>({});
@@ -89,19 +89,19 @@ const validateQuestion = (questionIndex: number): boolean => {
     const question = questionsArray.value[questionIndex];
 
     if (question.title.length < 3 || question.title.length > 120) {
-        errorState.value = true;
+        // errorState.value = true;
         return false;
     }
 
     for (const answer of question.answers) {
         if (answer.answer.length < 3 || answer.answer.length > 120) {
-            errorState.value = true;
+            // errorState.value = true;
             return false;
         }
     }
 
     if (isAllFalse(questionIndex)) {
-        errorState.value = true;
+        // errorState.value = true;
         return false;
     }
 
@@ -109,7 +109,7 @@ const validateQuestion = (questionIndex: number): boolean => {
 };
 
 const validateAllQuestions = (): boolean => {
-    errorState.value = false;
+    // errorState.value = false;
     for (let i = 0; i < questionsArray.value.length; i++) {
         if (!validateQuestion(i)) {
             return false;
@@ -122,7 +122,7 @@ const validateAllQuestions = (): boolean => {
 const addQuestion = () => {
     isSend.value = true
     if (validateAllQuestions()) {
-        errorState.value = true;
+        // errorState.value = true;
         isSend.value = false
         questionsArray.value.push({
             id: '',
