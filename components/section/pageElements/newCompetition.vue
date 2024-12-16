@@ -1,6 +1,12 @@
 
 <template>
     <div>
+          <pre>
+         {{ errorState }}
+         {{ showErrorMessage }}
+         {{ newImageFile ? true : false }}
+         {{ errorState === false }}
+      </pre>
         <SectionCompetitionForm :error="showErrorMessage" />
         <SectionChangeQuizImage />
         <div v-if="showErrorMessage && (newImageFile ? false : true)" class="mb-[32px] -mt-[24px]">
@@ -93,7 +99,7 @@ const onSubmit = async () => {
     showErrorMessage.value = true
     isLoadingButton.value = true
 
-    if (errorState.value === false && (newImageFile.value ? false : true)) {
+    if (errorState.value === false && (newImageFile.value ? true : false)) {
 
         const competitionData = {
             ...quizState.apiDataQuiz(),

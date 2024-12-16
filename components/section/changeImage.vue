@@ -1,5 +1,5 @@
 <template>
-    <ModalChangeQuizImage :modalActive="isModal" @close="changePhoto" :selectedImage="selectedImage" />
+    <ModalChangeImage :modalActive="isModal" @close="changePhoto" :selectedImage="selectedImage" />
     <div class="my-[40px]">
         <div v-if="isLoading">
             <div class="is-loading">
@@ -46,37 +46,10 @@ const isModalShow = () => {
     isModal.value = !isModal.value
 }
 
-function loadAvatarImage(url: string) {
-    const img = new Image()
-    img.src = url;
-    img.onload = () => {
-        isLoading.value = false
-    }
-}
-
 const changePhoto = (value: any) => {
     isModalShow();
-    // croppedImage.value = ''; // Resetowanie wartości
-    // setTimeout(() => {
     croppedImage.value = URL.createObjectURL(value);
-    // croppedImage.value = value;
-
-    // loadAvatarImage(URL.createObjectURL(value))
-    // }); // Małe opóźnienie, żeby wymusić odświeżenie
 }
-
-// watch(croppedImage, (newValue: any) => {
-//     console.log(newValue)
-//     loadAvatarImage(newValue)
-// })
-
-// const changePhoto = (value: any) => {
-//     isModalShow()
-//     const myImage = new Image(100, 200);
-//     // myImage.src = URL.createObjectURL(value)
-//     // document.body.appendChild(myImage);
-//     croppedImage.value = URL.createObjectURL(value)
-// }
 
 onMounted(() => {
     setTimeout(() => {
@@ -96,7 +69,6 @@ const handleFileInputChange = (event: Event) => {
         isModalShow()
     } else {
         isModalShow()
-        console.log(fileInput)
     }
 }
 
@@ -106,13 +78,6 @@ const deletePhoto = () => {
     croppedImage.value = ''
 
 }
-// Dodajemy watch, żeby reagować na zmiany w selectedImage
-// watch(selectedImage, (newVal) => {
-//     if (newVal) {
-//         croppedImage.value = newVal;
-//     }
-// });
-
 </script>
 <style scoped lang="scss">
 @import "@/assets/style/variables.scss";

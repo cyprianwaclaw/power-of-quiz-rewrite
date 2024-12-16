@@ -1,25 +1,19 @@
 <template>
    <div>
-      <pre>
-         {{ errorState }}
-         {{ errorState }}
-      </pre>
       <h2 class="text-2xl md:text-3xl flex place-items-center font-medium">
          Dodaj nowy quiz
       </h2>
-      <div v-if="errorState && showErrorMessage" class="flex place-items-center gap-[5px] mt-3">
-         <Icon name="ph:warning-circle" size="22" class="text-[#ef142a]" />
-         <p class="text-[#ef142a] text-[15px] mt-[3px]">Uzupełnij wszystkie
-            dane</p>
-      </div>
       <SectionQuizForm :error="showErrorMessage" />
-      <SectionChangeQuizImage />
-      <div v-if="showErrorMessage && (newImageFile ? false : true)" class="mb-[32px] -mt-[24px]">
+      <SectionChangeImage />
+      <div v-if="quizState.isAllData() === true ? false : true && (newImageFile ? false : true) && showErrorMessage"
+         class="mb-[32px] -mt-[24px]">
          <p class="text-error-notification">Wybierz zdjęcie quizu</p>
       </div>
       <SectionQuestionsForms :array="Array" :error="showErrorMessage" />
    </div>
    <div class="w-full -mb-[70px]">
+      {{ newImageFile }}
+      <!-- {{ showErrorMessage }} -->
       <ButtonLoading isLoading="false" @click="onSubmit" :loading="isLoadingButton"
          :text="isButtonText ? isButtonText : 'Dodaj quiz'"
          :class="[isButtonText ? 'button-send-success' : 'button-send']" />
@@ -43,17 +37,16 @@ const isLoadingButton = ref(false)
 const isButtonText = ref()
 
 
-
-
 const onSubmit = async () => {
    showErrorMessage.value = true
-   // isLoadingButton.value = true
+   isLoadingButton.value = true
 
-   console.log('test')
-   console.log(errorState.value)
+   // console.log('test')
+   // console.log(errorState.value)
 
-   if (errorState.value === false && (newImageFile.value ? false : true)) {
-      console.log('test1')
+   if (quizState.isAllData() && newImageFile.value ? true : false) {
+
+      console.log('All data are available')
       const quizData = {
          ...quizState.apiDataQuiz(),
          image: newImageFile.value
@@ -78,7 +71,7 @@ const onSubmit = async () => {
                   newImageFile.value = null
                   newImage.value = null
                   showErrorMessage.value = false;
-                  isSendSuccess.value = true
+                  // isSendSuccess.value = true
                }, 20)
             }, 1000)
             setTimeout(async () => {
@@ -88,11 +81,53 @@ const onSubmit = async () => {
             console.error("Error:", error)
          }
       }
+      isLoadingButton.value = false
    } else {
-      console.log('test2')
-      // scrollToTop()
+      scrollToTop()
+      console.log('Not all data are available')
       isLoadingButton.value = false
    }
+   // if (errorState.value === false) {
+   //    console.log('test1')
+   //    const quizData = {
+   //       ...quizState.apiDataQuiz(),
+   //       image: newImageFile.value
+   //    }
+
+   //    const newQuiz = await axiosInstanceData.post('/quizzes', quizData)
+   //    for (const question of questionsArray.value) {
+   //       const newQuestionData = ref({ "question": question.title, "quiz_id": newQuiz.data.data.id });
+   //       try {
+   //          const newQuestion = await axiosInstance.post('/questions', newQuestionData.value)
+
+   //          for (const answer of question.answers) {
+   //             const newAnswerData = ref({ "answer": answer.answer, "question_id": newQuestion.data.data.id, "correct": answer.isCorrect, });
+   //             await axiosInstance.post('/answers', newAnswerData.value);
+
+   //          }
+   //          setTimeout(async () => {
+   //             isLoadingButton.value = false
+   //             setTimeout(async () => {
+   //                isButtonText.value = "Wysłano!"
+   //                quizState.$reset()
+   //                newImageFile.value = null
+   //                newImage.value = null
+   //                showErrorMessage.value = false;
+   //                isSendSuccess.value = true
+   //             }, 20)
+   //          }, 1000)
+   //          setTimeout(async () => {
+   //             isButtonText.value = ""
+   //          }, 3100)
+   //       } catch (error) {
+   //          console.error("Error:", error)
+   //       }
+   //    }
+   // } else {
+   //    console.log('test2')
+   //    scrollToTop()
+   //    isLoadingButton.value = false
+   // }
 }
 
 

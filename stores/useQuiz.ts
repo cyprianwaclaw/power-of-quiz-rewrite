@@ -6,7 +6,6 @@ export const useQuiz = defineStore('quiz', {
         isSendSuccess: false as boolean,
         id: '',
         title: '',
-        image: '',
         description: '',
         time: '',
         difficulty: '',
@@ -23,8 +22,6 @@ export const useQuiz = defineStore('quiz', {
         }],
         questionsArrayNew: [] as any,
         removedQuestionIndexArray: [] as any,
-        newImageFile: '' as any,
-        newImage: '' as any,
 
     }),
 
@@ -42,7 +39,6 @@ export const useQuiz = defineStore('quiz', {
         updateQuizData(data: { id: any, title: string; image: any; description: string; time: any; difficulty: string; category_id: any, questionsArray: any }) {
             this.id = data.id;
             this.title = data.title;
-            this.image = data.image;
             this.description = data.description;
             this.time = data.time;
             this.difficulty = data.difficulty;
@@ -50,10 +46,23 @@ export const useQuiz = defineStore('quiz', {
             this.questionsArray = data.questionsArray;
         },
 
-        saveImage(image: any) {
-            this.image = image;
+        isAllData(): boolean {
+            const { title, category_id, difficulty, time, description } = this;
+
+            const hasBasicData = Object.values({ title, category_id, difficulty, time, description })
+                .every(value => value !== null && value !== '' && value !== undefined);
+
+            const questionsValid = this.questionsArray.every(question => {
+                const hasTitle = question.title.trim().length > 0;
+                const allAnswersFilled = question.answers.every(answer => answer.answer.trim().length > 0);
+                const hasCorrectAnswer = question.answers.some(answer => answer.isCorrect);
+                return hasTitle && allAnswersFilled && hasCorrectAnswer;
+            })
+
+            return hasBasicData && questionsValid;
         },
-        
+
+
         async questionsAndAnswersSubmit1(axiosMethod: 'post' | 'patch', questionsArray: any[]) {
             try {
                 const axiosInstance = useNuxtApp().$axiosInstance as any;
