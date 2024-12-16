@@ -87,7 +87,7 @@ export const useQuiz = defineStore('quiz', {
                 }
             } catch (error) {
                 console.error("Wystąpił błąd podczas aktualizacji pytań i odpowiedzi:", error);
-                this.errorState = true;
+                // this.errorState = true;
             }
         },
         async addQuestionsAndAnswers(questionsArray: any) {
@@ -107,7 +107,7 @@ export const useQuiz = defineStore('quiz', {
                 }
             } catch (error) {
                 console.error("Wystąpił błąd podczas aktualizacji pytań i odpowiedzi:", error);
-                this.errorState = true;
+                // this.errorState = true;
             }
         }
 

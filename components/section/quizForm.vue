@@ -1,7 +1,5 @@
 <template>
     <div>
-        <!-- {{ quizState.isAllData() === true ? false : true }}
-        {{ props.error }} -->
         <div class="bg-white pt-7 pb-8 px-2 mt-10 rounded-[24px] relative">
             <div class="row-table-start">
                 <textarea v-model="title" wrap="soft" rows="1" class=" w-full -mt-3 " ref="autoResizeTextarea"
@@ -60,7 +58,7 @@ const difficultyArray = reactive([
 ])
 
 const quizState = useQuiz()
-const { errorState, isSendSuccess, title, time, description, category_id, difficulty } = storeToRefs(quizState)
+const { isSendSuccess, title, time, description, category_id, difficulty } = storeToRefs(quizState)
 const rotationStates = ref<boolean[]>([false, false])
 
 const toggleRotation = (index: number, isVisible: boolean) => {
@@ -118,10 +116,8 @@ const validateField = (field: string): string | null => {
     } as any
 
     if (props.error && errors[field]()) {
-        errorState.value = true
+        // errorState.value = true
         return errorMessages[field]
-    } else {
-        errorState.value = false
     }
     return null
 }
