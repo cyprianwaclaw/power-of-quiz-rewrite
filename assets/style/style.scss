@@ -212,7 +212,7 @@ input {
     outline: none;
     border-radius: 8px;
     border-color: $input-border;
-    padding: 0.5rem 0.75rem;
+    padding: 0.7rem 0.85rem !important;
     transition: border-color 0.2s ease-in-out, color 0.2s ease-in-out, background-color 0.2s ease-in-out;
 }
 
