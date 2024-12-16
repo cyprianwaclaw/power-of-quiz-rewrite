@@ -17,9 +17,10 @@
                 <div v-if="(isSend || props.error) && single.title.length > 120" class="mt-2 mb-1">
                     <p class="text-error-notification">Pytanie nie moźe być dłuższe niż 120 znaków</p>
                 </div>
-                   <div v-if="single.title.length > 0 && single.answers.filter((answer) => answer.answer.trim().length > 0).length == 0" class="mt-2 mb-1">
-                        <p class="text-error-notification">Uzupełnij odpowiedzi i zaznacz poprawną</p>
-                    </div>
+                <div v-if="single.title.length > 0 && single.answers.filter((answer) => answer.answer.trim().length > 0).length == 0"
+                    class="mt-2 mb-1">
+                    <p class="text-error-notification">Uzupełnij odpowiedzi i zaznacz poprawną</p>
+                </div>
             </div>
             <div v-for="(answer, answerIndex) in single.answers" :key="answerIndex"
                 :class="answerIndex === 3 ? 'row-table-end' : 'row-table-start'">
@@ -33,16 +34,16 @@
                     <textarea class="scrollbar-hide" v-model="answer.answer" wrap="soft" rows="1"
                         :ref="(el) => setTextareaRef(questionIndex, answerIndex, el)"
                         @input="resizeTextarea(textareas, questionIndex, answerIndex)" placeholder="Odpowiedź..." />
-                    </div>
-                    <div v-if="(isSend || props.error) && answer.answer.length > 120" class="mt-2 mb-1">
-                        <p class="text-error-notification">Odpowiedź nie moźe być dłuższa niż 120 znaków</p>
-                    </div>
                 </div>
+                <div v-if="(isSend || props.error) && answer.answer.length > 120" class="mt-2 mb-1">
+                    <p class="text-error-notification">Odpowiedź nie moźe być dłuższa niż 120 znaków</p>
+                </div>
+            </div>
             <div class="mt-3 ml-[28px]" v-if="(isSend || props.error) && isAllFalse(questionIndex)">
                 <p class="text-error-notification">Uzupełnij tytuł, odpowiedzi i zaznacz poprawną</p>
             </div>
         </div>
-        <div  class="w-full flex justify-end mt-8">
+        <div class="w-full flex justify-end mt-8">
             <button @click="addQuestion" class="primary-color font-semibold text-[18px]">Następne pytanie</button>
         </div>
     </div>
@@ -52,8 +53,8 @@
 import { storeToRefs } from 'pinia'
 import { useCompetition } from "@/stores/useCompetition"
 
-const quizState =  useCompetition()
-const { errorState, questionsArray, removedQuestionIndexArray } = storeToRefs(quizState)
+const quizState = useCompetition()
+const { questionsArray, removedQuestionIndexArray } = storeToRefs(quizState)
 const router = useRouter()
 const textareas = ref<Record<string, HTMLTextAreaElement | null>>({});
 const titleTextareas = ref<Record<number, HTMLTextAreaElement | null>>({});
@@ -88,35 +89,30 @@ const validateQuestion = (questionIndex: number): boolean => {
 
     // Sprawdzenie, czy tytuł jest za długi
     if (question.title.length > 120) {
-        errorState.value = true;
         return false;
     }
 
     // Sprawdzenie, czy którakolwiek odpowiedź jest za długa
     for (const answer of question.answers) {
         if (answer.answer.length > 120) {
-            errorState.value = true;
             return false;
         }
     }
 
     // Sprawdzenie, czy tytuł jest podany, ale wszystkie odpowiedzi są puste
     if (question.title.length > 0 && question.answers.filter((answer) => answer.answer.trim().length > 0).length === 0) {
-        errorState.value = true;
-        return false;
+        return false
     }
 
     // Sprawdzenie, czy żadna odpowiedź nie jest zaznaczona jako poprawna
     if (isAllFalse(questionIndex)) {
-        errorState.value = true;
-        return false;
-    }
 
-    return true;
-};
+        return false
+    }
+    return true
+}
 
 const validateAllQuestions = (): boolean => {
-    errorState.value = false;
     // Przechodzimy przez wszystkie pytania i walidujemy każde z osobna
     for (let i = 0; i < questionsArray.value.length; i++) {
         if (!validateQuestion(i)) {
@@ -124,14 +120,14 @@ const validateAllQuestions = (): boolean => {
             return false;
         }
     }
-    return true;
-};
+    return true
+}
 
 
 const addQuestion = () => {
     isSend.value = true
     if (validateAllQuestions()) {
-        errorState.value = true;
+
         isSend.value = false
         questionsArray.value.push({
             id: '',
@@ -142,7 +138,7 @@ const addQuestion = () => {
                 { id: '', answer: '', isCorrect: false },
                 { id: '', answer: '', isCorrect: false }
             ]
-        });
+        })
     }
 }
 

@@ -76,7 +76,7 @@ const difficultyArray = reactive([
 ])
 
 const quizState = useCompetition()
-const { errorState, isSendSuccess, title, description, category_id, difficulty, first_points, second_points, third_points, time, time_start, time_end } = storeToRefs(quizState)
+const {isSendSuccess, title, description, category_id, difficulty, first_points, second_points, third_points, time, time_start, time_end } = storeToRefs(quizState)
 const rotationStates = ref<boolean[]>([false, false])
 
 const toggleRotation = (index: number, isVisible: boolean) => {
@@ -133,10 +133,8 @@ const validateField = (field: string): string | null => {
     } as any
 
     if (props.error && errors[field]()) {
-        errorState.value = true
+        // errorState.value = true
         return errorMessages[field]
-    } else {
-        errorState.value = false
     }
 
     return null
@@ -175,7 +173,7 @@ watch(isSendSuccess, (newValue: any) => {
 
 
 onMounted(() => {
-    errorState.value = true;
+    // errorState.value = true;
     difficultyNew.value = difficulty
     categoryNew.value = category_id
 

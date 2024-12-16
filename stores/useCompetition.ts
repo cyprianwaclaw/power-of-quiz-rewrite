@@ -14,6 +14,7 @@ export const useCompetition = defineStore('competition', {
         third_points: '',
         time_start: '',
         time_end: '',
+        isSelectedQuestionsArray: false as boolean,
         questionsArray: [{
             id: '',
             title: '',
@@ -45,7 +46,6 @@ export const useCompetition = defineStore('competition', {
 
             return {
                 title: this.title,
-                // image: image._object.newImageFile,
                 description: this.description,
                 difficulty: this.difficulty,
                 category_id: this.category_id,
@@ -56,6 +56,53 @@ export const useCompetition = defineStore('competition', {
                 third_points: this.third_points,
             };
         },
+
+        isAllData(): boolean {
+            const { title, category_id, difficulty, first_points, second_points, third_points, time, time_start, time_end, description } = this;
+
+            // Sprawdzanie podstawowych danych
+            const hasBasicData = Object.values({ title, category_id, difficulty, first_points, second_points, third_points, time, time_start, time_end, description })
+                .every(value => value !== null && value !== '' && value !== undefined);
+
+            // Logika walidacji questionsArray
+            const questionsValid = this.questionsArray.length > 0
+                ? this.questionsArray.every(question => {
+                    const hasTitle = question.title.trim().length > 0;
+                    const allAnswersFilled = question.answers.every(answer => answer.answer.trim().length > 0);
+                    const hasCorrectAnswer = question.answers.some(answer => answer.isCorrect);
+                    return hasTitle && allAnswersFilled && hasCorrectAnswer;
+                })
+                : false; // Jeśli tablica jest pusta, zwróć false
+
+            // Jeśli flaga isSelectedQuestionsArray jest true, walidacja questionsArray jest pomijana
+            if (this.isSelectedQuestionsArray) {
+                return hasBasicData; // Sprawdzane są tylko podstawowe dane
+            }
+
+            // Jeśli isSelectedQuestionsArray jest false, ale questionsArray ma dane, waliduj je
+            return hasBasicData && questionsValid;
+        },
+
+
+        // isAllData(): boolean {
+        //     const { title, category_id, difficulty, first_points, second_points, third_points, time, time_start, time_end, description } = this;
+        //     // time, time_start, time_end,
+        //     const hasBasicData = Object.values({ title, category_id, difficulty, first_points, second_points, third_points, time, time_start, time_end, description })
+        //         .every(value => value !== null && value !== '' && value !== undefined);
+
+        //     const questionsValid = this.questionsArray.every(question => {
+        //         const hasTitle = question.title.trim().length > 0;
+        //         const allAnswersFilled = question.answers.every(answer => answer.answer.trim().length > 0);
+        //         const hasCorrectAnswer = question.answers.some(answer => answer.isCorrect);
+        //         return hasTitle && allAnswersFilled && hasCorrectAnswer;
+        //     })
+
+        //     // return hasBasicData
+        //     return hasBasicData && questionsValid;
+
+        // },
+
+
 
         updateQuizData(data: { id: any, title: string; image: any; description: string; time: any; difficulty: string; category_id: any, questionsArray: any }) {
             this.id = data.id;
