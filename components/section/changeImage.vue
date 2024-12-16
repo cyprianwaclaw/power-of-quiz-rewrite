@@ -7,7 +7,7 @@
             </div>
         </div>
         <div v-else>
-            <div v-if="croppedImage">
+            <div v-if="newImage">
                 <img :src="croppedImage" :key="croppedImage" class="image" />
                 <div class="flex w-full justify-end -mt-[10px]">
                     <p @click="deletePhoto()" class="text-red-600 px-5 py-3">Usuń</p>
@@ -36,7 +36,7 @@ import { storeToRefs } from 'pinia'
 import { useImage } from "@/stores/imageStore"
 
 const imageState = useImage()
-const {newImage, newImageFile } = storeToRefs(imageState)
+const { newImage, newImageFile } = storeToRefs(imageState)
 const isLoading = ref(true)
 const isModal = ref(false)
 const selectedImage = ref<string | undefined>()

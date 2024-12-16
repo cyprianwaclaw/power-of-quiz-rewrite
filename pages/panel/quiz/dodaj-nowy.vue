@@ -12,8 +12,6 @@
       <SectionQuestionsForms :array="Array" :error="showErrorMessage" />
    </div>
    <div class="w-full -mb-[70px]">
-      {{ newImageFile }}
-      <!-- {{ showErrorMessage }} -->
       <ButtonLoading isLoading="false" @click="onSubmit" :loading="isLoadingButton"
          :text="isButtonText ? isButtonText : 'Dodaj quiz'"
          :class="[isButtonText ? 'button-send-success' : 'button-send']" />
@@ -30,7 +28,7 @@ const { newImageFile, newImage } = storeToRefs(imageState)
 const axiosInstance = useNuxtApp().$axiosInstance as any
 const axiosInstanceData = useNuxtApp().$axiosInstanceData as any;
 const quizState = useQuiz()
-const { errorState, questionsArray, isSendSuccess } = storeToRefs(quizState);
+const { questionsArray, isSendSuccess } = storeToRefs(quizState);
 
 const showErrorMessage = ref<boolean>(false);
 const isLoadingButton = ref(false)
@@ -40,9 +38,6 @@ const isButtonText = ref()
 const onSubmit = async () => {
    showErrorMessage.value = true
    isLoadingButton.value = true
-
-   // console.log('test')
-   // console.log(errorState.value)
 
    if (quizState.isAllData() && newImageFile.value ? true : false) {
 
@@ -71,7 +66,7 @@ const onSubmit = async () => {
                   newImageFile.value = null
                   newImage.value = null
                   showErrorMessage.value = false;
-                  // isSendSuccess.value = true
+                  isSendSuccess.value = true
                }, 20)
             }, 1000)
             setTimeout(async () => {
@@ -87,51 +82,7 @@ const onSubmit = async () => {
       console.log('Not all data are available')
       isLoadingButton.value = false
    }
-   // if (errorState.value === false) {
-   //    console.log('test1')
-   //    const quizData = {
-   //       ...quizState.apiDataQuiz(),
-   //       image: newImageFile.value
-   //    }
-
-   //    const newQuiz = await axiosInstanceData.post('/quizzes', quizData)
-   //    for (const question of questionsArray.value) {
-   //       const newQuestionData = ref({ "question": question.title, "quiz_id": newQuiz.data.data.id });
-   //       try {
-   //          const newQuestion = await axiosInstance.post('/questions', newQuestionData.value)
-
-   //          for (const answer of question.answers) {
-   //             const newAnswerData = ref({ "answer": answer.answer, "question_id": newQuestion.data.data.id, "correct": answer.isCorrect, });
-   //             await axiosInstance.post('/answers', newAnswerData.value);
-
-   //          }
-   //          setTimeout(async () => {
-   //             isLoadingButton.value = false
-   //             setTimeout(async () => {
-   //                isButtonText.value = "Wysłano!"
-   //                quizState.$reset()
-   //                newImageFile.value = null
-   //                newImage.value = null
-   //                showErrorMessage.value = false;
-   //                isSendSuccess.value = true
-   //             }, 20)
-   //          }, 1000)
-   //          setTimeout(async () => {
-   //             isButtonText.value = ""
-   //          }, 3100)
-   //       } catch (error) {
-   //          console.error("Error:", error)
-   //       }
-   //    }
-   // } else {
-   //    console.log('test2')
-   //    scrollToTop()
-   //    isLoadingButton.value = false
-   // }
 }
-
-
-
 
 onMounted(() => {
    quizState.$reset()
