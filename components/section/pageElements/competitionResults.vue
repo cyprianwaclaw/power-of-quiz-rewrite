@@ -1,5 +1,8 @@
 <template>
     <div>
+        <div>
+            {{ userCompetition?.data.length }}
+        </div>
         <CardUserCompetition :competitions="userCompetition?.data" :plan="true" :isLoading="isLoading" :n="10" />
         <SectionPagination :last_page="userCompetition?.pagination?.last_page"
             :current_page="userCompetition?.pagination?.current_page" :isLoading="isLoading" />

@@ -1,5 +1,9 @@
 <template>
    <div>
+      <pre>
+         {{ errorState }}
+         {{ errorState }}
+      </pre>
       <h2 class="text-2xl md:text-3xl flex place-items-center font-medium">
          Dodaj nowy quiz
       </h2>
@@ -10,6 +14,9 @@
       </div>
       <SectionQuizForm :error="showErrorMessage" />
       <SectionChangeQuizImage />
+      <div v-if="showErrorMessage && (newImageFile ? false : true)" class="mb-[32px] -mt-[24px]">
+         <p class="text-error-notification">Wybierz zdjęcie quizu</p>
+      </div>
       <SectionQuestionsForms :array="Array" :error="showErrorMessage" />
    </div>
    <div class="w-full -mb-[70px]">
@@ -22,7 +29,12 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia';
 import { useQuiz } from "@/stores/useQuiz";
+import { useImage } from "@/stores/imageStore"
+
+const imageState = useImage()
+const { newImageFile, newImage } = storeToRefs(imageState)
 const axiosInstance = useNuxtApp().$axiosInstance as any
+const axiosInstanceData = useNuxtApp().$axiosInstanceData as any;
 const quizState = useQuiz()
 const { errorState, questionsArray, isSendSuccess } = storeToRefs(quizState);
 
@@ -30,12 +42,24 @@ const showErrorMessage = ref<boolean>(false);
 const isLoadingButton = ref(false)
 const isButtonText = ref()
 
+
+
+
 const onSubmit = async () => {
    showErrorMessage.value = true
-   isLoadingButton.value = true
+   // isLoadingButton.value = true
 
-   if (errorState.value == false) {
-      const newQuiz = await axiosInstance.post('/quizzes', quizState.apiDataQuiz())
+   console.log('test')
+   console.log(errorState.value)
+
+   if (errorState.value === false && (newImageFile.value ? false : true)) {
+      console.log('test1')
+      const quizData = {
+         ...quizState.apiDataQuiz(),
+         image: newImageFile.value
+      }
+
+      const newQuiz = await axiosInstanceData.post('/quizzes', quizData)
       for (const question of questionsArray.value) {
          const newQuestionData = ref({ "question": question.title, "quiz_id": newQuiz.data.data.id });
          try {
@@ -51,6 +75,8 @@ const onSubmit = async () => {
                setTimeout(async () => {
                   isButtonText.value = "Wysłano!"
                   quizState.$reset()
+                  newImageFile.value = null
+                  newImage.value = null
                   showErrorMessage.value = false;
                   isSendSuccess.value = true
                }, 20)
@@ -63,13 +89,19 @@ const onSubmit = async () => {
          }
       }
    } else {
-      scrollToTop()
+      console.log('test2')
+      // scrollToTop()
       isLoadingButton.value = false
    }
 }
 
+
+
+
 onMounted(() => {
    quizState.$reset()
+   newImageFile.value = null
+   newImage.value = null
 })
 
 </script>
