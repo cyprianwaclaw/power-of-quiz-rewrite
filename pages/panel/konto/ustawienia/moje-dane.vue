@@ -1,6 +1,6 @@
 <template>
     <ModalUpdateSettings :modalActive="isAlert" @close="showAlert()" />
-    <ModalChangeQuizImage :modalActive="isModal" @close="isModalShow1" />
+    <ModalChangeImage :modalActive="isModal" @close="isModalShow1" />
     <NuxtLayout name="account" arrowText="Ustawienia">
         <div class="w-full flex flex-col items-center mt-12 mb-10">
             <div class="relative mb-[8px]">

@@ -138,6 +138,7 @@ const onSubmit = async () => {
                         isButtonText.value = "Wysłano!";
                         quizState.$reset();
                         newImageFile.value = null
+                        newImage.value = null
                         showErrorMessage.value = false;
                         isSendSuccess.value = true;
                     }, 20);

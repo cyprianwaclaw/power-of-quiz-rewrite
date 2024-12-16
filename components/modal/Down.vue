@@ -4,7 +4,6 @@
       <div class="blur-background-update" v-if="props.modalActive"></div>
       <Transition @enter="onEnter" @leave="onLeave" :css="false">
         <div class="modal-down" v-if="props.modalActive">
-          dsdsdsdsa
           <div class="justify-center flex -mt-[17px]">
             <hr class="w-9 close border-[2px] rounded-2xl" />
           </div>

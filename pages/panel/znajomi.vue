@@ -18,8 +18,8 @@
     </div>
 </template>
 <script lang="ts" setup>
-const axiosInstance = useNuxtApp().$axiosInstance;
-const router = useRouter();
+const axiosInstance = useNuxtApp().$axiosInstance as any
+const router = useRouter()
 
 definePageMeta({
     middleware: "auth",
