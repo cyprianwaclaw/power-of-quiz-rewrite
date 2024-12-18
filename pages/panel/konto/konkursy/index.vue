@@ -1,6 +1,6 @@
 <template>
     <NuxtLayout name="account" arrowText="Twoje konto" title="Konkursy">
-        <ButtonSecondary :array="buttonsArray" />
+            <ButtonSecondary :array="buttonsArray" />
         <SectionPageElementsCompetitionResults v-if="router.currentRoute.value.query?.section == null" />
         <SectionPageElementsNewCompetition v-if="router.currentRoute.value.query?.section == 'newCompetition'" />
     </NuxtLayout>
@@ -28,10 +28,6 @@ const buttonsArray = reactive([
         title: "Wyniki",
         link: ""
     },
-    // {
-    //     title: "Historia wypłat",
-    //     link: "historia"
-    // },
     {
         title: "Nowy konkurs",
         link: "newCompetition"

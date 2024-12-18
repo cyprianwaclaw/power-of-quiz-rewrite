@@ -1,36 +1,39 @@
 <template>
-    <div>
-        <div class="bg-white pt-7 pb-8 px-2 mt-10 rounded-[24px] relative">
-            <div class="row-table-start">
-                <textarea v-model="title" wrap="soft" rows="1" class=" w-full -mt-3 " ref="autoResizeTextarea"
-                    @input="autoResize" placeholder="Nazwa" />
-                <p v-if="quizState.isAllData() === true ? false : true && props.error" class="text-error-notification">{{ validateField('title') }}</p>
+    <div class="bg-white pt-7 pb-8 px-2 mt-10 md:mt-0 rounded-[24px] w-full">
+        <div class="row-table-start">
+            <textarea v-model="title" wrap="soft" rows="1" class=" w-full -mt-3 " ref="autoResizeTextarea"
+                @input="autoResize" placeholder="Nazwa" />
+            <p v-if="quizState.isAllData() === true ? false : true && props.error" class="text-error-notification">{{
+                validateField('title') }}</p>
+        </div>
+        <div class="row-table-start">
+            <Dropdown v-model="categorySelect" :options="categories" option-label="name" placeholder="Wybierz kategorię"
+                class="w-full my-1 -ml-[1px]" :pt="dropdownPt(0)" filter filter-placeholder="Wyszukaj..."
+                @show="toggleRotation(0, true)" @hide="toggleRotation(0, false)" />
+            <p v-if="quizState.isAllData() === true ? false : true && props.error" class="text-error-notification">{{
+                validateField('category') }}</p>
+        </div>
+        <div class="row-table-start">
+            <Dropdown v-model="difficultySelect" :options="difficultyArray" option-label="name"
+                placeholder="Poziom trudności" class="w-full my-1 -ml-[1px]" :pt="dropdownPt(1)"
+                @show="toggleRotation(1, true)" @hide="toggleRotation(1, false)" />
+            <p v-if="quizState.isAllData() === true ? false : true && props.error" class="text-error-notification">{{
+                validateField('difficulty') }}</p>
+        </div>
+        <div class="row-table-start">
+            <p class="text-[14px] mb-[6px] text-[#312d2d]">Czas trwania</p>
+            <div class="flex place-items-center gap-[12px] mb-1.5">
+                <input type="number" min="0" max="99" class="w-[56px] px-[12px] py-[8px]" placeholder="0" v-model="time" />
+                <p>minuty</p>
             </div>
-            <div class="row-table-start">
-                <Dropdown v-model="categorySelect" :options="categories" option-label="name" placeholder="Wybierz kategorię"
-                    class="w-full my-1 -ml-[1px]" :pt="dropdownPt(0)" filter filter-placeholder="Wyszukaj..."
-                    @show="toggleRotation(0, true)" @hide="toggleRotation(0, false)" />
-                <p v-if="quizState.isAllData() === true ? false : true && props.error" class="text-error-notification">{{ validateField('category') }}</p>
-            </div>
-            <div class="row-table-start">
-                <Dropdown v-model="difficultySelect" :options="difficultyArray" option-label="name"
-                    placeholder="Poziom trudności" class="w-full my-1 -ml-[1px]" :pt="dropdownPt(1)"
-                    @show="toggleRotation(1, true)" @hide="toggleRotation(1, false)" />
-                <p v-if="quizState.isAllData() === true ? false : true && props.error" class="text-error-notification">{{ validateField('difficulty') }}</p>
-            </div>
-            <div class="row-table-start">
-                <p class="text-[14px] mb-[6px] text-[#9a9a9a]">Czas trwania</p>
-                <div class="flex place-items-center gap-[12px] mb-1.5">
-                    <input type="number" min="0" max="99" class="w-[56px] px-[12px] py-[8px]" placeholder="0" v-model="time" />
-                    <p>minuty</p>
-                </div>
-                <p v-if="quizState.isAllData() === true ? false : true && props.error" class="text-error-notification">{{ validateField('time') }}</p>
-            </div>
-            <div class="row-table-end">
-                <textarea v-model="description" wrap="soft" rows="3" class=" w-full mt-1" ref="autoResizeTextarea1"
-                    @input="autoResize" placeholder="Opis..." />
-                <p v-if="quizState.isAllData() === true ? false : true && props.error" class="text-error-notification">{{ validateField('description') }}</p>
-            </div>
+            <p v-if="quizState.isAllData() === true ? false : true && props.error" class="text-error-notification">{{
+                validateField('time') }}</p>
+        </div>
+        <div class="row-table-end">
+            <textarea v-model="description" wrap="soft" rows="3" class=" w-full mt-1" ref="autoResizeTextarea1"
+                @input="autoResize" placeholder="Opis..." />
+            <p v-if="quizState.isAllData() === true ? false : true && props.error" class="text-error-notification">{{
+                validateField('description') }}</p>
         </div>
     </div>
 </template>

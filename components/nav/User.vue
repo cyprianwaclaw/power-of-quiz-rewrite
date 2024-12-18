@@ -2,21 +2,26 @@
   <SectionMobileSearch :modalActive="openModalSearch" @close="isClickSearch" />
   <div class="fixed z-20 w-full">
     <div
-      class="sticky flex bg-white  place-items-center justify-between h-16 border-own z-40 px-6 xl:gap-[100px] md:gap-[24px]">
-      <div class="flex items-center shrink-0">
-        <NavLogo/>
-        <div v-for="(page, index) in links" :key="index" class="mr-7 hidden lg:flex">
-          <NuxtLink :to="page.link" class="flex gap-7">
-            <p class="text-[#464646] font-semibold whitespace-nowrap hover:text-black">
-              {{ page.name }}
-            </p>
-          </NuxtLink>
+      class="sticky flex bg-white  place-items-center justify-between h-16 border-own z-40 px-6 md:px-12 xl:gap-[100px] md:gap-[24px]">
+      <div class="flex items-center shrink-0 justify-between w-full">
+        <div @click="clickLogo" class="cursor-pointer">
+          <NavLogo />
         </div>
-      </div>
-      <div class="flex md:hidden">
-        <button @click="isClickSearch" class="justify-end flex">
-          <Icon :name="openModalSearch ? 'carbon:close' : 'ph:magnifying-glass-light'" size="31" class="search-icon" />
-        </button>
+        <div class="hidden md:flex gap-[10px] place-items-center md:gap-4">
+          <div v-for="(page, index) in links" :key="index" class="mr-4">
+            <NuxtLink :to="page.link" class="flex gap-7">
+              <p class="text-[#464646] font-semibold whitespace-nowrap hover:text-black">
+                {{ page.name }}
+              </p>
+            </NuxtLink>
+          </div>
+          <NavOpenMenu />
+        </div>
+        <div class="flex md:hidden -mr-1">
+          <button @click="isClickSearch" class="justify-end flex">
+            <Icon :name="openModalSearch ? 'carbon:close' : 'ph:magnifying-glass-light'" size="31" class="search-icon" />
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -36,16 +41,17 @@ const clickLogo = () => {
 
 const links = [
   { name: "Quizy", link: "/panel/quiz" },
-  { name: "Zaproś znajomych", link: "/" },
-  { name: "Dodaj nowy", link: "/" },
+  { name: "Konkursy", link: "/panel/quiz" },
+  // { name: "Zaproś znajomych", link: "/" },
+  // { name: "Dodaj nowy", link: "/" },
 ]
 
 </script>
 <style scoped lang="scss">
 @import "@/assets/style/variables.scss";
 
-.border-own{
-  border-bottom:1px solid  rgb(229 231 235);
+.border-own {
+  border-bottom: 1px solid rgb(229 231 235);
 }
 
 @media only screen and (max-width: 770px) {

@@ -1,10 +1,10 @@
 <template>
   <div class="-mb-[80px]">
-    <div @click="goToBack()" class="flex place-items-center -mt-[1px] mb-[28px]">
-      <Icon name="ph:caret-right-bold" size="22" class="primary-color back-arrow" />
-      <p class="go primary-color">{{ props?.arrowText }}</p>
-    </div>
-    <h1 class="text-[27px] font-medium color-[#212427]">{{ props?.title }}</h1>
+      <div @click="goToBack()" class="flex place-items-center -mt-[1px] mb-[28px]">
+        <Icon name="ph:caret-right-bold" size="22" class="primary-color back-arrow" />
+        <p class="go primary-color">{{ props?.arrowText }}</p>
+      </div>
+      <h1 class="text-[27px] font-medium color-[#212427]">{{ props?.title }}</h1>
     <div class="mt-[16px]">
       <slot />
     </div>

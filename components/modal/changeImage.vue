@@ -3,15 +3,17 @@
         <Transition @enter="EnterBg" @leave="LeaveBg" :css="false">
             <div class="blur-background-update" v-if="props.modalActive" />
         </Transition>
-        <div class="flex sm:hidden">
+        <div class="flex">
+            <!-- sm:hidden -->
             <Transition @enter="onEnterMobile" @leave="onLeaveMobile" :css="false">
                 <div class="modal-down" v-if="props.modalActive">
-                    <div class="justify-center flex -mt-[17px]">
+                    <div class="justify-center flex -mt-[17px] md:hidden">
                         <hr class="w-9 close border-[2px] rounded-2xl" />
                     </div>
-                    <div class="flex columns-2 w-full justify-between mb-4 mt-[17px] place-items-start gap-[24px]">
+                    <div
+                        class="flex columns-2 w-full justify-between mb-4 mt-[17px] md:mt-[2px] place-items-start gap-[24px]">
                         <p class="font-medium text-[20px] leading-[25px] ">
-                            {{ routeName === 'panel-konto-ustawienia-moje-dane' ? 'Zdjęcie profilowe' : 'Zdjęcie quizu' }}
+                            {{ routeName === 'panel-konto-ustawienia-moje-dane' ? 'Zdjęcie profilowe' : 'Ustaw zdjęcie' }}
                         </p>
                         <Icon name="carbon:close" size="30" class="close w-8 h-8 border-transparent rounded-[6px]"
                             @click="removeImage()" />
@@ -34,6 +36,9 @@
                             <div v-if="isLoading">
                                 <div class="is-loading">
                                     <div class="image" />
+                                    <div class="flex w-full justify-end">
+                                        <div class="image image-buttons" />
+                                    </div>
                                 </div>
                             </div>
                             <div v-else>
@@ -41,15 +46,15 @@
                                     <img :src="croppedImage" alt="Cropped Result" class="image" />
                                     <div class="w-full flex justify-end mt-[14px] gap-[18px]">
                                         <button @click="removeImage()"
-                                            class="text-[16px] font-medium text-red-500">Usuń</button>
-                                        <button @click="saveImage()" class="button-primary">Zapisz</button>
+                                            class="text-[16px] font-medium text-red-500 cursor-pointer">Usuń</button>
+                                        <button @click="saveImage()" class="button-primary cursor-pointer">Zapisz</button>
                                     </div>
                                 </div>
                                 <div v-else>
                                     <Cropper v-show="!isLoading" ref="cropper" :src="selectedImageValue"
                                         :stencil-props="{ aspectRatio: routeName === 'panel-konto-ustawienia-moje-dane' ? 1 : 10 / 7 }"
                                         :class="['cropper']" :auto-zoom="true" :auto-detect-crop-area="false"
-                                        :style="{ height: '260px', width: '100%', borderRadius: '12px', overflow: 'hidden' }" />
+                                        :style="{ height: '340px', width: '100%', borderRadius: '12px', overflow: 'hidden' }" />
                                     <div class="w-full flex justify-end mt-[14px]">
                                         <button @click="getCroppedImage" class="button-primary">Gotowe</button>
                                     </div>
@@ -255,11 +260,33 @@ input {
     background-color: white;
     border: solid transparent;
     border-radius: 16px 16px 0px 0px;
-    padding: 24px 24px 0px 24px;
+    padding: 24px;
     position: absolute;
-    bottom: 0px;
+    bottom: 10px;
     width: 100%;
     z-index: 100;
+    height: 506px
+}
+
+/* Dla ekranów o szerokości 700px i większych */
+@media (min-width: 700px) {
+    .modal-down {
+        position: fixed;
+        /* Ustawienie pozycji na środku */
+        top: 50%;
+        height: 514px;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border-radius: 16px;
+        /* Zaokrąglenie na wszystkich rogach */
+        // width: auto; /* Dopasowanie szerokości */
+        width: 600px;
+        /* Maksymalna szerokość */
+        padding: 24px;
+        /* Zachowanie marginesu */
+        bottom: auto;
+        /* Usuń wartość `bottom` */
+    }
 }
 
 .close {
@@ -275,7 +302,7 @@ input {
 
 .content {
     height: 359px;
-    padding-top: 16px;
+    padding-top: 4px;
 }
 
 .image {
@@ -284,11 +311,7 @@ input {
     margin-bottom: 16px;
     object-fit: cover;
     width: 100%;
-    height: 260px;
-
-    @media only screen and (min-width: 640px) {
-        height: 100%;
-    }
+    height: 340px;
 }
 
 .is-loading {
@@ -303,11 +326,13 @@ input {
     .image {
         border-radius: 12px;
         width: 100%;
-        height: 260px;
+        height: 340px;
+    }
 
-        @media only screen and (min-width: 640px) {
-            height: 538px;
-        }
+    .image-buttons {
+        border-radius: 10px;
+        width: 200px;
+        height: 45px;
     }
 }
 
@@ -315,22 +340,5 @@ input {
     to {
         background-position-x: -200%;
     }
-}
-
-.modal-desktop {
-    background-color: white;
-    border: solid transparent;
-    border-radius: 12px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 100;
-    width: 740px;
-    height: 580px;
-    padding: 21px;
-    display: flex;
-    gap: 28px;
-    columns: 2;
 }
 </style>

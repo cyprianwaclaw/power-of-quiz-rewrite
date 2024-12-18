@@ -1,26 +1,29 @@
 <template>
     <ModalChangeImage :modalActive="isModal" @close="changePhoto" :selectedImage="selectedImage" />
-    <div class="my-[40px]">
+    <div class="mt-[28px] lg:mt-[0px]">
         <div v-if="isLoading">
             <div class="is-loading">
                 <div class="image" />
             </div>
         </div>
         <div v-else>
-            <div v-if="newImage">
+            <div v-if="newImage" class="h-[300px] lg:w-[450px] 2xl:w-[550px] w-full flex flex-col -mt-[114px]">
+                <p class="font-semibold text-[21px] md:flex hidden">
+                   Wybrane zdjęcie
+                </p>
                 <img :src="croppedImage" :key="croppedImage" class="image" />
-                <div class="flex w-full justify-end -mt-[10px]">
-                    <p @click="deletePhoto()" class="text-red-600 px-5 py-3">Usuń</p>
-                    <button @click="handleFileInputChange" class="button-primary">Edytuj</button>
+                <div class="flex  justify-end -mt-[10px]">
+                    <p @click="deletePhoto()" class="text-red-600 px-5 py-3 cursor-pointer">Usuń</p>
+                    <button @click="handleFileInputChange" class="button-primary cursor-pointer">Edytuj</button>
                 </div>
             </div>
             <label v-else for="file-upload">
-                <div class="image-retangle h-[260px] md:mt-3 md:w-[350px] lg:w-[450px] 2xl:w-[550px] w-full">
+                <div class="image-retangle h-[420px] lg:w-[450px] 2xl:w-[550px] w-full">
                     <Icon name="carbon:cloud-upload" size="82" color="618CFB"
-                        class="justify-center flex w-full -mb-[21px] mt-3 md:mt-12" />
+                        class="justify-center flex w-full -mb-[26px] mt-3 md:mt-[64px]" />
                     <input type="file" id="file-upload" ref="input" accept="image/*" class="default-file-input"
                         @change="handleFileInputChange" />
-                    <div class="flex w-full justify-center items-center">
+                    <div class="flex  justify-center items-center">
                         <p class="flex md:hidden cursor-pointer">Kliknij tutaj aby dodać zdjęcie</p>
                         <p class="hidden md:flex justify-center cursor-pointer">Kliknij tutaj aby dodać zdjęcie,<br> lub
                             upuść tutaj zdjęcie</p>
@@ -88,7 +91,7 @@ const deletePhoto = () => {
     padding: 45px 37px;
     background: #f7f7f7;
     border: 2px dashed #9f9f9f;
-    border-radius: 12px;
+    border-radius: 16px;
 }
 
 
@@ -131,7 +134,7 @@ input {
     border: 1px solid $border;
     border-radius: 12px;
     margin-bottom: 27px;
-    margin-top: 24px;
+    margin-top: 15px;
     object-fit: cover;
     width: 100%;
     height: 260px;

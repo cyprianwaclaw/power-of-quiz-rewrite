@@ -1,15 +1,16 @@
 <template>
   <div class="mt-1 md:mt-6">
-    <div class="flex gap-[10px] items-place-center md:gap-4 gap-1 mb-12">
+    <div class="flex gap-[10px] items-place-center md:gap-4 mb-12">
       <SectionUserAvatar :size="45" :avatar="user.avatar" />
       <h2 class="text-2xl md:text-3xl flex place-items-center font-medium0">
         {{ user.user_name ? user.user_name : '' }} {{ user.user_surname ? user.user_surname : '' }}
       </h2>
     </div>
     <div class="flex flex-col md:hidden">
+      <NavOpenMenu />
       <h2 class="title-h2 mb-[6px] md:mt-8">Wybrane dla Ciebie</h2>
       <p class="text mb-7">Wybrane quizy na podstawie Twoich ostatnich wyborów</p>
-      <CardIndexQuiz :quizes="quizForYou" :plan="hasPremium?.has_premium" :isLoading="isLoading" :n="12"/>
+      <CardIndexQuiz :quizes="quizForYou" :plan="hasPremium?.has_premium" :isLoading="isLoading" :n="12" />
     </div>
     <div class="grid md:grid-cols-2 grid-rows-1 gap-8 my-12">
       <SectionCardStatistic />
@@ -23,12 +24,12 @@
     <div class="md:flex hidden flex-col mt-8 md:mt-20">
       <h2 class="title-h2 mb-[6px] md:mt-8">Wybrane dla Ciebie</h2>
       <p class="text mb-7">Wybrane quizy na podstawie Twoich ostatnich wyborów</p>
-      <CardIndexQuiz :quizes="quizForYou" :plan="hasPremium?.has_premium" :isLoading="isLoading" :n="12"/>
+      <CardIndexQuiz :quizes="quizForYou" :plan="hasPremium?.has_premium" :isLoading="isLoading" :n="12" />
     </div>
     <div class="flex-col mt-8  md:mt-20">
       <h2 class="title-h2 mb-[6px] md:mt-8">Quizy zyskujące popularność</h2>
       <p class="text mb-7">Zobacz jakie quizy są ostatnio na topie i zagraj w nie</p>
-      <CardIndexQuiz :quizes="quizPopular" :plan="hasPremium?.has_premium" :isLoading="isLoading" :n="12"/>
+      <CardIndexQuiz :quizes="quizPopular" :plan="hasPremium?.has_premium" :isLoading="isLoading" :n="12" />
     </div>
     <div class="bg-white p-10 rounded-3xl relative md:hidden my-12">
       <SectionCardPackage />
@@ -36,14 +37,14 @@
     <div class="flex-col mt-8 md:mt-20 md:mb-0 -mb-10">
       <h2 class="title-h2 mb-[6px] md:mt-8">Najnowsze quizy</h2>
       <p class="text mb-7">Zobacz jakie quizy są ostatnio na topie i zagraj w nie</p>
-      <CardIndexQuiz :quizes="quizLatest" :plan="hasPremium?.has_premium" :isLoading="isLoading" :n="12"/>
+      <CardIndexQuiz :quizes="quizLatest" :plan="hasPremium?.has_premium" :isLoading="isLoading" :n="12" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useUser } from "@/stores/useUser"
-const axiosInstance = useNuxtApp().$axiosInstance
+const axiosInstance = useNuxtApp().$axiosInstance as any
 const userState = useUser()
 const { user, hasPremium } = storeToRefs(userState);
 

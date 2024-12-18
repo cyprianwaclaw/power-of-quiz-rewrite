@@ -1,89 +1,94 @@
 <template>
-  <div class="lg:hidden">
-    <div @click="openMenu">
-      <Icon name="ph:equals-light" size="42" class="close w-8 h-8" color="#C4C4C4" />
-    </div>
-    <Transition>
-    <div class="fixed z-50 left-0 bottom-0 w-full">
-      <div class="blur-background-update z-50" v-if="isOpen"></div>
-      <Transition @before-enter="onBefore">
-        <div
-          class="absolute bg-white top-0 right-0 w-[350px] h-screen pt-10 px-5"
-          v-if="isOpen"
-        >
-          <Icon
-            name="carbon:close"
-            size="32"
-            class="close w-8 h-8 top-2 absolute right-4"
-            color="#C4C4C4"
-            @click="openMenu"
-            v-on-click-outside="openMenu"
-          />
-          <div class="flex flex-col gap-5">
-            <div v-for="(page, index) in links" :key="index">
-              <NuxtLink :to="page.link">
-                <p
-                  class="text-[#464646] font-semibold whitespace-nowrap hover:text-black"
-                >
-                {{ page.name }}
+  <div class="hidden md:flex">
+    <div @mouseenter="showMenu" @mouseleave="showMenu">
+      <div class=" flex gap-[12px] place-items-center cursor-pointer">
+        <SectionUserAvatar :size="36" :avatar="user.avatar" />
+        <div class="flex flex-col">
+          <p class="text-[15px] flex place-items-center font-medium -mb-[2px]">
+            {{ user.user_name ? user.user_name : '' }} {{ user.user_surname ? user.user_surname : '' }}
+          </p>
+          <div v-if="hasPremium ? true : false" class="flex place-items-center gap-[4px]">
+            <Icon name="fa:diamond" size="15" class="primary-color" />
+            <p class="text-[12px] primary-color font-semibold">PREMIUM</p>
+          </div>
+          <div v-else>
+            <p class="text-[12px] text-gray">Standard</p>
+          </div>
+        </div>
+      </div>
+      <div class="absolute right-[24px] pt-[21px]" v-if="isOpen">
+        <div class="modal-menu">
+          <div class="flex flex-col gap-[7px]">
+            <div v-for="link in linksArray" :key="link.name">
+              <NuxtLink :to="link.link" @click="showMenu">
+                <p class="modal-menu-item">
+                  {{ link.name }}
+                </p>
+              </NuxtLink>
+            </div>
+          </div>
+          <div class="mt-[21px] pt-[21px] border-t border-gray-300">
+            <NuxtLink to="/panel/plan-premium" @click="showMenu" v-if="!hasPremium ? true : false"
+              class="flex place-items-center w-full justify-between mb-[10px]">
+              <div class="flex place-items-center gap-[4px]">
+                <Icon name="fa:diamond" size="18" class="primary-color" />
+                <p class="text-[14px] primary-color font-semibold">Bądź PREMIUM</p>
+              </div>
+              <Icon name="ph:arrow-right-bold" size="21" class="primary-color" />
+            </NuxtLink>
+            <div class="flex w-full justify-between place-items-center">
+              <p class="text-[16px] font-medium cursor-default">Punkty: <span class="">{{ user.points }}</span></p>
+              <NuxtLink to="/panel/plan-premium" @click="showMenu" v-if="user.points > 0">
+                <p class="primary-color text-[12px] hover:underline">
+                  Wypłać
                 </p>
               </NuxtLink>
             </div>
           </div>
         </div>
-      </Transition>
+      </div>
     </div>
-  </Transition>
-</div>
+  </div>
 </template>
 <script setup lang="ts">
-import gsap from "gsap";
-// import { vOnClickOutside } from "@vueuse/components";
-const emit = defineEmits(["close"]);
-const props = defineProps({
-  closeButton: {
-    type: String,
-    required: true,
-  },
-  modalActive: {
-    type: Boolean,
-    required: true,
-  },
-});
+import { useUser } from "@/stores/useUser"
 
-const isOpen = ref(false);
-const openMenu = () => {
-  isOpen.value = !isOpen.value;
-};
+const userState = useUser()
+const { user, hasPremium } = storeToRefs(userState)
+const isOpen = ref(false)
 
-const links = [
-  { name: "Zaproś znajomych", link: "/panel/zaproszeni" },
-  { name: "Moje konto", link: "/panel/konto" },
-  { name: "Moje quizy", link: "/panel/quiz/dodaj-nowy" },
-  { name: "Ustawienia", link: "/panel/quiz/dodaj-nowy" },
-  { name: "Dodaj nowy quiz", link: "/panel/quiz/dodaj-nowy" },
-  { name: "Zaproś znajomych", link: "/panel/quiz/dodaj-nowy" },
-  { name: "Ustawienia", link: "/panel/quiz/dodaj-nowy" },
-  { name: "Przeglądaj quizy", link: "/panel/quiz/dodaj-nowy" },
-];
-
-const onBefore = (el: any) => {
-  gsap.from(el, {
-    x: 400,
-    duration: 0.35,
-  });
-};
-</script>
-<style scoped lang="scss">
-@import "@/assets/style/variables.scss";
-
-.v-enter-active,
-.v-leave-active {
-  transition: opacity 0s ease;
+const showMenu = () => {
+  isOpen.value = !isOpen.value
 }
 
-.v-enter-from,
-.v-leave-to {
-  opacity: 0;
+const linksArray = [
+  { name: "Zaproś znajomych", link: "/panel/zaproszeni" },
+  { name: "Dodaj quiz", link: "/panel/quiz/dodaj-nowy" },
+  { name: "Dodaj konkurs", link: "/panel/konto/konkursy/nowy" },
+  { name: "Moje konto", link: "/panel/konto" },
+  { name: "Ustawienia", link: "/panel/quiz/dodaj-nowy" },
+]
+
+</script>
+<style lang="scss" scoped>
+.modal-menu {
+  background: white;
+  width: 240px;
+  padding: 20px 24px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+
+}
+
+.modal-menu-item {
+  color: rgb(46, 40, 40);
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+
+  &:hover {
+    color: #7c7c7c;
+    text-decoration: underline;
+  }
 }
 </style>

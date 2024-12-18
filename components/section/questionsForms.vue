@@ -21,25 +21,28 @@
                     <p class="text-error-notification">Pytanie nie moźe być dłuższe niż 120 znaków</p>
                 </div>
             </div>
-            <div v-for="(answer, answerIndex) in single.answers" :key="answerIndex"
-                :class="answerIndex === 3 ? 'row-table-end' : 'row-table-start'">
-                <div class="flex place-items-center mr-[23px]">
-                    <div class="w-[44px] h-[44px] mr-[7px] flex justify-center items-center"
-                        @click="selectAnswer(questionIndex, answerIndex)">
-                        <Icon :name="answer.isCorrect ? 'ph:check-circle-duotone' : 'ph:check-circle'"
-                            :color="answer.isCorrect ? '#4BB21A' : '#9a9a9a'" size="25" />
+            <div class="md:grid md:grid-cols-2">
+                <div v-for="(answer, answerIndex) in single.answers" :key="answerIndex"
+                    :class="answerIndex === 3 ? 'pt-[14px] pl-[8px] pb-[8px] ml-[20px] mx-[20px] border-b md:border-gray-200 border-white' : 'pt-[14px] pl-[8px] pb-[8px] ml-[20px] mx-[20px] border-b border-gray-200'">
+                    <div class="flex place-items-center mr-[23px]">
+                        <div class="w-[44px] h-[44px] mr-[7px] flex justify-center items-center"
+                            @click="selectAnswer(questionIndex, answerIndex)">
+                            <Icon :name="answer.isCorrect ? 'ph:check-circle-duotone' : 'ph:check-circle'"
+                                :color="answer.isCorrect ? '#4BB21A' : '#9a9a9a'" size="25" />
+                        </div>
+                        <textarea class="scrollbar-hide" v-model="answer.answer" wrap="soft" rows="1"
+                            :ref="(el) => setTextareaRef(questionIndex, answerIndex, el)"
+                            @input="resizeTextarea(textareas, questionIndex, answerIndex)" placeholder="Odpowiedź..." />
                     </div>
-                    <textarea class="scrollbar-hide" v-model="answer.answer" wrap="soft" rows="1"
-                        :ref="(el) => setTextareaRef(questionIndex, answerIndex, el)"
-                        @input="resizeTextarea(textareas, questionIndex, answerIndex)" placeholder="Odpowiedź..." />
-                </div>
-                <div v-if="(isSend || props.error) && answer.answer.length < 3" class="mt-2 mb-1">
-                    <p class="text-error-notification">Wprowadź min 3 znaki</p>
-                </div>
-                <div v-if="(isSend || props.error) && answer.answer.length > 120" class="mt-2 mb-1">
-                    <p class="text-error-notification">Odpowiedź nie moźe być dłuższa niż 120 znaków</p>
+                    <div v-if="(isSend || props.error) && answer.answer.length < 3" class="mt-2 mb-1">
+                        <p class="text-error-notification">Wprowadź min 3 znaki</p>
+                    </div>
+                    <div v-if="(isSend || props.error) && answer.answer.length > 120" class="mt-2 mb-1">
+                        <p class="text-error-notification">Odpowiedź nie moźe być dłuższa niż 120 znaków</p>
+                    </div>
                 </div>
             </div>
+
             <div class="mt-3 ml-[28px]" v-if="(isSend || props.error) && isAllFalse(questionIndex)">
                 <p class="text-error-notification">Zaznacz poprawną odpowiedź</p>
             </div>

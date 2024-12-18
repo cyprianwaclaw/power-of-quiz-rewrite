@@ -1,7 +1,10 @@
 <template>
-    <div class="border-own">
+    <!-- <div class="border-own">
         <p class="text-[12px]">Regulamin</p>
         <p class="text-[12px]">Polityka prywatności</p>
+      </div> -->
+      <div>
+        
       </div>
 </template>
 

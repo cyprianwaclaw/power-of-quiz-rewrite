@@ -1,7 +1,10 @@
 
 <template>
     <div>
-        <div class="md:flex md:w-full md:gap-[28px] place-items-center md:-mt-[32px]">
+        <h2 class="text-2xl md:text-3xl flex place-items-center font-medium">
+            Dodaj nowy quiz
+        </h2>
+        <div class="md:flex md:w-full md:gap-[28px] place-items-center md:mt-[2px]">
             <SectionCompetitionForm :error="showErrorMessage" />
             <div class="mt-[44px]">
                 <p class="font-semibold text-[21px] mb-[14px]">

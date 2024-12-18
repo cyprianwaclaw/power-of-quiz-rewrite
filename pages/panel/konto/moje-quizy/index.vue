@@ -16,10 +16,9 @@
 <script lang="ts" setup>
 import { storeToRefs } from "pinia"
 import { useUser } from "@/stores/useUser"
-const axiosInstance = useNuxtApp().$axiosInstance;
+const axiosInstance = useNuxtApp().$axiosInstance as any
 
 const route = useRoute()
-const router = useRouter()
 const isLoading = ref(true)
 const userQuizzes = ref() as any
 const userState = useUser();

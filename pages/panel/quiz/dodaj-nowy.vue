@@ -3,15 +3,19 @@
       <h2 class="text-2xl md:text-3xl flex place-items-center font-medium">
          Dodaj nowy quiz
       </h2>
-      <SectionQuizForm :error="showErrorMessage" />
-      <SectionChangeImage />
-      <div v-if="quizState.isAllData() === true ? false : true && (newImageFile ? false : true) && showErrorMessage"
-         class="mb-[32px] -mt-[24px]">
-         <p class="text-error-notification">Wybierz zdjęcie quizu</p>
+      <div class="md:flex md:w-full md:gap-[28px] place-items-center md:mt-[42px]">
+         <SectionQuizForm :error="showErrorMessage" />
+         <div>
+            <SectionChangeImage />
+            <div v-if="quizState.isAllData() === true ? false : true && (newImageFile ? false : true) && showErrorMessage"
+               class="mb-[32px] mt-[24px]">
+               <p class="text-error-notification">Wybierz zdjęcie quizu</p>
+            </div>
+         </div>
       </div>
       <SectionQuestionsForms :array="Array" :error="showErrorMessage" />
    </div>
-   <div class="w-full -mb-[70px]">
+   <div class="w-full md:w-[200px] -mb-[70px]">
       <ButtonLoading isLoading="false" @click="onSubmit" :loading="isLoadingButton"
          :text="isButtonText ? isButtonText : 'Dodaj quiz'"
          :class="[isButtonText ? 'button-send-success' : 'button-send']" />

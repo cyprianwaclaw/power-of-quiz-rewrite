@@ -1,55 +1,52 @@
 <template>
-    <div>
-        <div class="bg-white pt-7 pb-8 px-2 mt-10 rounded-[24px] relative">
-            <div class="row-table-start">
-                <textarea v-model="title" wrap="soft" rows="1" class=" w-full -mt-3 " ref="autoResizeTextarea"
-                    @input="autoResize" placeholder="Nazwa" />
-                <p v-if="props.error" class="text-error-notification">{{ validateField('title') }}</p>
-            </div>
-            <div class="row-table-start">
-                <Dropdown v-model="categorySelect" :options="categories" option-label="name" placeholder="Wybierz kategorię"
-                    class="w-full my-1 -ml-[1px]" :pt="dropdownPt(0)" filter filter-placeholder="Wyszukaj..."
-                    @show="toggleRotation(0, true)" @hide="toggleRotation(0, false)" />
-                <p v-if="props.error" class="text-error-notification">{{ validateField('category') }}</p>
-            </div>
-            <div class="row-table-start">
-                <Dropdown v-model="difficultySelect" :options="difficultyArray" option-label="name"
-                    placeholder="Poziom trudności" class="w-full my-1 -ml-[1px]" :pt="dropdownPt(1)"
-                    @show="toggleRotation(1, true)" @hide="toggleRotation(1, false)" />
-                <p v-if="props.error" class="text-error-notification">{{ validateField('difficulty') }}</p>
-            </div>
-            <div class="row-table-start">
-                <input class="border-none pl-0" placeholder="Punkty za pierwsze miejsce" v-model="first_points"
-                    type="number" />
+    <div class="bg-white pt-7 pb-8 px-2 mt-10 rounded-[24px] w-full">
+        <div class="row-table-start">
+            <textarea v-model="title" wrap="soft" rows="1" class=" w-full -mt-3 " ref="autoResizeTextarea"
+                @input="autoResize" placeholder="Nazwa" />
+            <p v-if="props.error" class="text-error-notification">{{ validateField('title') }}</p>
+        </div>
+        <div class="row-table-start">
+            <Dropdown v-model="categorySelect" :options="categories" option-label="name" placeholder="Wybierz kategorię"
+                class="w-full my-1 -ml-[1px]" :pt="dropdownPt(0)" filter filter-placeholder="Wyszukaj..."
+                @show="toggleRotation(0, true)" @hide="toggleRotation(0, false)" />
+            <p v-if="props.error" class="text-error-notification">{{ validateField('category') }}</p>
+        </div>
+        <div class="row-table-start">
+            <Dropdown v-model="difficultySelect" :options="difficultyArray" option-label="name"
+                placeholder="Poziom trudności" class="w-full my-1 -ml-[1px]" :pt="dropdownPt(1)"
+                @show="toggleRotation(1, true)" @hide="toggleRotation(1, false)" />
+            <p v-if="props.error" class="text-error-notification">{{ validateField('difficulty') }}</p>
+        </div>
+        <div class="row-table-start">
+            <p class="text-[14px] mb-[6px] text-[#312d2d]">Nagrody na wyznaczone miejsce</p>
+            <div class="flex flex-col md:flex-row">
+                <input class="border-none pl-0" placeholder="Pierwsze" v-model="first_points" type="number" />
                 <p v-if="props.error && !first_points" class="text-error-notification">Uzupełnij wygraną</p>
-            </div>
-            <div class="row-table-start">
-                <input class="border-none pl-0" placeholder="Punkty za drugie miejsce" v-model="second_points"
-                    type="number" />
+                <input class="border-none pl-0" placeholder="Drugie" v-model="second_points" type="number" />
                 <p v-if="props.error && !second_points" class="text-error-notification">Uzupełnij wygraną</p>
-            </div>
-            <div class="row-table-start">
-                <input class="border-none pl-0" placeholder="Punkty za trzecie miejsce" v-model="third_points"
-                    type="number" />
+                <input class="border-none pl-0" placeholder="Trzecie" v-model="third_points" type="number" />
                 <p v-if="props.error && !third_points" class="text-error-notification">Uzupełnij wygraną</p>
             </div>
-            <div class="row-table-start">
-                <Calendar v-model="time" class="w-full my-1 -ml-[1px]" dateFormat="dd.mm.yy" placeholder="Data konkursu"
+        </div>
+        <div class="row-table-start flex flex-col md:flex-row place-items-center -m-[8px]">
+            <p class="text-[14px] mb-[6px] text-[#312d2d] pr-[30px] mt-[8px]">Data i godzina</p>
+            <div class="flex flex-col md:flex-row gap-[0px]">
+                <Calendar v-model="time" class="w-[145px] my-1 -ml-[1px]" dateFormat="dd.mm.yy" placeholder="Data konkursu"
+                :pt="dropdownPt(1)" />
+                <div class="flex gap-[0px] -mt-[24px] md:mt-[0px]">
+                    <Calendar v-model="time_start" class="w-[70px] my-1 -ml-[1px]" showTime timeOnly placeholder="Start"
                     :pt="dropdownPt(1)" />
-                <div class="flex gap-[12px]">
-                    <Calendar v-model="time_start" class="w-[100px] my-1 -ml-[1px]" showTime timeOnly
-                        placeholder="Rozpoczęcie" :pt="dropdownPt(1)" />
-                    <Calendar v-model="time_end" class="w-[100px] my-1 -ml-[1px]" showTime timeOnly
-                        placeholder="Zakończenie" :pt="dropdownPt(1)" />
+                    <Calendar v-model="time_end" class="w-[80px] my-1 -ml-[1px]" showTime timeOnly placeholder="Koniec"
+                    :pt="dropdownPt(1)" />
                 </div>
-                <p v-if="props.error && (!time || !time_end || !time_start)" class="text-error-notification">Uzupełnij datę
-                    oraz godziny konkursu</p>
             </div>
-            <div class="row-table-end">
-                <textarea v-model="description" wrap="soft" rows="3" class=" w-full mt-1" ref="autoResizeTextarea1"
-                    @input="autoResize" placeholder="Opis..." />
-                <p v-if="props.error" class="text-error-notification">{{ validateField('description') }}</p>
-            </div>
+            <p v-if="props.error && (!time || !time_end || !time_start)" class="text-error-notification">Uzupełnij datę
+                oraz godziny konkursu</p>
+        </div>
+        <div class="row-table-end">
+            <textarea v-model="description" wrap="soft" rows="3" class=" w-full mt-1" ref="autoResizeTextarea1"
+                @input="autoResize" placeholder="Opis..." />
+            <p v-if="props.error" class="text-error-notification">{{ validateField('description') }}</p>
         </div>
     </div>
 </template>
@@ -76,7 +73,7 @@ const difficultyArray = reactive([
 ])
 
 const quizState = useCompetition()
-const {isSendSuccess, title, description, category_id, difficulty, first_points, second_points, third_points, time, time_start, time_end } = storeToRefs(quizState)
+const { isSendSuccess, title, description, category_id, difficulty, first_points, second_points, third_points, time, time_start, time_end } = storeToRefs(quizState)
 const rotationStates = ref<boolean[]>([false, false])
 
 const toggleRotation = (index: number, isVisible: boolean) => {
