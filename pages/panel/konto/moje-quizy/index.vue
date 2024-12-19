@@ -43,18 +43,14 @@ const buttonsArray = reactive([
 onMounted(async () => {
     const res = await axiosInstance.get(`user/quizzes?${formatQueryString(route.query)}`);
     userQuizzes.value = res.data;
-    // setTimeout(async () => {
-        isLoading.value = false;
-    // }, 200);
+    isLoading.value = false;
 });
 
 onBeforeRouteUpdate(async (to) => {
     isLoading.value = true;
     const res = await axiosInstance.get(`user/quizzes?${formatQueryString(to.query)}`);
     userQuizzes.value = res.data;
-    // setTimeout(async () => {
-        isLoading.value = false;
-    // }, 100);
+    isLoading.value = false;
 })
 
 </script>
