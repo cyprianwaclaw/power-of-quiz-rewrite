@@ -54,28 +54,28 @@ const props = defineProps({
 const router = useRouter();
 
 const pageNumbers = (lastPage: number, currentPage: number) => {
-  const pages = [];
-  const pagesPerPage = 3;
-  const half = Math.floor(pagesPerPage / 2);
+  const pages = []
+  const pagesPerPage = 3
+  const half = Math.floor(pagesPerPage / 2)
 
-  let startPage = currentPage - half;
-  let endPage = currentPage + half;
+  let startPage = currentPage - half
+  let endPage = currentPage + half
 
   if (startPage < 1) {
-    startPage = 1;
-    endPage = pagesPerPage;
+    startPage = 1
+    endPage = pagesPerPage
   }
 
   if (endPage > lastPage) {
     endPage = lastPage;
-    startPage = lastPage - pagesPerPage + 1;
+    startPage = lastPage - pagesPerPage + 1
     if (startPage < 1) {
-      startPage = 1;
+      startPage = 1
     }
   }
 
   for (let i = startPage; i <= endPage; i++) {
-    pages.push(i);
+    pages.push(i)
   }
 
   return pages;

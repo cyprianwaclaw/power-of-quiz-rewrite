@@ -50,24 +50,29 @@
             </div>
         </div>
         <div class="flex justify-end -mb-[100px] mt-8">
-            <div class="flex place-items-center gap-1.5" @click="logoutUser()">
+            <!-- @click="logoutUser()" -->
+            <div class="flex place-items-center gap-1.5">
                 <p class="one primary-color">Wyloguj się</p>
                 <Icon name="material-symbols:logout-rounded" size="18" class="primary-color margin-top" />
             </div>
         </div>
     </div>
     <!-- Dekstop view user account  -->
+    <!-- <pre>
+        {{ arrayData }}
+    </pre> -->
     <div class="hidden md:flex flex-col">
         <div class="mt-[28px]">
-            <ButtonSecondary :array="buttonsArray" query="pageName" />
+            <ButtonLink :array="buttonsArray" query="pageName" :isLoading="isLoadingButton" :n="4" />
         </div>
         <div class="flex w-full gap-[40px]">
             <div class="flex shrink-0 w-[150px]">
-                <ButtonSecondary :array="quizSectionsArray" :onlyText="true" query="section" />
+                <ButtonLink :array="allButtonsArray(router.currentRoute.value.query?.pageName)" :onlyText="true"
+                    query="section" :n="4" :isLoading="isLoadingButton"/>
             </div>
             <!-- {{ router.currentRoute.value.query?.pageName == null }} -->
             <div class="flex shrink-1 bg-white w-full rounded-[18px] p-[30px]">
-                <div v-if="router.currentRoute.value.query?.pageName == null">
+                <div v-if="router.currentRoute.value.query?.pageName == null || 'quiz'">
                     <div>
                         <CardUserQuizzes :quizzes="userQuizzes?.quizzes" :n="14" :isLoading="isLoading" />
                         <SectionPagination :last_page="userQuizzes?.pagination?.last_page"
@@ -88,57 +93,95 @@ const axiosInstance = useNuxtApp().$axiosInstance as any
 
 const route = useRoute()
 const isLoading = ref(true)
+const isLoadingButton = ref(true)
 const router = useRouter()
 const userQuizzes = ref() as any
 const userState = useUser();
-const { user } = storeToRefs(userState);
+const { user } = storeToRefs(userState)
 
-const buttonsArray = reactive([
+const allButtonsArray = (routeName: any) => {
+    if (routeName == null || routeName == 'quiz') {
+        return [
+            {
+                title: "Wszystkie",
+                link: `null-quiz`
+
+            },
+            {
+                title: "Zaakceptowane",
+                link: "true-quiz"
+            },
+            {
+                title: "Do akceptacji",
+                link: "false-quiz"
+            }
+        ]
+    }
+    if (routeName == 'competition') {
+        return [
+            {
+                title: "Wyniki",
+                link: "null-competition"
+            },
+        ]
+    }
+    if (routeName == 'founds') {
+        return [
+            {
+                title: "Saldo konta",
+                link: "null-founds"
+            },
+            {
+                title: "Historia wypłat",
+                link: "payouthistory-founds"
+            },
+        ]
+    }
+}
+
+const buttonsArray = ref([
     {
         title: "Quizy",
-        link: ""
+        link: `null-quiz`
     },
     {
         title: "Konkursy",
-        link: "competition"
+        link: "null-competition"
     },
     {
         title: "Środki",
-        link: "founds"
+        link: "null-founds"
     },
     {
         title: "Faktury i płatności",
-        link: "invoices"
-    }
-])
-
-
-const quizSectionsArray = reactive([
-    {
-        title: "Wszystkie",
-        link: ""
-    },
-    {
-        title: "Zaakceptowane",
-        link: "true"
-    },
-    {
-        title: "Do akceptacji",
-        link: "false"
+        link: "null-invoices"
     }
 ])
 
 onMounted(async () => {
     const res = await axiosInstance.get(`user/quizzes?${formatQueryString(route.query)}`);
     userQuizzes.value = res.data;
-    isLoading.value = false;
+
+    if (route.query.pageName == undefined) {
+        console.log("route.query.pageName")
+        router.push({ query: { pageName: 'quiz', section: 'null' } })
+        isLoading.value = false
+        isLoadingButton.value = false
+    } else {
+        isLoading.value = false
+        isLoadingButton.value = false
+    }
 });
 
 onBeforeRouteUpdate(async (to) => {
     isLoading.value = true;
     const res = await axiosInstance.get(`user/quizzes?${formatQueryString(to.query)}`);
     userQuizzes.value = res.data;
-    isLoading.value = false;
+    isLoading.value = false
+    if (to.query.pageName == undefined) {
+        router.push({ query: { pageName: 'quiz', section: 'null' } });
+        // console.log("route.query.pageName")
+    }
 })
 </script>
 

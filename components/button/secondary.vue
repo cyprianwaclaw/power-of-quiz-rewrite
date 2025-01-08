@@ -1,18 +1,10 @@
 <template>
-  <div v-if="!onlyText" class="flex place-items-center mb-[38px] overflow-x-scroll scrollbar-hide ">
+  <div class="flex place-items-center mb-[38px] overflow-x-scroll scrollbar-hide ">
     <div v-for="(button, index) in props.array" :key="index">
       <button @click="goTo(button.link)" class="whitespace-nowrap"
         :class="{ 'active': currentSection === button.link, 'non-active': currentSection !== button.link }">
         {{ button.title }}
       </button>
-    </div>
-  </div>
-  <div v-else class="flex place-items-start flex-col gap-[9px]">
-    <div v-for="(button, index) in props.array" :key="index">
-      <p @click="goTo(button.link)" class="whitespace-nowrap"
-        :class="{ 'active-text': currentSection === button.link, 'non-active-text': currentSection !== button.link }">
-        {{ button.title }}
-      </p>
     </div>
   </div>
 </template>
