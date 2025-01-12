@@ -1,14 +1,13 @@
 <template>
     <div class="w-full ">
-        <!-- <p class="mb-2 text-lg font-bold">Poziom trasasudności</p> -->
         <div v-for="(level, index) in difficultyArray" :key="index">
             <label class="flex w-full mt-2">
                 <input class="w-5 flex mb-[4px]" type="checkbox" v-model="level.selected" />
                 <p class="w-full flex ml-2">{{ level.name }}</p>
             </label>
         </div>
-           <div class="flex w-full">
-            <ButtonLoading isLoading="false" :loading="isLoadingButton" text="Zaloguj się" @click="handleClick('Kategoria')" />
+           <div class="flex w-full mt-[24px]">
+            <ButtonLoading isLoading="false" :loading="isLoadingButton" text="Zapisz" @click="handleClick('Kategoria')" />
         </div>
     </div>
 </template>

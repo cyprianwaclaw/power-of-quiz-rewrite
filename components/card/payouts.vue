@@ -15,23 +15,20 @@
         </div>
     </div>
     <div v-else>
-        <div class=" flex flex-col gap-[12px] w-full md:grid md:grid-cols-3  md:gap-x-[24px] md:gap-y-[24px]">
+        <div class="w-full">
             <div v-for="(single, index) in props.payouts" :key="index">
-                <div class="flex place-items-center justify-between md:bg-white md:px-5 md:py-3 md:rounded-[10px]"
+                 <div class="flex place-items-center justify-between w-full py-[10px] md:bg-white md:px-5 md:py-3 md:rounded-[10px]"
                     :class="[index != '0' ? 'border-t pt-[16px]' : '']">
-                    <div class="flex flex-col">
+                    <div class="flex flex-col w-full">
                         <p class="text-[15px] text-[#BEBEBE]">{{ single.date }}</p>
                         <p class="text-[21px] font-semibold">{{ single.amount }} zł</p>
                     </div>
-                    <div class="flex gap-2 text-[15px]">
-                        <p class="font-semibold" :class="{
+                        <p class="font-semibold whitespace-nowrap" :class="{
                             'text-[#E21313]': single.status === 'Błąd',
                             'text-[#4BB21A]': single.status === 'Sukces',
                             'text-[#E1A817]': single.status === 'W oczekiwaniu'
                         }">{{ single.status }} </p>
-                    </div>
                 </div>
-
             </div>
         </div>
     </div>

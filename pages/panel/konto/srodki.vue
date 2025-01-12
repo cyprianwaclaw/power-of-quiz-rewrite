@@ -34,18 +34,17 @@
         </div>
         <div v-if="route.query.section == buttonsArray[1].link">
             <div class="bg-white rounded-[18px] p-[30px]">
-                <CardPayouts :payouts="allPayouts.payouts" :n="14" :isLoading="isLoading" />
+                <CardPayouts :payouts="allPayouts?.payouts" :n="14" :isLoading="isLoading" />
                 <SectionPagination :last_page="allPayouts?.pagination?.last_page"
                     :current_page="allPayouts?.pagination?.current_page" :isLoading="isLoading" />
             </div>
-
         </div>
     </NuxtLayout>
 </template>
 <script lang="ts" setup>
 import { storeToRefs } from "pinia"
 import { useUser } from "@/stores/useUser"
-const axiosInstance = useNuxtApp().$axiosInstance;
+const axiosInstance = useNuxtApp().$axiosInstance as any
 
 definePageMeta({
     middleware: "auth",
@@ -77,9 +76,9 @@ const isClose = (value: any) => {
 
 const modalWithdraw = async (value: any) => {
     isWithdraw.value = !isWithdraw.value;
-    if (value == true) {
-           await userState.login()
-    }
+    // if (value == true) {
+    //        await userState.login()
+    // }
 }
 if (route.query.section == buttonsArray[1].link) {
     const res = await axiosInstance.get(`payouts?${formatQueryString(router.currentRoute.value.query)}`);

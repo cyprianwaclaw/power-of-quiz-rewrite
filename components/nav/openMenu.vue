@@ -2,7 +2,7 @@
   <div class="hidden md:flex">
     <div @mouseenter="showMenu" @mouseleave="showMenu">
       <div class=" flex gap-[12px] place-items-center cursor-pointer">
-        <SectionUserAvatar :size="36" :avatar="user.avatar" />
+        <SectionUserAvatar :size="36" :avatar="user?.avatar" />
         <div class="flex flex-col">
           <p class="text-[15px] flex place-items-center font-medium -mb-[2px]">
             {{ user.user_name ? user.user_name : '' }} {{ user.user_surname ? user.user_surname : '' }}
@@ -20,11 +20,11 @@
         <div class="modal-menu">
           <div class="flex flex-col gap-[7px]">
             <div v-for="link in linksArray" :key="link.name">
-              <NuxtLink :to="link.link" @click="showMenu">
+              <div @click="showMenuLink(link.link)">
                 <p class="modal-menu-item">
                   {{ link.name }}
                 </p>
-              </NuxtLink>
+              </div>
             </div>
           </div>
           <div class="mt-[21px] pt-[21px] border-t border-gray-300">
@@ -52,6 +52,8 @@
 </template>
 <script setup lang="ts">
 import { useUser } from "@/stores/useUser"
+const route = useRoute()
+const router = useRouter()
 
 const userState = useUser()
 const { user, hasPremium } = storeToRefs(userState)
@@ -66,9 +68,17 @@ const linksArray = [
   { name: "Dodaj quiz", link: "/panel/quiz/dodaj-nowy" },
   { name: "Dodaj konkurs", link: "/panel/konto/konkursy/nowy" },
   { name: "Moje konto", link: "/panel/konto" },
-  { name: "Ustawienia", link: "/panel/quiz/dodaj-nowy" },
+  { name: "Ustawienia", link: "/panel/konto/ustawienia" },
 ]
 
+const showMenuLink = (routeName: string) => {
+  let routeCurrent = route?.name as any
+  if ('/' + routeCurrent.replace(/-/g, "/") !== routeName) {
+    console.log("other route name")
+    router.push(routeName)
+  }
+  showMenu()
+}
 </script>
 <style lang="scss" scoped>
 .modal-menu {

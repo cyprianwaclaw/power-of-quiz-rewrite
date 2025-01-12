@@ -5,7 +5,9 @@
             <InputNumber v-model.number="sliderRange[0]" class="w-14" />
             <InputNumber v-model.number="sliderRange[1]" class="w-14" />
         </div>
-        <ButtonLoading isLoading="false" :loading="isLoadingButton" text="Zaloguj się" @click="handleClick()" />
+        <div class="flex w-full mt-[32px]">
+            <ButtonLoading isLoading="false" :loading="isLoadingButton" text="Zapisz" @click="handleClick()" />
+        </div>
     </div>
 </template>
 
@@ -50,6 +52,8 @@ const handleClick = () => {
 }
 
 </script>
+
+<style scoped lang="scss"></style>
 
 <style scoped lang="scss"></style>
 

@@ -1,5 +1,5 @@
 <template>
-    <h2 class="text-2xl md:text-3xl flex place-items-center font-medium">
+    <h2 class="text-2xl md:text-3xl flex place-items-center font-medium cursor-default">
         Moje konto
     </h2>
     <div class="md:hidden flex flex-col">
@@ -58,131 +58,107 @@
         </div>
     </div>
     <!-- Dekstop view user account  -->
-    <!-- <pre>
-        {{ arrayData }}
-    </pre> -->
     <div class="hidden md:flex flex-col">
-        <div class="mt-[28px]">
-            <ButtonLink :array="buttonsArray" query="pageName" :isLoading="isLoadingButton" :n="4" />
-        </div>
-        <div class="flex w-full gap-[40px]">
-            <div class="flex shrink-0 w-[150px]">
-                <ButtonLink :array="allButtonsArray(router.currentRoute.value.query?.pageName)" :onlyText="true"
-                    query="section" :n="4" :isLoading="isLoadingButton"/>
-            </div>
-            <!-- {{ router.currentRoute.value.query?.pageName == null }} -->
-            <div class="flex shrink-1 bg-white w-full rounded-[18px] p-[30px]">
-                <div v-if="router.currentRoute.value.query?.pageName == null || 'quiz'">
-                    <div>
-                        <CardUserQuizzes :quizzes="userQuizzes?.quizzes" :n="14" :isLoading="isLoading" />
-                        <SectionPagination :last_page="userQuizzes?.pagination?.last_page"
-                            :current_page="userQuizzes?.pagination?.current_page" :isLoading="isLoading" />
-                    </div>
-                    <div v-if="!userQuizzes?.quizzes">
-                        <!-- nie ma quizów -->
-                    </div>
-                </div>
-            </div>
-        </div>
+        <SectionPageElementsUserAccountDesktop />
     </div>
 </template>
 <script lang="ts" setup>
-import { storeToRefs } from "pinia"
-import { useUser } from "@/stores/useUser"
-const axiosInstance = useNuxtApp().$axiosInstance as any
+// import { storeToRefs } from "pinia"
+// import { useUser } from "@/stores/useUser"
+// const axiosInstance = useNuxtApp().$axiosInstance as any
 
-const route = useRoute()
-const isLoading = ref(true)
-const isLoadingButton = ref(true)
-const router = useRouter()
-const userQuizzes = ref() as any
-const userState = useUser();
-const { user } = storeToRefs(userState)
+// const route = useRoute()
+// const isLoading = ref(true)
+// const isLoadingButton = ref(true)
+// const router = useRouter()
+// const userQuizzes = ref() as any
+// const userState = useUser();
+// const { user } = storeToRefs(userState)
 
-const allButtonsArray = (routeName: any) => {
-    if (routeName == null || routeName == 'quiz') {
-        return [
-            {
-                title: "Wszystkie",
-                link: `null-quiz`
+// const allButtonsArray = (routeName: any) => {
+//     if (routeName == null || routeName == 'quiz') {
+//         return [
+//             {
+//                 title: "Wszystkie",
+//                 link: `null-quiz`
 
-            },
-            {
-                title: "Zaakceptowane",
-                link: "true-quiz"
-            },
-            {
-                title: "Do akceptacji",
-                link: "false-quiz"
-            }
-        ]
-    }
-    if (routeName == 'competition') {
-        return [
-            {
-                title: "Wyniki",
-                link: "null-competition"
-            },
-        ]
-    }
-    if (routeName == 'founds') {
-        return [
-            {
-                title: "Saldo konta",
-                link: "null-founds"
-            },
-            {
-                title: "Historia wypłat",
-                link: "payouthistory-founds"
-            },
-        ]
-    }
-}
+//             },
+//             {
+//                 title: "Zaakceptowane",
+//                 link: "true-quiz"
+//             },
+//             {
+//                 title: "Do akceptacji",
+//                 link: "false-quiz"
+//             }
+//         ]
+//     }
+//     if (routeName == 'competition') {
+//         return [
+//             {
+//                 title: "Wyniki",
+//                 link: "null-competition"
+//             },
+//         ]
+//     }
+//     if (routeName == 'founds') {
+//         return [
+//             {
+//                 title: "Saldo konta",
+//                 link: "null-founds"
+//             },
+//             {
+//                 title: "Historia wypłat",
+//                 link: "payouthistory-founds"
+//             },
+//         ]
+//     }
+// }
 
-const buttonsArray = ref([
-    {
-        title: "Quizy",
-        link: `null-quiz`
-    },
-    {
-        title: "Konkursy",
-        link: "null-competition"
-    },
-    {
-        title: "Środki",
-        link: "null-founds"
-    },
-    {
-        title: "Faktury i płatności",
-        link: "null-invoices"
-    }
-])
+// const buttonsArray = ref([
+//     {
+//         title: "Quizy",
+//         link: `null-quiz`
+//     },
+//     {
+//         title: "Konkursy",
+//         link: "null-competition"
+//     },
+//     {
+//         title: "Środki",
+//         link: "null-founds"
+//     },
+//     {
+//         title: "Faktury i płatności",
+//         link: "null-invoices"
+//     }
+// ])
 
-onMounted(async () => {
-    const res = await axiosInstance.get(`user/quizzes?${formatQueryString(route.query)}`);
-    userQuizzes.value = res.data;
+// onMounted(async () => {
+//     const res = await axiosInstance.get(`user/quizzes?${formatQueryString(route.query)}`);
+//     userQuizzes.value = res.data;
 
-    if (route.query.pageName == undefined) {
-        console.log("route.query.pageName")
-        router.push({ query: { pageName: 'quiz', section: 'null' } })
-        isLoading.value = false
-        isLoadingButton.value = false
-    } else {
-        isLoading.value = false
-        isLoadingButton.value = false
-    }
-});
+//     if (route.query.pageName == undefined) {
+//         console.log("route.query.pageName")
+//         router.push({ query: { pageName: 'quiz', section: 'null' } })
+//         isLoading.value = false
+//         isLoadingButton.value = false
+//     } else {
+//         isLoading.value = false
+//         isLoadingButton.value = false
+//     }
+// });
 
-onBeforeRouteUpdate(async (to) => {
-    isLoading.value = true;
-    const res = await axiosInstance.get(`user/quizzes?${formatQueryString(to.query)}`);
-    userQuizzes.value = res.data;
-    isLoading.value = false
-    if (to.query.pageName == undefined) {
-        router.push({ query: { pageName: 'quiz', section: 'null' } });
-        // console.log("route.query.pageName")
-    }
-})
+// onBeforeRouteUpdate(async (to) => {
+//     isLoading.value = true;
+//     const res = await axiosInstance.get(`user/quizzes?${formatQueryString(to.query)}`);
+//     userQuizzes.value = res.data;
+//     isLoading.value = false
+//     if (to.query.pageName == undefined) {
+//         router.push({ query: { pageName: 'quiz', section: 'null' } });
+//         // console.log("route.query.pageName")
+//     }
+// })
 </script>
 
 <style scoped lang="scss">

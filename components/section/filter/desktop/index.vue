@@ -1,6 +1,5 @@
 <template>
     <div class="flex justify-between place-items-center">
-        <!-- <div class="flex w-full gap-7 justify-between"> -->
         <div class="flex w-full gap-7">
             <div v-for="(button, i) in buttonsArray.slice(0, 4)" :key="i">
                 <div class="w-full relative">
@@ -9,23 +8,22 @@
                         <Icon name="ph:caret-down" size="24" :class="{ 'rotate': button.click }" class="search-icon" />
                         <div :class="{ 'border-bottom': button.click }" class="hidden" />
                     </button>
-                    <div class="content border-radius h-[170px] min-w-[220px]"
+                    <div class="content border-radius h-[235px] min-w-[220px]"
                         v-if="button.click && button.name === 'category'">
                         <SectionFilterDesktopItemsCategory :categories="props.categories"
                             @close="toggleClick(button.text)" />
                     </div>
-                    <div class="content h-[170px]" v-if="button.click && button.name === 'difficulty'">
+                    <div class="content h-[206px]" v-if="button.click && button.name === 'difficulty'">
                         <SectionFilterDesktopItemsDifficulty @close="toggleClick(button.text)" />
                     </div>
-                    <div class="content border-radius h-[170px] min-w-[280px]"
+                    <div class="content border-radius h-[230px] min-w-[280px]"
                         v-if="button.click && button.name === 'questions'">
                         <SectionFilterDesktopItemsQuestions @close="toggleClick(button.text)" />
                     </div>
-                    <div class="content border-radius h-[170px] min-w-[280px]"
+                    <div class="content border-radius h-[230px] min-w-[280px]"
                         v-if="button.click && button.name === 'duration'">
                         <SectionFilterDesktopItemsDuration @close="toggleClick(button.text)" />
                     </div>
-
                 </div>
             </div>
         </div>

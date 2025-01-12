@@ -41,9 +41,7 @@ const clickLogo = () => {
 
 const links = [
   { name: "Quizy", link: "/panel/quiz" },
-  { name: "Konkursy", link: "/panel/quiz" },
-  // { name: "Zaproś znajomych", link: "/" },
-  // { name: "Dodaj nowy", link: "/" },
+  { name: "Konkursy", link: "/panel/quiz?section=konkursy" },
 ]
 
 </script>

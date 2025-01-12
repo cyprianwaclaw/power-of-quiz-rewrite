@@ -36,72 +36,43 @@
             </Transition>
         </div>
         <!-- Dekstop view  -->
-        <!-- <div class="sm:flex hidden">
+        <div class="sm:flex hidden">
             <Transition @enter="onEnterDesktop" :css="false">
                 <div class="modal-desktop" v-if="props.modalActive">
-                    <div class="w-full h-full">
-                        <div v-if="isLoading">
-                            <div class="is-loading">
-                                <div class="image" />
-                            </div>
-                        </div>
-                        <img v-show="!isLoading" :src="props.quiz.image" class="image" />
+                    <div class="flex absolute right-[21px] top-[21px]">
+                        <Icon name="carbon:close" size="30" class="close w-8 h-8 border-transparent rounded-[6px]"
+                            @click="$emit('close')" />
                     </div>
-                    <div class="w-full flex flex-col">
-                        <div class="flex absolute right-[21px] top-[21px]">
-                            <Icon name="carbon:close" size="30" class="close w-8 h-8 border-transparent rounded-[6px]"
-                                @click="$emit('close')" />
-                        </div>
-                        <p class="font-medium text-[20px] leading-[25px] mt-[64px] ">{{ quiz.title }}</p>
-
-                        <div class="mt-[18px] mb-6 flex flex-col">
-                            <div class="flex gap-[7px]">
-                                <p class="text-gray-600">Kategoria:</p>
-                                <p class="text-base primary-color font-medium">
-                                    {{ quiz.category }}
+                    <div>
+                        <div>
+                            <div v-if="!success" class="flex flex-col justify-center w-[360px] mt-[9px] ml-[10px]">
+                                <p class="text-[18px] text-gray-700 font-medium leading-[23px] mb-[12px]">Wypłata środków</p>
+                                <input class="input-widthdraw" type="number" min="1" v-model="amount"
+                                    placeholder="Kwota do wypłaty" />
+                                <p class="text-[13px] mt-[3px] text-gray-400 mb-[23px]">
+                                    Minimalna kwota do wypłaty to 1 zł
                                 </p>
+                                <ButtonLoading isLoading="false" :loading="isLoadingButton" text="Wypłacam"
+                                    @click="widthdrawFunds" />
                             </div>
-                            <div class="flex gap-[7px] mt-[5px]">
-                                <p class="text-gray-600">Trudność:</p>
-                                <p class="text-base primary-color font-medium">
-                                    {{ quiz.difficulty }}
-                                </p>
+                            <div v-else class="flex w-full justify-center items-center flex-col text-center mt-[3px]">
+                                <Icon name="ph:check-circle-light" color="#4BB21A" size="60" />
+                                <p class="text-[15px] text-gray-600 leading-[23px] px-[60px] mt-[6px]">Przyjęto wypłatę,
+                                    wkrótce
+                                    środki zaksięgują się na Twoim koncie</p>
+                                <p class="font-semibold text-[28px] mb-[16px] mt-[12px]">{{ amount }} zł</p>
+                                <button class="button-primary w-full" @click="emitClose()">Gotowe</button>
                             </div>
-                            <div class="flex gap-[7px] mt-[5px]">
-                                <p class="text-gray-600">Pytania:</p>
-                                <p class="text-base primary-color font-medium">
-                                    {{ quiz.questions_count }}
-                                </p>
-                            </div>
-                            <div class="flex gap-[7px] mt-[5px]">
-                                <p class="text-gray-600">Czas trwania:</p>
-                                <p class="text-base primary-color font-medium">
-                                    {{ quiz.time }} min
-                                </p>
-                            </div>
-                            <div class="flex gap-[7px] mt-[5px]">
-                                <p class="text-gray-600">Dodano:</p>
-                                <p class="text-base primary-color font-medium">
-                                    {{ quiz.date }}
-                                </p>
-                            </div>
-                            <p class="text-[17px] font-semibold mt-[18px]">Opis</p>
-                            <p class="text pr-6 mb-5 text-gray-600 mt-[4px]">{{ quiz.description }}</p>
-                            <button class="button-primary w-[260px] absolute bottom-10">
-                                <NuxtLink :to="`/panel/quiz/${quiz?.id}`">
-                                    <p class="text-center">Zagraj w quiz</p>
-                                </NuxtLink>
-                            </button>
                         </div>
                     </div>
                 </div>
             </Transition>
-        </div> -->
+        </div>
     </div>
 </template>
 
 <script setup lang="ts">
-const axiosInstance = useNuxtApp().$axiosInstance;
+const axiosInstance = useNuxtApp().$axiosInstance as any
 import gsap from 'gsap'
 
 const props = defineProps({
@@ -239,14 +210,13 @@ const LeaveBg = (el: any) => {
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 100;
-    width: 740px;
-    height: 580px;
-    padding: 21px;
+    width: 510px;
+    height: 300px;
+    padding: 26px;
     display: flex;
     gap: 28px;
     columns: 2;
 }
-
 
 .input-widthdraw {
     background-color: #ECECEC;
@@ -263,7 +233,6 @@ const LeaveBg = (el: any) => {
     &:focus {
         background-color: #ffffff;
         border-color: #d0d0d0;
-        border-width: 1px;
         color: #363636 !important;
         letter-spacing: 0.17px;
         font-weight: 500;
@@ -281,7 +250,14 @@ const LeaveBg = (el: any) => {
     }
 
     &::-ms-clear {
-        display: none; // Ukrycie przycisku w IE
+        display: none;
     }
+
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    -moz-appearance: textfield;
 }
 </style>

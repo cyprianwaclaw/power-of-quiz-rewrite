@@ -87,8 +87,9 @@ onMounted(() => {
 
 textarea {
   background-color: #ECECEC;
-  padding: 14px 16px;
+  padding: 12px 16px;
   width: 100%;
+  min-height: 50px;
   color: #211f1f;
   font-size: 16px;
   letter-spacing: 0.17px;

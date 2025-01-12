@@ -1,5 +1,5 @@
 <template>
-    <div class="overflow-y-scroll h-[100px]">
+    <div class="overflow-y-scroll h-[150px]">
         <div v-for="(category, index) in categoriesArray" :key="index">
             <label class="flex w-full mt-2">
                 <input class="w-5 flex mb-[4px]" type="checkbox" v-model="category.selected" />
@@ -7,8 +7,8 @@
             </label>
         </div>
     </div>
-    <div class="flex w-full">
-        <ButtonLoading isLoading="false" :loading="isLoadingButton" text="Zaloguj się" @click="handleClick" />
+    <div class="flex w-full pb-[10px]">
+        <ButtonLoading isLoading="false" :loading="isLoadingButton" text="Zapisz" @click="handleClick" />
     </div>
 </template>
 <script lang="ts" setup>

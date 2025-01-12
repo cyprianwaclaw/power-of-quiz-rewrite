@@ -10,10 +10,13 @@
         </template>
     </ModalDown>
     <div class="md:mt-5 lg:mt-8">
-        <h2 class="text-[27px] md:text-3xl flex place-items-center font-medium">
-            {{ router.currentRoute.value.query.searchTerm ? 'Quizy' : ' Wszystkie gry' }}
+        <h2 class="hidden md:flex md:text-3xl place-items-center font-medium">
+            {{ router.currentRoute.value?.query.section == 'konkursy' ? 'Konkursy' : 'Quizy' }}
         </h2>
-        <div v-if="!router.currentRoute.value.query.searchTerm" class="mt-[24px] -mb-[1px]">
+        <h2 class="md:hidden flex text-[27px] md:text-3xl place-items-center font-medium">
+            {{ router.currentRoute.value?.query.searchTerm ? 'Quizy' : ' Wszystkie gry' }}
+        </h2>
+        <div v-if="!router.currentRoute.value.query.searchTerm" class="flex md:hidden mt-[24px] -mb-[1px]">
             <ButtonSecondary :array="buttonsArray" />
         </div>
         <div v-if="router.currentRoute.value.query.searchTerm" class="mt-[23px]">
@@ -26,7 +29,7 @@
             </p>
         </div>
     </div>
-    <div class="-mb-24">
+    <div class="-mb-24 md:mt-[38px]">
         <div class="flex w-full justify-between mb-[14px] place-items-center">
             <div v-if="isLoading">
                 <div class="card is-loading">
@@ -45,7 +48,7 @@
                 </button>
             </div>
         </div>
-        <div class="sm:flex hidden flex-col mb-[32px]">
+        <div v-if="router.currentRoute.value?.query.section !== 'konkursy'" class="sm:flex hidden flex-col mb-[32px]">
             <SectionFilterDesktop :categories="mapCategories" />
         </div>
         <div v-if="router.currentRoute.value.query.section === 'konkursy' ? false : true"
@@ -173,7 +176,7 @@ onBeforeRouteUpdate(async (to) => {
     isLoading.value = false
 })
 
- 
+
 const clearSearchTerm = () => {
     router.push('/panel/quiz')
 }

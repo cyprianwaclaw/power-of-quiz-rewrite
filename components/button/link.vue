@@ -1,7 +1,7 @@
 <template>
   <div v-if="props.isLoading">
     <div v-if="!onlyText">
-      <div class=" flex gap-[16px] w-full mb-[38px]">
+      <div class=" flex gap-[16px] w-full mb-[37px]">
         <div v-for="item in props.n" :key="item">
           <div class="is-loading place-items-center">
             <div class="image" />
@@ -10,7 +10,7 @@
       </div>
     </div>
     <div v-else>
-      <div class=" flex flex-col gap-[11px] w-full mb-[38px]">
+      <div class=" flex flex-col gap-[11px] w-full">
         <div v-for="item in props.n" :key="item">
           <div class="is-loading place-items-center">
             <div class="image1" />
@@ -31,7 +31,7 @@
     <div v-else>
       <div class="flex place-items-start flex-col gap-[9px]">
         <div v-for="(button, index) in props.array" :key="index">
-          <p @click="goTo(button.link)" class="whitespace-nowrap"
+          <p @click="goTo(button.link)" class="whitespace-nowrap cursor-default"
             :class="{ 'active-text': currentSection === button.link.split('-')[0], 'non-active-text': currentSection !== button.link.split('-')[0] }">
             {{ button.title }}
           </p>
@@ -70,9 +70,13 @@ const props = defineProps({
 const currentSection = ref<string>(route.query.section as string || "")
 
 const goTo = (url: string) => {
-
-  const query = url === "" ? {} : { ...route.query, section: url.split('-')[0], pageName: url.split('-')[1], }
-  router.push({ query })
+  if (route.query.pageName !== url.split('-')[1] || route.query.section !== url.split('-')[0]) {
+    const query = url === "" ? {} : { ...route.query, section: url.split('-')[0], pageName: url.split('-')[1], page: 1 }
+    router.push({ query })
+  } else {
+    const query = url === "" ? {} : { ...route.query, section: url.split('-')[0], pageName: url.split('-')[1], }
+    router.push({ query })
+  }
 }
 
 onBeforeRouteUpdate((to: any) => {
@@ -153,8 +157,8 @@ button {
   }
 
   .image1 {
-    height: 28px;
-    width: 140px;
+    height: 24px;
+    width: 120px;
     border-radius: 6px;
   }
 
