@@ -9,7 +9,7 @@
             <ModalContentSorting @close="sortingShowMobile" @save="saveSort" />
         </template>
     </ModalDown>
-    <div class="md:mt-5 lg:mt-8">
+    <div class="md:mt-5 lg:mt-8 cursor-default">
         <h2 class="hidden md:flex md:text-3xl place-items-center font-medium">
             {{ router.currentRoute.value?.query.section == 'konkursy' ? 'Konkursy' : 'Quizy' }}
         </h2>

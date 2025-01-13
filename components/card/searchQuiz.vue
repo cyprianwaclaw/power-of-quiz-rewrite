@@ -12,13 +12,14 @@
     </div>
   </div>
   <div v-else>
-    <div class="grid md:grid-cols-2 gap-5 w-full">
+    <!-- derswddfederwrerewrewrrewrewrer -->
+    <div class="grid gap-5 md:gap-[13px] w-full">
       <div v-for="(quiz, index) in props.quizes" :key="index"
         :style="`background-image: url(${quiz.image}); background-size: cover; border-radius:12px;`"
         @click="isClick(quiz)">
         <div class="bg-image w-full rounded-[12px] lg:rounded-[12px] cursor-pointer">
           <div class="details">
-            <h3 class="title hover:underline-offset-4">{{ quiz.title }}</h3>
+            <h3 class="title text-[18px] md:text-[15px] hover:underline-offset-4">{{ quiz.title }}</h3>
             <div class="flex mt-1 gap-3 float-left">
               <p class="des">{{ quiz.time }} min</p>
               <div class="vl"></div>
@@ -86,8 +87,7 @@ const isClick = (quiz: any) => {
 .title {
   color: white;
   font-weight: 500;
-  font-size: 18px;
-  line-height: 27px;
+  line-height: 24px;
 }
 
 .des {

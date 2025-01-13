@@ -35,6 +35,70 @@
                                     {{ competition.time.data }}
                                 </p>
                             </div>
+                         <div class="flex gap-[7px] mb-3">
+                                <p class="text-gray-600">Godziny</p>
+                                <p class="text-base primary-color font-medium">
+                                    {{ competition.time.start_format }} - {{ competition.time.end_format }}
+                                </p>
+                            </div>
+                            <div class="flex gap-[7px]">
+                                <p class="text-gray-600">Kategoria:</p>
+                                <p class="text-base primary-color font-medium">
+                                    {{ competition.category }}
+                                </p>
+                            </div>
+                            <div class="flex gap-[7px]">
+                                <p class="text-gray-600">Trudność:</p>
+                                <p class="text-base primary-color font-medium">
+                                    {{ competition.difficulty }}
+                                </p>
+                            </div>
+                            <div class="flex gap-[7px]">
+                                <p class="text-gray-600">Liczba pytań:</p>
+                                <p class="text-base primary-color font-medium">
+                                    {{ competition.questions_count }}
+                                </p>
+                            </div>
+                        </div>
+                        <p class="text-[17px] font-semibold">Opis</p>
+                        <p class="text pr-6 mb-5 text-gray-600 mt-[4px]"> {{ competition.description }}</p>
+                        <label class="flex w-full mb-5 mt-12">
+                            <input type="checkbox" class="w-5 flex mb-[4px]" v-model="checkbox" />
+                            <p class="ml-2">Akceptuje <NuxtLink to="/regulamin" class="link">regulamin</NuxtLink>
+                            </p>
+                        </label>
+                        <button class=" w-full mb-6 " :class="checkbox ? 'button-primary' : 'button-primary-disabled'">
+                            <p class="text-center" @click="startGame(competition.id)">Zagraj</p>
+                        </button>
+                    </div>
+                </div>
+            </Transition>
+        </div>
+        <!-- Dekstop view  -->
+        <div class="sm:flex hidden">
+            <Transition @enter="onEnterDesktop" :css="false">
+                <div class="modal-desktop" v-if="props.modalActive">
+                    <div class="w-full h-full">
+                        <div v-if="isLoading">
+                            <div class="is-loading">
+                                <div class="image" />
+                            </div>
+                        </div>
+                        <img v-show="!isLoading" :src="props.competition.image" class="image" />
+                    </div>
+                    <div class="w-full flex flex-col">
+                        <div class="flex absolute right-[21px] top-[21px]">
+                            <Icon name="carbon:close" size="30" class="close w-8 h-8 border-transparent rounded-[6px]"
+                                @click="$emit('close')" />
+                        </div>
+                        <p class="font-medium text-[20px] leading-[25px] mt-[64px] ">{{ competition.title }}</p>
+                        <div class="mb-6 gap-[5px] flex flex-col">
+                            <div class="flex gap-[7px] mt-2">
+                                <p class="text-gray-600">Data:</p>
+                                <p class="text-base primary-color font-medium">
+                                    {{ competition.time.data }}
+                                </p>
+                            </div>
                             <div class="flex gap-[7px] mb-3">
                                 <p class="text-gray-600">Godziny</p>
                                 <p class="text-base primary-color font-medium">
@@ -71,121 +135,9 @@
                             <p class="text-center" @click="startGame(competition.id)">Zagraj</p>
                         </button>
                     </div>
-
-                    <!-- <div class="content overflow-y-scroll">
-                        <div class="w-full">
-                            <div v-if="isLoading">
-                                <div class="is-loading">
-                                    <div class="image" />
-                                </div>
-                            </div>
-                            <img v-show="!isLoading" :src="props.quiz.image" class="image" />
-                        </div>
-                        <div class="mt-5 mb-6 gap-[5px] flex flex-col">
-                            <div class="flex gap-[7px]">
-                                <p class="text-gray-600">Kategoria:</p>
-                                <p class="text-base primary-color font-medium">
-                                    {{ quiz.category }}
-                                </p>
-                            </div>
-                            <div class="flex gap-[7px]">
-                                <p class="text-gray-600">Trudność:</p>
-                                <p class="text-base primary-color font-medium">
-                                    {{ quiz.difficulty }}
-                                </p>
-                            </div>
-                            <div class="flex gap-[7px]">
-                                <p class="text-gray-600">Pytania:</p>
-                                <p class="text-base primary-color font-medium">
-                                    {{ quiz.questions_count }}
-                                </p>
-                            </div>
-                            <div class="flex gap-[7px]">
-                                <p class="text-gray-600">Czas trwania:</p>
-                                <p class="text-base primary-color font-medium">
-                                    {{ quiz.time }} min
-                                </p>
-                            </div>
-                            <div class="flex gap-[7px]">
-                                <p class="text-gray-600">Dodano:</p>
-                                <p class="text-base primary-color font-medium">
-                                    {{ quiz.date }}
-                                </p>
-                            </div>
-                        </div>
-                        <p class="text-[17px] font-semibold">Opis</p>
-                        <p class="text pr-6 mb-5 text-gray-600 mt-[4px]">{{ quiz.description }}</p>
-                        <button class="button-primary w-full mb-6 mt-7">
-                     
-                            <p class="text-center" @click="startGame(quiz?.id)">Zagraj w quidsdz</p>
-
-                        </button>
-                    </div> -->
                 </div>
             </Transition>
         </div>
-        <!-- Dekstop view  -->
-        <!-- <div class="sm:flex hidden">
-            <Transition @enter="onEnterDesktop" :css="false">
-                <div class="modal-desktop" v-if="props.modalActive">
-                    <div class="w-full h-full">
-                        <div v-if="isLoading">
-                            <div class="is-loading">
-                                <div class="image" />
-                            </div>
-                        </div>
-                        <img v-show="!isLoading" :src="props.quiz.image" class="image" />
-                    </div>
-                    <div class="w-full flex flex-col">
-                        <div class="flex absolute right-[21px] top-[21px]">
-                            <Icon name="carbon:close" size="30" class="close w-8 h-8 border-transparent rounded-[6px]"
-                                @click="$emit('close')" />
-                        </div>
-                        <p class="font-medium text-[20px] leading-[25px] mt-[64px] ">{{ quiz.title }}</p>
-
-                        <div class="mt-[18px] mb-6 flex flex-col">
-                            <div class="flex gap-[7px]">
-                                <p class="text-gray-600">Kategoria:</p>
-                                <p class="text-base primary-color font-medium">
-                                    {{ quiz.category }}
-                                </p>
-                            </div>
-                            <div class="flex gap-[7px] mt-[5px]">
-                                <p class="text-gray-600">Trudność:</p>
-                                <p class="text-base primary-color font-medium">
-                                    {{ quiz.difficulty }}
-                                </p>
-                            </div>
-                            <div class="flex gap-[7px] mt-[5px]">
-                                <p class="text-gray-600">Pytania:</p>
-                                <p class="text-base primary-color font-medium">
-                                    {{ quiz.questions_count }}
-                                </p>
-                            </div>
-                            <div class="flex gap-[7px] mt-[5px]">
-                                <p class="text-gray-600">Czas trwania:</p>
-                                <p class="text-base primary-color font-medium">
-                                    {{ quiz.time }} min
-                                </p>
-                            </div>
-                            <div class="flex gap-[7px] mt-[5px]">
-                                <p class="text-gray-600">Dodano:</p>
-                                <p class="text-base primary-color font-medium">
-                                    {{ quiz.date }}
-                                </p>
-                            </div>
-                            <p class="text-[17px] font-semibold mt-[18px]">Opis</p>
-                            <p class="text pr-6 mb-5 text-gray-600 mt-[4px]">{{ quiz.description }}</p>
-                            <button class="button-primary w-[260px] absolute bottom-10">
-                                <NuxtLink :to="`/panel/quiz/${quiz?.id}`">
-                                    <p class="text-center">Zagraj w quiz</p>
-                                </NuxtLink>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </Transition>
-        </div> -->
     </div>
 </template>
 
@@ -212,7 +164,7 @@ const emit = defineEmits(['close'])
 const isLoading = ref(true)
 const checkbox = ref(false)
 const startGame = async (id: number) => {
-    if (checkbox.value === true) {       
+    if (checkbox.value === true) {
         const newCompetition = await axiosInstance.get(`/competition/${id}/start`)
         const submissionData = {
             submission_id: newCompetition.data.submission_id,
@@ -222,7 +174,7 @@ const startGame = async (id: number) => {
 
         }
         quizSubmissionCookie.value = JSON.stringify(submissionData)
-        router.push(`/panel/konkurs/${id}`)
+        router.push(`/panel/konkurs/${id}?name=${props.competition.title}`)
     }
 }
 

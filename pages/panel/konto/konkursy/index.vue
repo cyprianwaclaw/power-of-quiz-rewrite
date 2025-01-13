@@ -1,5 +1,6 @@
 <template>
     <NuxtLayout name="account" arrowText="Twoje konto" title="Konkursy">
+        {{ router.currentRoute.value.query }}
         <ButtonSecondary :array="buttonsArray" />
         <SectionPageElementsCompetitionResults v-if="router.currentRoute.value.query?.section == null" />
         <SectionPageElementsNewCompetition v-if="router.currentRoute.value.query?.section == 'newCompetition'" />
@@ -33,6 +34,11 @@ const buttonsArray = reactive([
         link: "newCompetition"
     }
 ])
+onMounted(()=>{
+    if (router.currentRoute.value.query.name == 'wyniki') {     
+        router.push('/panel/konto?pageName=competition&section=null&page=1')
+    }
+})
 
 </script>
 

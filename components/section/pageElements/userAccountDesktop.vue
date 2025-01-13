@@ -146,6 +146,7 @@ const buttonsArray = ref([
 ])
 
 onMounted(async () => {
+
     const res = await axiosInstance.get(`user/quizzes?${formatQueryString(route.query)}`);
     userQuizzes.value = res.data;
 

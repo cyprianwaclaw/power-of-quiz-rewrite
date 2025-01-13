@@ -1,31 +1,36 @@
 <template>
-    <div>
-        <NuxtLink to="/panel/quiz?section=konkursy" class="flex place-items-center -mt-[10px] mb-[18px]">
-            <Icon name="ph:caret-left-bold" size="22" class="primary-color back-arrow" />
-            <p class="go primary-color">Konkursy</p>
-        </NuxtLink>
-        <img :src="competitionSubmissionCookie.info?.image" class="image" />
-        <p class="text-center px-[24px] font-medium leading-6 mt-[11px] mb-[21px]">
-            {{ currentQuestionsArray?.question }}
-        </p>
-        <div v-if="currentQuestionsArray ? true : false" class="flex flex-col gap-[10px] w-full">
-            <div v-for="(answer, index) in currentQuestionsArray?.answers" :key="index">
-                <div class="w-full default-state rounded" @click="sendAnswer(currentQuestionsArray.id, answer.id)" :class="[
-                    isClick === answer.id && isGoodAnswer === false ? 'bad-answer' : '',
-                    isClick === answer.id && isGoodAnswer === true ? 'good-answer' : '',
-                ]">
-                    {{ answer.answer }}
-                    {{ isGoodAnswer }}
+    <div class="w-full flex-col justify-center mx-auto md:w-[700px]">
+            <NuxtLink to="/panel/quiz?section=konkursy" class="flex md:hidden place-items-center -mt-[10px] mb-[18px]">
+                <Icon name="ph:caret-left-bold" size="22" class="primary-color back-arrow" />
+                <p class="go primary-color">Konkursy</p>
+            </NuxtLink>
+            <p class="md:flex hidden text-[19px] font-semibold my-[15px]">
+                {{ router.currentRoute.value.query.name }}
+            </p>
+               <div class="image-wrapper h-[210px] md:h-[350px]">
+                   <img :src="competitionSubmissionCookie.info?.image" />
+                </div>
+                            <p class="md:flex hidden text-[19px] font-semibold mt-[32px]">
+                {{ currentQuestionsArray?.question }}
+            </p>
+            <div v-if="currentQuestionsArray ? true : false" class="flex flex-col gap-[10px] mt-[16px] w-full md:grid md:grid-cols-2">
+                <div v-for="(answer, index) in currentQuestionsArray?.answers" :key="index">
+                    <div class="w-full default-state rounded" @click="sendAnswer(currentQuestionsArray.id, answer.id)"
+                        :class="[
+                            isClick === answer.id && isGoodAnswer === false ? 'bad-answer' : '',
+                            isClick === answer.id && isGoodAnswer === true ? 'good-answer' : '',
+                        ]">
+                        {{ answer.answer }}
+                    </div>
                 </div>
             </div>
-        </div>
-        <div v-else class="bg-white p-[21px] rounded-xl">
-            <p class="primary-color font-medium text-[18px]">Rozwiązano konkurs</p>
-            <p class="mt-[7px]">
-                Po zakończymym konkursie zostaną ogłoszone wyniki, śledź informacje <NuxtLink to="/panel/konto/konkursy"
-                    class="underline">TUTAJ
-                </NuxtLink>
-            </p>
+            <div v-else class="bg-white p-[21px] rounded-xl">
+                <p class="primary-color font-medium text-[18px]">Rozwiązano konkurs</p>
+                <p class="mt-[7px]">
+                    Po zakończymym konkursie zostaną ogłoszone wyniki, śledź informacje <NuxtLink to="/panel/konto/konkursy?name=wyniki"
+                        class="underline">TUTAJ
+                    </NuxtLink>
+                </p>
         </div>
     </div>
 </template>
@@ -76,7 +81,6 @@ const sendAnswer = async (questionId: number, answerId: number) => {
 .image-wrapper {
     position: relative;
     width: 100%;
-    height: 210px;
     overflow: hidden;
     border-radius: 18px;
 }
@@ -112,14 +116,31 @@ const sendAnswer = async (questionId: number, answerId: number) => {
     background: $color-success !important;
 }
 
+
 .default-state {
     background: $primary;
-    height: 54px;
+    height: 62px;
     border-radius: 8px;
-    place-content: center;
-    padding-left: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    padding-left: 10px;
     font-size: 15px;
     color: white;
+    cursor: pointer;
+
+    &:hover {
+        background: lighten($primary, 5%);
+    }
+
+    @media (max-width: 768px) {
+        font-size: 14px;
+        font-weight: 500;
+        padding-left: 14px;
+        justify-content: start;
+        height: 50px;
+    }
 }
 
 .is-loading {

@@ -29,10 +29,10 @@
 </template>
 
 <script setup lang="ts">
-import { useUser } from "@/stores/useUser";
+import { useUser } from "@/stores/useUser"
 
-const axiosInstance = useNuxtApp().$axiosInstance;
-const userState = useUser();
+const axiosInstance = useNuxtApp().$axiosInstance as any
+const userState = useUser()
 const router = useRouter();
 const isLoading = ref(true);
 const allQuiz = ref();

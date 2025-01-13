@@ -58,10 +58,7 @@
                         <p class="text-[17px] font-semibold">Opis</p>
                         <p class="text pr-6 mb-5 text-gray-600 mt-[4px]">{{ quiz.description }}</p>
                         <button class="button-primary w-full mb-6 mt-7">
-                            <!-- <NuxtLink :to="`/panel/quiz/${quiz?.id}`"> -->
-                                <!-- dsada -->
-                                <p class="text-center" @click="startGame(quiz?.id)">Zagraj w quidsdz</p>
-                            <!-- </NuxtLink> -->
+                                <p class="text-center" @click="startGame(quiz?.id)">Zagraj w quiz</p>
                         </button>
                     </div>
                 </div>
@@ -138,7 +135,6 @@ import gsap from 'gsap'
 const axiosInstance = useNuxtApp().$axiosInstance as any
 const router = useRouter()
 
-
 const quizSubmissionCookie = useCookie('quiz_submission') as any
 
 const props = defineProps({
@@ -191,8 +187,8 @@ const onEnterMobile = (el: any, done: any) => {
         y: elementHeight,
         duration: 0.3,
         onComplete: done,
-    });
-};
+    })
+}
 
 const onLeaveMobile = (el: any, done: any) => {
     let elementHeight = el.offsetHeight;
