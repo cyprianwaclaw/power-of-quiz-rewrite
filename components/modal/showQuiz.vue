@@ -16,12 +16,13 @@
                     </div>
                     <div class="content overflow-y-scroll">
                         <div class="w-full">
-                            <div v-if="isLoading">
+                            <!-- <div v-if="isLoading">
                                 <div class="is-loading">
                                     <div class="image" />
                                 </div>
                             </div>
-                            <img v-show="!isLoading" :src="props.quiz.image" class="image" />
+                            <img v-show="!isLoading" :src="props.quiz.image" class="image" /> -->
+                            <NuxtImg :src="props.quiz.image" class="image" />
                         </div>
                         <div class="mt-5 mb-6 gap-[5px] flex flex-col">
                             <div class="flex gap-[7px]">
@@ -58,7 +59,7 @@
                         <p class="text-[17px] font-semibold">Opis</p>
                         <p class="text pr-6 mb-5 text-gray-600 mt-[4px]">{{ quiz.description }}</p>
                         <button class="button-primary w-full mb-6 mt-7">
-                                <p class="text-center" @click="startGame(quiz?.id)">Zagraj w quiz</p>
+                            <p class="text-center" @click="startGame(quiz?.id)">Zagraj w quiz</p>
                         </button>
                     </div>
                 </div>
@@ -69,12 +70,13 @@
             <Transition @enter="onEnterDesktop" :css="false">
                 <div class="modal-desktop" v-if="props.modalActive">
                     <div class="w-full h-full">
-                        <div v-if="isLoading">
+                        <!-- <div v-if="isLoading">
                             <div class="is-loading">
                                 <div class="image" />
                             </div>
-                        </div>
-                        <img v-show="!isLoading" :src="props.quiz.image" class="image" />
+                        </div> -->
+                        <!-- <img v-show="!isLoading" :src="props.quiz.image" class="image" /> -->
+                        <NuxtImg :src="props.quiz.image" class="image" />
                     </div>
                     <div class="w-full flex flex-col">
                         <div class="flex absolute right-[21px] top-[21px]">

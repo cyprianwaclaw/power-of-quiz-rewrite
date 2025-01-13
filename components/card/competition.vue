@@ -14,7 +14,8 @@
     <div class="grid md:grid-cols-2 gap-6 w-full">
       <div v-for="competition in competitions" :key="competition.id">
         <div class="bg-white w-full p-[18px] rounded-2xl" @click="isClick(competition)">
-          <img :src="competition.image" class="image-class" />
+          <!-- <img :src="competition.image" class="image-class" /> -->
+          <NuxtImg :src="competition.image" class="image-class"/>
           <div class="details">
             <h3 class="title hover:underline-offset-4">{{ truncateText(competition.title, 30) }}</h3>
             <div class="flex flex-col gap-[10px] pb-[2px]">

@@ -20,12 +20,13 @@
                     </div>
                     <div class="content overflow-y-scroll">
                         <div class="w-full">
-                            <div v-if="isLoading">
+                        <NuxtImg :src="props.competition.image" class="image"/>
+                            <!-- <div v-if="isLoading">
                                 <div class="is-loading">
                                     <div class="image" />
                                 </div>
                             </div>
-                            <img v-show="!isLoading" :src="competition.image" class="image" />
+                            <img v-show="!isLoading" :src="competition.image" class="image" /> -->
                         </div>
                         <div class="mb-6 gap-[5px] flex flex-col">
                             <div class="flex gap-[7px] mt-2">
@@ -92,7 +93,7 @@
                         <button class=" w-full mb-6 " :class="checkbox ? 'button-primary' : 'button-primary-disabled'">
                             <p class="text-center" @click="startGame(competition.id)">Zagraj</p>
                         </button>
-                    </div>
+                    </div>  
                 </div>
             </Transition>
         </div>
@@ -101,12 +102,8 @@
             <Transition @enter="onEnterDesktop" :css="false">
                 <div class="modal-desktop" v-if="props.modalActive">
                     <div class="w-full h-full">
-                        <div v-if="isLoading">
-                            <div class="is-loading">
-                                <div class="image" />
-                            </div>
-                        </div>
-                        <img v-show="!isLoading" :src="props.competition.image" class="image" />
+                        <NuxtImg :src="props.competition.image" class="image"/>
+                        <!-- <img v-show="!isLoading" :src="props.competition.image" class="image" /> -->
                     </div>
                     <div class="w-full flex flex-col">
                         <div class="flex absolute right-[21px] top-[21px]">
