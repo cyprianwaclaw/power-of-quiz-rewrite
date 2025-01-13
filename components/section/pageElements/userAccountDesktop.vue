@@ -164,32 +164,24 @@ onMounted(async () => {
 
     if (route.query.pageName == undefined) {
         router.push({ query: { pageName: 'quiz', section: 'null' } })
-        setTimeout(() => {
             isLoading.value = false
             isLoadingButton.value = false
-        }, 340)
     }
     if (route.query.pageName == 'competition') {
         const res = await axiosInstance.get(`/user/competitions?${formatQueryString(route.query)}&page=${route.query.page}&per_page=${4}`);
         competitionData.value = res.data;
-        setTimeout(() => {
             isLoading.value = false
             isLoadingButton.value = false
-        }, 340)
     }
     if (route.query.pageName == 'founds') {
         const res = await axiosInstance.get(`payouts?${formatQueryString(route.query)}`);
         allPayouts.value = res.data;
-        setTimeout(() => {
             isLoading.value = false
             isLoadingButton.value = false
-        }, 340)
     }
     else {
-        setTimeout(() => {
             isLoading.value = false
             isLoadingButton.value = false
-        }, 340)
     }
 })
 

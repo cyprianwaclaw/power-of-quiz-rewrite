@@ -577,10 +577,8 @@ onMounted(async () => {
         router.push({ query: { pageName: 'profile', section: 'null' } })
     }
 
-    setTimeout(() => {
         isLoading.value = false
         isLoadingButtonSkeleton.value = false
-    }, 340)
 })
 
 
