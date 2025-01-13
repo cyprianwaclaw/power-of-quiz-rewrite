@@ -19,13 +19,20 @@
                 </div>
             </div>
             <div v-if="router.currentRoute.value.query?.pageName === 'competition'">
-                <div>
+                <div v-if="router.currentRoute.value.query?.section === 'results'">
+                    <CardUserCompetition :competitions="userCompetition?.data" :plan="true" :isLoading="isLoading"
+                        :n="8" />
+                    <SectionPagination :last_page="userCompetition?.pagination?.last_page"
+                        :current_page="userCompetition?.pagination?.current_page" :isLoading="isLoading" />
+
+                </div>
+                <div v-else>
                     <CardUserQuizzes :quizzes="competitionData?.data" :n="14" :isLoading="isLoading" />
                     <SectionPagination :last_page="competitionData?.pagination?.last_page"
                         :current_page="competitionData?.pagination?.current_page" :isLoading="isLoading" />
-                </div>
-                <div v-if="!competitionData?.data">
-                    nie ma quizów
+                    <div v-if="!competitionData?.data">
+                        Brak konkursów
+                    </div>
                 </div>
             </div>
             <div v-if="router.currentRoute.value.query?.pageName === 'founds'" class="w-full flex shrink-0">
@@ -75,6 +82,7 @@ const router = useRouter()
 const userQuizzes = ref() as any
 const competitionData = ref() as any
 const allPayouts = ref() as any
+const userCompetition = ref() as any
 const isOpen = ref(false)
 const isWithdraw = ref(false)
 
@@ -108,6 +116,10 @@ const allButtonsArray = (routeName: any) => {
         return [
             {
                 title: "Wyniki",
+                link: "results-competition"
+            },
+            {
+                title: "Moje konkursy",
                 link: "null-competition"
             },
         ]
@@ -133,7 +145,7 @@ const buttonsArray = ref([
     },
     {
         title: "Konkursy",
-        link: "null-competition"
+        link: "results-competition"
     },
     {
         title: "Środki",
@@ -158,7 +170,6 @@ onMounted(async () => {
         }, 340)
     }
     if (route.query.pageName == 'competition') {
-        // isLoading.value = true;
         const res = await axiosInstance.get(`/user/competitions?${formatQueryString(route.query)}&page=${route.query.page}&per_page=${4}`);
         competitionData.value = res.data;
         setTimeout(() => {
@@ -167,7 +178,6 @@ onMounted(async () => {
         }, 340)
     }
     if (route.query.pageName == 'founds') {
-        // isLoading.value = true;
         const res = await axiosInstance.get(`payouts?${formatQueryString(route.query)}`);
         allPayouts.value = res.data;
         setTimeout(() => {
@@ -181,7 +191,7 @@ onMounted(async () => {
             isLoadingButton.value = false
         }, 340)
     }
-});
+})
 
 onBeforeRouteUpdate(async (to) => {
     if (to.query.pageName == 'quiz') {
@@ -201,6 +211,10 @@ onBeforeRouteUpdate(async (to) => {
         const res = await axiosInstance.get(`payouts?${formatQueryString(to.query)}`);
         allPayouts.value = res.data;
         // isLoading.value = false;
+    }
+    if (to.query.section == 'results') {
+        const res = await axiosInstance.get(`/user/competitions?${formatQueryString(to.query)}&per_page=${8}`);
+        userCompetition.value = res.data
     }
     isLoading.value = false
     if (to.query.pageName == undefined) {

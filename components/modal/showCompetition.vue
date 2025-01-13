@@ -31,11 +31,10 @@
                             <div class="flex gap-[7px] mt-2">
                                 <p class="text-gray-600">Data:</p>
                                 <p class="text-base primary-color font-medium">
-                                    <!-- {{ competition.time }} -->
                                     {{ competition.time.data }}
                                 </p>
                             </div>
-                         <div class="flex gap-[7px] mb-3">
+                            <div class="flex gap-[7px] mb-3">
                                 <p class="text-gray-600">Godziny</p>
                                 <p class="text-base primary-color font-medium">
                                     {{ competition.time.start_format }} - {{ competition.time.end_format }}
@@ -60,6 +59,29 @@
                                 </p>
                             </div>
                         </div>
+                           <div class="mb-6 flex flex-col">
+                                <p class="text-[17px] font-semibold">Nagrody</p>
+                                <div class="ml-[8px] flex flex-col gap-[5px] mt-[6px]">
+                                    <div class="flex gap-[7px]">
+                                        <p class="text-gray-600">Pierwsze miejsce: </p>
+                                        <p class="text-base primary-color font-medium">
+                                            {{ competition.awward.first_points }} punktów
+                                        </p>
+                                    </div>
+                                    <div class="flex gap-[7px]">
+                                        <p class="text-gray-600">Drugie miejsce: </p>
+                                        <p class="text-base primary-color font-medium">
+                                            {{ competition.awward.second_points }} punktów
+                                        </p>
+                                    </div>
+                                    <div class="flex gap-[7px]">
+                                        <p class="text-gray-600">Trzecie miejsce: </p>
+                                        <p class="text-base primary-color font-medium">
+                                            {{ competition.awward.thrid_points }} punktów
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
                         <p class="text-[17px] font-semibold">Opis</p>
                         <p class="text pr-6 mb-5 text-gray-600 mt-[4px]"> {{ competition.description }}</p>
                         <label class="flex w-full mb-5 mt-12">
@@ -91,8 +113,8 @@
                             <Icon name="carbon:close" size="30" class="close w-8 h-8 border-transparent rounded-[6px]"
                                 @click="$emit('close')" />
                         </div>
-                        <p class="font-medium text-[20px] leading-[25px] mt-[64px] ">{{ competition.title }}</p>
-                        <div class="mb-6 gap-[5px] flex flex-col">
+                        <p class="font-medium text-[20px] leading-[25px] mt-[10px] ">{{ competition.title }}</p>
+                        <div class="mb-6 gap-[2px] flex flex-col  mt-[10px]">
                             <div class="flex gap-[7px] mt-2">
                                 <p class="text-gray-600">Data:</p>
                                 <p class="text-base primary-color font-medium">
@@ -122,6 +144,29 @@
                                 <p class="text-base primary-color font-medium">
                                     {{ competition.questions_count }}
                                 </p>
+                            </div>
+                        </div>
+                        <div class="mb-6 flex flex-col">
+                            <p class="text-[17px] font-semibold">Nagrody</p>
+                            <div class="ml-[8px] flex flex-col gap-[2px] mt-[4px]">
+                                <div class="flex gap-[7px]">
+                                    <p class="text-gray-600">Pierwsze miejsce: </p>
+                                    <p class="text-base primary-color font-medium">
+                                        {{ competition.awward.first_points }} punktów
+                                    </p>
+                                </div>
+                                <div class="flex gap-[7px]">
+                                    <p class="text-gray-600">Drugie miejsce: </p>
+                                    <p class="text-base primary-color font-medium">
+                                        {{ competition.awward.second_points }} punktów
+                                    </p>
+                                </div>
+                                <div class="flex gap-[7px]">
+                                    <p class="text-gray-600">Trzecie miejsce: </p>
+                                    <p class="text-base primary-color font-medium">
+                                        {{ competition.awward.thrid_points }} punktów
+                                    </p>
+                                </div>
                             </div>
                         </div>
                         <p class="text-[17px] font-semibold">Opis</p>
@@ -337,7 +382,7 @@ const LeaveBg = (el: any) => {
     transform: translate(-50%, -50%);
     z-index: 100;
     width: 740px;
-    height: 580px;
+    height: 620px;
     padding: 21px;
     display: flex;
     gap: 28px;

@@ -14,8 +14,6 @@
     </div>
 </template>
 <script lang="ts" setup>
-import { storeToRefs } from "pinia"
-import { useUser } from "@/stores/useUser"
 const axiosInstance = useNuxtApp().$axiosInstance as any
 
 definePageMeta({
