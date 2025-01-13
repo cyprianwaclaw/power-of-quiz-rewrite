@@ -15,7 +15,8 @@
                 <NuxtLink :to="`/panel/konto/moje-quizy/${single.id}`" class=" place-items-center flex gap-[12px]"
                     :class="[index != '0' ? 'border-t pt-[15px]' : '']">
                     <div class="w-[90px] flex-shrink-0">
-                        <img :src="single.image" class="image" />
+                        <!-- <img :src="single.image" class="image" /> -->
+                            <NuxtImg :src="single.image" class="image" />
                     </div>
                     <div>
                         <p class="font-semibold text-[#191616] leading-[19px] text-[14px]">{{ single.title }}</p>
