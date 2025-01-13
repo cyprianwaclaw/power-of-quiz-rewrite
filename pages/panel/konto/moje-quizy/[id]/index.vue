@@ -1,59 +1,65 @@
 <template>
     <NuxtLayout name="account" arrowText="Moje quizy">
-        <p class="font-bold text-[13px] mt-10"
+        <NuxtLink to="http://localhost:3000/panel/konto?pageName=quiz&section=null"
+            class="hidden md:flex place-items-center -mt-[12px] ">
+            <Icon name="ph:caret-left-bold" size="22" class="primary-color back-arrow" />
+            <p class="text-[18px] primary-color">Moje konto</p>
+        </NuxtLink>
+        <p class="font-bold text-[13px] md:text-[14px] mt-10 md:mt-[44px]"
             :class="singleQuiz?.data.status == true ? 'text-[#4BB21A]' : 'text-[#E1A817]'">
             {{ singleQuiz?.data.status
                 ? 'Aktywny' : 'W oczekiwaniu' }}</p>
-        <p class="font-semibold text-[23px] leading-[28px] mt-[6px]"> {{ singleQuiz?.data.title }}</p>
-        <div class="w-full">
-            <div v-if="isLoading">
-                <div class="is-loading">
-                    <div class="image" />
-                </div>
+
+        <p class="font-semibold text-[23px] md:text-[28px] leading-[28px] mt-[8px]"> {{ singleQuiz?.data.title }}</p>
+        <div class="md:flex md:flex-row-reverse md:gap-[28px] md:mt-[32px] mt-[32px] flex flex-col">
+
+            <div class="w-full mb-[34px] md:mb-[0px]">
+                <NuxtImg :src="singleQuiz?.data.image" class="image md:h-[420px] h-[300px]"/>
             </div>
-            <img v-show="!isLoading" :src="singleQuiz?.data.image" class="image" />
-        </div>
-        <div class="bg-white rounded-[18px] p-[30px]">
-            <div class=" mb-[28px] gap-[5px] flex flex-col">
-                <div class="flex gap-[7px]">
-                    <p class="text-gray-600">Kategoria:</p>
-                    <p class="text-base primary-color font-medium">
-                        {{ singleQuiz?.data.category }}
-                    </p>
+
+            <div class="bg-white rounded-[18px] p-[30px] w-full">
+                <div class=" mb-[28px] gap-[5px] flex flex-col">
+                    <div class="flex gap-[7px]">
+                        <p class="text-gray-600">Kategoria:</p>
+                        <p class="text-base primary-color font-medium">
+                            {{ singleQuiz?.data.category }}
+                        </p>
+                    </div>
+                    <div class="flex gap-[7px]">
+                        <p class="text-gray-600">Trudność:</p>
+                        <p class="text-base primary-color font-medium">
+                            {{ singleQuiz?.data.difficulty }}
+                        </p>
+                    </div>
+                    <div class="flex gap-[7px]">
+                        <p class="text-gray-600">Pytania:</p>
+                        <p class="text-base primary-color font-medium">
+                            {{ quizQuestions?.count }}
+                        </p>
+                    </div>
+                    <div class="flex gap-[7px]">
+                        <p class="text-gray-600">Czas trwania:</p>
+                        <p class="text-base primary-color font-medium">
+                            {{ singleQuiz?.data.time }} min
+                        </p>
+                    </div>
+                    <div class="flex gap-[7px]">
+                        <p class="text-gray-600">Dodano:</p>
+                        <p class="text-base primary-color font-medium">
+                            {{ singleQuiz?.data.date }}
+                        </p>
+                    </div>
                 </div>
-                <div class="flex gap-[7px]">
-                    <p class="text-gray-600">Trudność:</p>
-                    <p class="text-base primary-color font-medium">
-                        {{ singleQuiz?.data.difficulty }}
-                    </p>
-                </div>
-                <div class="flex gap-[7px]">
-                    <p class="text-gray-600">Pytania:</p>
-                    <p class="text-base primary-color font-medium">
-                        {{ quizQuestions?.count }}
-                    </p>
-                </div>
-                <div class="flex gap-[7px]">
-                    <p class="text-gray-600">Czas trwania:</p>
-                    <p class="text-base primary-color font-medium">
-                        {{ singleQuiz?.data.time }} min
-                    </p>
-                </div>
-                <div class="flex gap-[7px]">
-                    <p class="text-gray-600">Dodano:</p>
-                    <p class="text-base primary-color font-medium">
-                        {{ singleQuiz?.data.date }}
-                    </p>
-                </div>
+                <p class="text-[17px] font-semibold">Opis</p>
+                <p class="text pr-6 text-gray-600 mt-[5px] leading-[23px]">{{ singleQuiz?.data.description }}</p>
             </div>
-            <p class="text-[17px] font-semibold">Opis</p>
-            <p class="text pr-6 text-gray-600 mt-[5px] leading-[23px]">{{ singleQuiz?.data.description }}</p>
         </div>
-        <div class="bg-white rounded-[18px] p-[30px] mt-[27px]">
+
+        <div class="mt-[27px] bg-white border-white rounded-[18px] w-full p-[21px]">
             <CardQuizQuestions :questions="quizQuestions?.data" :n="14" :isLoading="isLoading" />
         </div>
         <div class="flex justify-end items-end mt-8 gap-[2px]">
-            <p class="text-red-600 px-[23px] py-[10px] font-semibold" @click="removeModal()">Usuń</p>
+            <p class="text-red-600 px-[23px] py-[10px] font-semibold cursor-pointer" @click="removeModal()">Usuń</p>
             <NuxtLink :to="`/panel/konto/moje-quizy/${router.currentRoute.value.params.id}/edycja`">
                 <button class="button-primary">
                     Edytuj
@@ -98,18 +104,17 @@ const removeModal = () => {
 <style scoped lang="scss">
 @import "@/assets/style/variables.scss";
 
+.isLoaded {
+    background: linear-gradient(110deg, #c7c7c7 8%, #d4d4d4 18%, #c7c7c7 33%);
+    border-radius: 12px;
+    background-size: 300% 100%;
+    animation: 1.6s shine linear infinite;
+}
 .image {
     border: 1px solid $border;
     border-radius: 12px;
-    margin-bottom: 27px;
-    margin-top: 24px;
     object-fit: cover;
     width: 100%;
-    height: 275px;
-
-    @media only screen and (min-width: 640px) {
-        height: 100%;
-    }
 }
 
 .is-loading {

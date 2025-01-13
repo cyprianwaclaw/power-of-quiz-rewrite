@@ -1,5 +1,10 @@
 <template>
     <NuxtLayout name="account" :arrowText="truncateText(title, 26)">
+        <NuxtLink to="http://localhost:3000/panel/konto?pageName=quiz&section=null"
+            class="hidden md:flex place-items-center -mt-[12px] mb-[32px]">
+            <Icon name="ph:caret-left-bold" size="22" class="primary-color back-arrow" />
+            <p class="text-[18px] primary-color">Moje konto</p>
+        </NuxtLink>
         <SectionQuizForm :error="showErrorMessage" />
         <SectionChangeQuizImage />
         <SectionQuestionsForms :error="showErrorMessage" />

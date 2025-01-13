@@ -8,14 +8,14 @@
                 </div>
             </div>
         </div>
-    </div>
+</div>  
     <div v-else>
-        <div class="flex flex-col  w-full">
+        <div class="flex flex-col">
             <div v-for="(single, index) in props.questions" :key="index">
-                <div @click="toggleQuestion(index)" class="place-items-center flex  bg-white pb-[17px]"
+                <div @click="toggleQuestion(index)" class="place-items-center flex  bg-white  cursor-pointer hover:bg-slate-50 px-[30px] pt-[30px] pb-[17px]"
                     :class="[index != '0' ? 'border-t pt-[18px]' : '']">
-                    <div class="w-full">
-                        <p class="question-title" :class="{ 'change-color': isOpen[index] }"><span
+                    <div class="w-full md:mr-[120px]">
+                        <p class="question-title leading-[22px]" :class="{ 'change-color': isOpen[index] }"><span
                                 class="primary-color font-bold">{{ index + 1
                                 }}.</span> {{ single.question }}</p>
                     </div>
@@ -26,7 +26,7 @@
                 <Transition name="accordion" @before-enter="beforeEnter" @enter="enter" @leave="leave">
                     <div v-if="isOpen[index]" class="bg-white flex flex-col gap-[10px] ml-[7px] mt-[3px]">
                         <div v-for="(answer, index) in single.answers" :key="index"
-                            class=" place-items-center flex gap-[6px]">
+                            class=" place-items-center flex gap-[6px] ml-[32px]">
                             <div class="w-[23px]  flex-shrink-0 flex">
                                 <Icon :name="answer.correct ? 'ph:check-circle-duotone' : 'ph:check-circle'" size="22"
                                     :color="answer.correct ? '#4BB21A' : '#BFBFBF'" />
@@ -114,7 +114,6 @@ const leave = (el: any, done: () => void) => {
 
 .question-title {
     font-size: 16px;
-    line-height: 20px;
     color: $text-black;
 }
 

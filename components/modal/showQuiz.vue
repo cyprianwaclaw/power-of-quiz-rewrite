@@ -16,12 +16,6 @@
                     </div>
                     <div class="content overflow-y-scroll">
                         <div class="w-full">
-                            <!-- <div v-if="isLoading">
-                                <div class="is-loading">
-                                    <div class="image" />
-                                </div>
-                            </div>
-                            <img v-show="!isLoading" :src="props.quiz.image" class="image" /> -->
                             <NuxtImg :src="props.quiz.image" class="image" />
                         </div>
                         <div class="mt-5 mb-6 gap-[5px] flex flex-col">

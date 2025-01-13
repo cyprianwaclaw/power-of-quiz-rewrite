@@ -1,6 +1,6 @@
 <template>
   <div class="-mb-[80px]">
-      <div @click="goToBack()" class="flex place-items-center -mt-[1px] mb-[28px]">
+      <div @click="goToBack()" class="md:hidden flex place-items-center -mt-[1px] mb-[28px]">
         <Icon name="ph:caret-right-bold" size="22" class="primary-color back-arrow" />
         <p class="go primary-color">{{ props?.arrowText }}</p>
       </div>
