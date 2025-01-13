@@ -5,7 +5,7 @@
         <SectionUserAvatar :size="36" :avatar="user?.avatar" />
         <div class="flex flex-col">
           <p class="text-[15px] flex place-items-center font-medium -mb-[2px]">
-            {{ user.user_name ? user.user_name : '' }} {{ user.user_surname ? user.user_surname : '' }}
+            {{ user?.user_name ? user?.user_name : '' }} {{ user?.user_surname ? user?.user_surname : '' }}
           </p>
           <div v-if="hasPremium ? true : false" class="flex place-items-center gap-[4px]">
             <Icon name="fa:diamond" size="15" class="primary-color" />
