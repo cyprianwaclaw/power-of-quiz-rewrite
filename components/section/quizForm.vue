@@ -1,4 +1,6 @@
 <template>
+    <!-- {{ allDataToEdit[0].difficulty}}
+    {{ quizData }} -->
     <div class="bg-white pt-7 pb-8 px-2 mt-10 md:mt-0 rounded-[24px] w-full">
         <div class="row-table-start">
             <textarea v-model="title" wrap="soft" rows="1" class=" w-full -mt-3 " ref="autoResizeTextarea"
@@ -41,7 +43,25 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
 import { useQuiz } from "@/stores/useQuiz"
+import { useEditQuiz } from "@/stores/useEditQuiz"
 const axiosInstance = useNuxtApp().$axiosInstance as any
+
+const router = useRouter()
+const { allDataToEdit } = storeToRefs(useEditQuiz())
+const categories = ref([]);
+const quizState = useQuiz()
+const { isSendSuccess, title, time, description, category_id, difficulty } = storeToRefs(quizState)
+const rotationStates = ref<boolean[]>([false, false])
+const resCategories = await axiosInstance.get('/categories');
+categories.value = resCategories.data.data;
+
+const quizData = reactive({
+    title,
+    time,
+    description,
+    category_id,
+    difficulty
+})
 
 const props = defineProps({
     error: {
@@ -50,9 +70,6 @@ const props = defineProps({
         default: true,
     }
 })
-const categories = ref([]);
-const resCategories = await axiosInstance.get('/categories');
-categories.value = resCategories.data.data;
 
 const difficultyArray = reactive([
     { id: 'easy', name: 'Łatwy' },
@@ -60,9 +77,6 @@ const difficultyArray = reactive([
     { id: 'hard', name: 'Trudny' },
 ])
 
-const quizState = useQuiz()
-const { isSendSuccess, title, time, description, category_id, difficulty } = storeToRefs(quizState)
-const rotationStates = ref<boolean[]>([false, false])
 
 const toggleRotation = (index: number, isVisible: boolean) => {
     rotationStates.value[index] = isVisible;
@@ -159,6 +173,18 @@ watch(isSendSuccess, (newValue: any) => {
 onMounted(() => {
     difficultyNew.value = difficulty
     categoryNew.value = category_id
+
+    if (router.currentRoute.value.fullPath.includes('edycja')) {
+        quizData.title = allDataToEdit.value[0].title
+        quizData.time = allDataToEdit.value[0].time
+        quizData.description = allDataToEdit.value[0].description
+        quizData.difficulty = allDataToEdit.value[0].difficulty
+        // quizData.difficulty = "easy"
+
+        quizData.category_id = allDataToEdit.value[0].category_id
+    } else {
+        // questionsArrayData.value = questionsArray.value
+    }
 
     nextTick(() => {
         const textareas = document.querySelectorAll('textarea');

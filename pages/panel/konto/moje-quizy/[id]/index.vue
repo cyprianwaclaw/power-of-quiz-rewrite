@@ -9,7 +9,7 @@
             :class="singleQuiz?.data.status == true ? 'text-[#4BB21A]' : 'text-[#E1A817]'">
             {{ singleQuiz?.data.status
                 ? 'Aktywny' : 'W oczekiwaniu' }}</p>
-
+<!-- {{ singleQuiz?.data }} -->
         <p class="font-semibold text-[23px] md:text-[28px] leading-[28px] mt-[8px]"> {{ singleQuiz?.data.title }}</p>
         <div class="md:flex md:flex-row-reverse md:gap-[28px] md:mt-[32px] mt-[32px] flex flex-col">
 
@@ -109,7 +109,18 @@ const goToEditData = () => {
     allDataToEdit.value = [{
         "dsd": "dfdf",
         "image": singleQuiz.value.data.image,
-        "quizQuestion": quizQuestions.value?.data
+        "quizQuestion": quizQuestions.value?.data,
+        "title": singleQuiz.value.data.title,
+        "time": singleQuiz.value.data.time,
+        "description": singleQuiz.value.data.description,
+        "category_id": singleQuiz.value.data.category_id,
+        "difficulty": singleQuiz.value.data.difficulty_id,
+
+        // title
+        // time,
+        // description,
+        // category_id,
+        // difficulty
      }]
 }
 

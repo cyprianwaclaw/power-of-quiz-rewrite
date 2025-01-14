@@ -26,7 +26,7 @@
                             <input type="file" ref="input" accept="image/*" class="default-file-input"
                                 @change="handleFileInputChange" />
                             <div class="flex w-full justify-center items-center">
-                                <p class="flex md:hidden cursor-pointer">Kliknij tutaj aby dodać zdjęcie</p>
+                                <p class="flex md:hidden cursor-pointer">fKliknij tutaj aby dodać zdjęcie</p>
                                 <p class="hidden md:flex justify-center cursor-pointer">Kliknij tutaj aby dodać zdjęcie,<br>
                                     lub
                                     upuść tutaj zdjęcie</p>

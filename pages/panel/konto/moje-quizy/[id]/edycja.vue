@@ -1,26 +1,24 @@
 <template>
     <NuxtLayout name="account" :arrowText="truncateText(title, 26)">
-        <NuxtLink to="http://localhost:3000/panel/konto?pageName=quiz&section=null"
+        <NuxtLink to="/panel/konto?pageName=quiz&section=null"
             class="hidden md:flex place-items-center -mt-[12px] mb-[32px]">
             <Icon name="ph:caret-left-bold" size="22" class="primary-color back-arrow" />
             <p class="text-[18px] primary-color">Moje konto</p>
         </NuxtLink>
-        {{ allDataToEdit }}
-        {{ newImage }}
-        <div class="mt-[200px]">
-            <SectionChangeImage />
+        <!-- {{ allDataToEdit }}
+        {{ newImage }} -->
+        <div class="flex flex-col md:flex-row md:place-items-center md:gap-[28px] mt-[34px]">
+            <SectionQuizForm :error="showErrorMessage" />
+            <div class="mt-[px]">
+                <SectionChangeImage />
+            </div>
         </div>
         <SectionQuestionsForms :error="showErrorMessage" />
-        <SectionChangeQuizImage />
-        <!-- <SectionQuizForm :error="showErrorMessage" /> -->
-        <!--    <div class="-mt-4">
-            <SectionQuestionsFormsNew :error="showErrorMessage" />
-        </div> -->
-        <!-- <div class="w-full -mb-[70px]">
+        <div class="w-full -mb-[70px]">
             <ButtonLoading isLoading="false" @click="onSubmit" :loading="isLoadingButton"
                 :text="isButtonText ? isButtonText : 'Zapisz zmiany'"
                 :class="[isButtonText ? 'button-send-success' : 'button-send']" />
-        </div> -->
+        </div>
     </NuxtLayout>
 </template>
 <script lang="ts" setup>

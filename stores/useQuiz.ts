@@ -13,10 +13,10 @@ export const useQuiz = defineStore('quiz', {
             id: '',
             question: '',
             answers: [
-                { id: '', answer: '', isCorrect: false },
-                { id: '', answer: '', isCorrect: false },
-                { id: '', answer: '', isCorrect: false },
-                { id: '', answer: '', isCorrect: false }
+                { id: '', answer: '', correct: false },
+                { id: '', answer: '', correct: false },
+                { id: '', answer: '', correct: false },
+                { id: '', answer: '', correct: false }
             ]
         }],
         questionsArrayNew: [] as any,
@@ -54,7 +54,7 @@ export const useQuiz = defineStore('quiz', {
             const questionsValid = this.questionsArray.every(question => {
                 const hasquestion = question.question.trim().length > 0;
                 const allAnswersFilled = question.answers.every(answer => answer.answer.trim().length > 0);
-                const hasCorrectAnswer = question.answers.some(answer => answer.isCorrect);
+                const hasCorrectAnswer = question.answers.some(answer => answer.correct);
                 return hasquestion && allAnswersFilled && hasCorrectAnswer;
             })
 

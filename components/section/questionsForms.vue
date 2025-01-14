@@ -1,7 +1,5 @@
 <template>
     <div class="mb-11">
-        <!-- {{ questionsArrayData }} -->
-        <!-- {{ allDataToEdit }} -->
         <div v-for="(single, questionIndex) in questionsArrayData" :key="questionIndex"
             class=" bg-white pt-7 pb-8 px-2 mt-7 rounded-[24px] relative">
             <div class="flex justify-between place-items-center mx-[21px]">
@@ -29,8 +27,8 @@
                     <div class="flex place-items-center mr-[23px]">
                         <div class="w-[44px] h-[44px] mr-[7px] flex justify-center items-center"
                             @click="selectAnswer(questionIndex, answerIndex)">
-                            <Icon :name="answer.isCorrect ? 'ph:check-circle-duotone' : 'ph:check-circle'"
-                                :color="answer.isCorrect ? '#4BB21A' : '#9a9a9a'" size="25" />
+                            <Icon :name="answer.correct ? 'ph:check-circle-duotone' : 'ph:check-circle'"
+                                :color="answer.correct ? '#4BB21A' : '#9a9a9a'" size="25" />
                         </div>
                         <textarea class="scrollbar-hide" v-model="answer.answer" wrap="soft" rows="1"
                             :ref="(el) => setTextareaRef(questionIndex, answerIndex, el)"
@@ -62,7 +60,7 @@ import { useEditQuiz } from "@/stores/useEditQuiz"
 
 const { allDataToEdit } = storeToRefs(useEditQuiz())
 const quizState = useQuiz()
-const { questionsArray, removedQuestionIndexArray } = storeToRefs(quizState)
+const { questionsArray, removedQuestionIndexArray, isSendSuccess } = storeToRefs(quizState)
 const router = useRouter()
 const textareas = ref<Record<string, HTMLTextAreaElement | null>>({});
 const titleTextareas = ref<Record<number, HTMLTextAreaElement | null>>({});
@@ -79,7 +77,12 @@ onMounted(() => {
     }
     // route.fullPath.includes('edycja')
 })
-
+// isSendSuccess
+watch(isSendSuccess, (newValue) => {
+    if (newValue == true) {
+        questionsArrayData.value = [{ "id": "", "question": "", "answers": [{ "id": "", "answer": "", "correct": false }, { "id": "", "answer": "", "correct": false }, { "id": "", "answer": "", "correct": false }, { "id": "", "answer": "", "correct": false }] }]
+    }
+})
 watch(questionsArrayData, (newValue, oldValue) => {
     if (router.currentRoute.value.fullPath.includes('edycja')) {
         console.log(newValue, oldValue)
@@ -109,7 +112,7 @@ const setTitleTextareaRef = (questionIndex: any, el: any) => {
 
 const selectAnswer = (questionIndex: any, answerIndex: any) => {
     questionsArrayData.value[questionIndex].answers.forEach((answer: any, idx: number) => {
-        answer.isCorrect = (idx === answerIndex)
+        answer.correct = (idx === answerIndex)
     })
 }
 
@@ -157,17 +160,17 @@ const addQuestion = () => {
             id: '',
             question: '',
             answers: [
-                { id: '', answer: '', isCorrect: false },
-                { id: '', answer: '', isCorrect: false },
-                { id: '', answer: '', isCorrect: false },
-                { id: '', answer: '', isCorrect: false }
+                { id: '', answer: '', correct: false },
+                { id: '', answer: '', correct: false },
+                { id: '', answer: '', correct: false },
+                { id: '', answer: '', correct: false }
             ]
         });
     }
 }
 
 const isAllFalse = (questionIndex: any): boolean => {
-    return questionsArrayData.value[questionIndex].answers.every((answer: any) => !answer.isCorrect);
+    return questionsArrayData.value[questionIndex].answers.every((answer: any) => !answer.correct);
 };
 
 const removeQuestion = (index: any) => {

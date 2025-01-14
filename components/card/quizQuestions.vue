@@ -32,7 +32,7 @@
                                     :color="answer.correct ? '#4BB21A' : '#BFBFBF'" />
                             </div>
                             <p class="text-[15px] leading-[20px] text-[#7B7B7B]">
-                                {{ answer.text }}
+                                {{ answer.answer }}
                             </p>
                         </div>
                     </div>
