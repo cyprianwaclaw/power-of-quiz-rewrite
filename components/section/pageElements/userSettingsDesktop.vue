@@ -474,8 +474,7 @@ const schemaCompany = yup.object().shape({
         .required("Pole wymagane")
         .max(20, "Nazwa miescowości nie może mieć więcej niż 20 znaków"),
     building_number: yup.string().required("Pole wymagane"),
-    // house_number: yup
-});
+})
 
 const updateCompany = async (values: any) => {
     handleClick()
@@ -573,7 +572,6 @@ const updateFinancial = async (values: any) => {
 onMounted(async () => {
 
     if (route.query.pageName == undefined) {
-        // console.log("route.query.pageName")
         router.push({ query: { pageName: 'profile', section: 'null' } })
     }
 

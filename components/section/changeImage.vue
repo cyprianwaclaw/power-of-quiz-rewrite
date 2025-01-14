@@ -9,23 +9,24 @@
         <div v-else>
             <div v-if="newImage" class="h-[300px] lg:w-[450px] 2xl:w-[550px] w-full flex flex-col -mt-[114px]">
                 <p class="font-semibold text-[21px] md:flex hidden">
-                   Wybrane zdjęcie
+                    Wybrane zdjęcie
                 </p>
-                <img :src="croppedImage" :key="croppedImage" class="image" />
+                <NuxtImg v-if="!route.fullPath.includes('edycja')" :src="croppedImage" :key="croppedImage" class="image" />
+                <NuxtImg v-if="route.fullPath.includes('edycja')" :src="newImage" :key="croppedImage" class="image" />
                 <div class="flex  justify-end -mt-[10px]">
                     <p @click="deletePhoto()" class="text-red-600 px-5 py-3 cursor-pointer">Usuń</p>
                     <button @click="handleFileInputChange" class="button-primary cursor-pointer">Edytuj</button>
                 </div>
             </div>
-            <label v-else for="file-upload">
+            <label v-else for="file-upload" class="cursor-pionter">
                 <div class="image-retangle h-[420px] lg:w-[450px] 2xl:w-[550px] w-full">
                     <Icon name="carbon:cloud-upload" size="82" color="618CFB"
-                        class="justify-center flex w-full -mb-[26px] mt-3 md:mt-[64px]" />
+                        class="justify-center flex w-full -mb-[32px] mt-3 md:mt-[72px]" />
                     <input type="file" id="file-upload" ref="input" accept="image/*" class="default-file-input"
                         @change="handleFileInputChange" />
                     <div class="flex  justify-center items-center">
-                        <p class="flex md:hidden cursor-pointer">Kliknij tutaj aby dodać zdjęcie</p>
-                        <p class="hidden md:flex justify-center cursor-pointer">Kliknij tutaj aby dodać zdjęcie,<br> lub
+                        <p class="flex md:hidden">Kliknij tutaj aby dodać zdjęcie</p>
+                        <p class="hidden md:flex justify-center">Kliknij tutaj aby dodać zdjęcie,<br> lub
                             upuść tutaj zdjęcie</p>
                     </div>
                 </div>
@@ -38,6 +39,7 @@
 import { storeToRefs } from 'pinia'
 import { useImage } from "@/stores/imageStore"
 
+const route = useRoute()
 const imageState = useImage()
 const { newImage, newImageFile } = storeToRefs(imageState)
 const isLoading = ref(true)
@@ -92,6 +94,13 @@ const deletePhoto = () => {
     background: #f7f7f7;
     border: 2px dashed #9f9f9f;
     border-radius: 16px;
+    transition: all 0.1s ease;
+    cursor: pointer;
+
+    &:hover {
+        background: #ededed;
+        cursor: pointer;
+    }
 }
 
 
@@ -103,12 +112,13 @@ input[type="file"] {
     border: none;
     display: flex;
     justify-content: center;
+    cursor: pointer;
 }
 
 .image-retangle p {
     text-align: center;
     font-weight: 500;
-    font-size: 17px;
+    font-size: 16px;
     color: #9c9c9c;
 }
 

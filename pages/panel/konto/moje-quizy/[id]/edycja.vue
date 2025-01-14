@@ -5,26 +5,36 @@
             <Icon name="ph:caret-left-bold" size="22" class="primary-color back-arrow" />
             <p class="text-[18px] primary-color">Moje konto</p>
         </NuxtLink>
-        <SectionQuizForm :error="showErrorMessage" />
-        <SectionChangeQuizImage />
-        <SectionQuestionsForms :error="showErrorMessage" />
-        <div class="-mt-4">
-            <SectionQuestionsFormsNew :error="showErrorMessage" />
+        {{ allDataToEdit }}
+        {{ newImage }}
+        <div class="mt-[200px]">
+            <SectionChangeImage />
         </div>
-        <div class="w-full -mb-[70px]">
+        <SectionQuestionsForms :error="showErrorMessage" />
+        <SectionChangeQuizImage />
+        <!-- <SectionQuizForm :error="showErrorMessage" /> -->
+        <!--    <div class="-mt-4">
+            <SectionQuestionsFormsNew :error="showErrorMessage" />
+        </div> -->
+        <!-- <div class="w-full -mb-[70px]">
             <ButtonLoading isLoading="false" @click="onSubmit" :loading="isLoadingButton"
                 :text="isButtonText ? isButtonText : 'Zapisz zmiany'"
                 :class="[isButtonText ? 'button-send-success' : 'button-send']" />
-        </div>
+        </div> -->
     </NuxtLayout>
 </template>
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia';
 import { useQuiz } from "@/stores/useQuiz";
+import { useEditQuiz } from "@/stores/useEditQuiz";
+import { useImage } from "@/stores/imageStore"
 const axiosInstance = useNuxtApp().$axiosInstance as any
 
+const imageState = useImage()
+const { newImage, newImageFile } = storeToRefs(imageState)
 const quizState = useQuiz()
-const { errorState, title, id, newImageFile, questionsArray, removedQuestionIndexArray, questionsArrayNew, isSendSuccess, image } = storeToRefs(quizState);
+const { title, id, questionsArray, removedQuestionIndexArray, questionsArrayNew, isSendSuccess } = storeToRefs(quizState);
+const { allDataToEdit } = storeToRefs(useEditQuiz());
 const showErrorMessage = ref<boolean>(false);
 const updatedQuiz = ref(false)
 const isLoadingButton = ref(false)
@@ -33,9 +43,10 @@ const quizQuestions = ref() as any
 const quizObject = ref() as any
 
 onMounted(() => {
-    quizQuestions.value = JSON.parse(localStorage.getItem('quizQuestions') as string);
-    quizObject.value = JSON.parse(localStorage.getItem('quizData') as string);
-    updateQuizData(quizState)
+    newImage.value = allDataToEdit.value[0]?.image
+    // quizQuestions.value = JSON.parse(localStorage.getItem('quizQuestions') as string);
+    // quizObject.value = JSON.parse(localStorage.getItem('quizData') as string);
+    // updateQuizData(quizState)
 })
 
 const onSubmit = async () => {

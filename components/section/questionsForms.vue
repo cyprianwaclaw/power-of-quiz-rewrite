@@ -1,23 +1,25 @@
 <template>
     <div class="mb-11">
-        <div v-for="(single, questionIndex) in questionsArray" :key="questionIndex"
+        <!-- {{ questionsArrayData }} -->
+        <!-- {{ allDataToEdit }} -->
+        <div v-for="(single, questionIndex) in questionsArrayData" :key="questionIndex"
             class=" bg-white pt-7 pb-8 px-2 mt-7 rounded-[24px] relative">
             <div class="flex justify-between place-items-center mx-[21px]">
                 <p class="font-semibold text-[18px]">Pytanie {{ questionIndex + 1 }}</p>
-                <div class="w-[48px] h-[48px] absolute right-3 mt-3 " v-if="questionsArray.length >= 2"
+                <div class="w-[48px] h-[48px] absolute right-3 mt-3 " v-if="questionsArrayData.length >= 2"
                     @click="removeQuestion(questionIndex)">
                     <Icon name="carbon:close" size="30"
                         class="text-error-notification close border-transparent rounded-[6px]" />
                 </div>
             </div>
             <div class="mr-[28px] ml-5">
-                <textarea v-model="single.title" wrap="soft" rows="1" class=" w-full mt-3 "
+                <textarea v-model="single.question" wrap="soft" rows="1" class=" w-full mt-3 "
                     :ref="(el) => setTitleTextareaRef(questionIndex, el)"
                     @input="resizeTitleTextarea(titleTextareas, questionIndex)" placeholder="Pytanie..." />
-                <div v-if="(isSend || props.error) && single.title.length < 3" class="mt-2 mb-1">
+                <div v-if="(isSend || props.error) && single.question.length < 3" class="mt-2 mb-1">
                     <p class="text-error-notification">Wprowadź min 3 znaki</p>
                 </div>
-                <div v-if="(isSend || props.error) && single.title.length > 120" class="mt-2 mb-1">
+                <div v-if="(isSend || props.error) && single.question.length > 120" class="mt-2 mb-1">
                     <p class="text-error-notification">Pytanie nie moźe być dłuższe niż 120 znaków</p>
                 </div>
             </div>
@@ -56,12 +58,36 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import { useQuiz } from "@/stores/useQuiz"
+import { useEditQuiz } from "@/stores/useEditQuiz"
 
+const { allDataToEdit } = storeToRefs(useEditQuiz())
 const quizState = useQuiz()
 const { questionsArray, removedQuestionIndexArray } = storeToRefs(quizState)
 const router = useRouter()
 const textareas = ref<Record<string, HTMLTextAreaElement | null>>({});
 const titleTextareas = ref<Record<number, HTMLTextAreaElement | null>>({});
+
+
+const questionsArrayData = ref([]) as any
+
+
+onMounted(() => {
+    if (router.currentRoute.value.fullPath.includes('edycja')) {
+        questionsArrayData.value = allDataToEdit.value[0]?.quizQuestion
+    } else {
+        questionsArrayData.value = questionsArray.value
+    }
+    // route.fullPath.includes('edycja')
+})
+
+watch(questionsArrayData, (newValue, oldValue) => {
+    if (router.currentRoute.value.fullPath.includes('edycja')) {
+        console.log(newValue, oldValue)
+        // questionsArrayData.value = allDataToEdit.value[0]?.quizQuestion
+    } else {
+        questionsArray.value = newValue
+    }
+})
 
 const props = defineProps({
     error: {
@@ -82,16 +108,16 @@ const setTitleTextareaRef = (questionIndex: any, el: any) => {
 
 
 const selectAnswer = (questionIndex: any, answerIndex: any) => {
-    questionsArray.value[questionIndex].answers.forEach((answer: any, idx: number) => {
+    questionsArrayData.value[questionIndex].answers.forEach((answer: any, idx: number) => {
         answer.isCorrect = (idx === answerIndex)
     })
 }
 
 
 const validateQuestion = (questionIndex: number): boolean => {
-    const question = questionsArray.value[questionIndex];
+    const question = questionsArrayData.value[questionIndex];
 
-    if (question.title.length < 3 || question.title.length > 120) {
+    if (question.question.length < 3 || question.question.length > 120) {
         // errorState.value = true;
         return false;
     }
@@ -113,7 +139,7 @@ const validateQuestion = (questionIndex: number): boolean => {
 
 const validateAllQuestions = (): boolean => {
     // errorState.value = false;
-    for (let i = 0; i < questionsArray.value.length; i++) {
+    for (let i = 0; i < questionsArrayData.value.length; i++) {
         if (!validateQuestion(i)) {
             return false;
         }
@@ -127,9 +153,9 @@ const addQuestion = () => {
     if (validateAllQuestions()) {
         // errorState.value = true;
         isSend.value = false
-        questionsArray.value.push({
+        questionsArrayData.value.push({
             id: '',
-            title: '',
+            question: '',
             answers: [
                 { id: '', answer: '', isCorrect: false },
                 { id: '', answer: '', isCorrect: false },
@@ -141,13 +167,13 @@ const addQuestion = () => {
 }
 
 const isAllFalse = (questionIndex: any): boolean => {
-    return questionsArray.value[questionIndex].answers.every((answer: any) => !answer.isCorrect);
+    return questionsArrayData.value[questionIndex].answers.every((answer: any) => !answer.isCorrect);
 };
 
 const removeQuestion = (index: any) => {
-    const removedQuestionIndex = questionsArray.value[index].id
+    const removedQuestionIndex = questionsArrayData.value[index].id
     removedQuestionIndexArray.value.push(removedQuestionIndex)
-    questionsArray.value.splice(index, 1)
+    questionsArrayData.value.splice(index, 1)
 }
 
 </script>

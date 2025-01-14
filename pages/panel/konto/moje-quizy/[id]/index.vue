@@ -60,26 +60,30 @@
         </div>
         <div class="flex justify-end items-end mt-8 gap-[2px]">
             <p class="text-red-600 px-[23px] py-[10px] font-semibold cursor-pointer" @click="removeModal()">Usuń</p>
-            <NuxtLink :to="`/panel/konto/moje-quizy/${router.currentRoute.value.params.id}/edycja`">
-                <button class="button-primary">
+            <!-- <NuxtLink :to="`/panel/konto/moje-quizy/${router.currentRoute.value.params.id}/edycja`"> -->
+                <!-- < :to="`/panel/konto/moje-quizy/${router.currentRoute.value.params.id}/edycja`"> -->
+                <button class="button-primary" 
+                @click="goToEditData()">
                     Edytuj
                 </button>
-            </NuxtLink>
+            <!-- </Nu> -->
         </div>
     </NuxtLayout>
 </template>
 <script lang="ts" setup>
 import { storeToRefs } from "pinia"
 import { useUser } from "@/stores/useUser"
+import { useQuiz } from "@/stores/useQuiz"
+import { useEditQuiz } from "@/stores/useEditQuiz";
 const axiosInstance = useNuxtApp().$axiosInstance as any
 
-const route = useRoute()
 const router = useRouter()
 const isLoading = ref(true)
 const singleQuiz = ref() as any
 const quizQuestions = ref() as any
 const userState = useUser();
 const { user } = storeToRefs(userState);
+const { allDataToEdit } = storeToRefs(useEditQuiz());
 const isRemove = ref(false)
 
 onMounted(async () => {
@@ -88,8 +92,8 @@ onMounted(async () => {
     singleQuiz.value = quiz.data;
     quizQuestions.value = questions.data;
 
-    localStorage.setItem('quizData', JSON.stringify(quiz.data.data));
-    localStorage.setItem('quizQuestions', JSON.stringify(questions.data.data));
+    // localStorage.setItem('quizData', JSON.stringify(quiz.data.data));
+    // localStorage.setItem('quizQuestions', JSON.stringify(questions.data.data));
 
     setTimeout(async () => {
         isLoading.value = false;
@@ -99,6 +103,16 @@ onMounted(async () => {
 const removeModal = () => {
     isRemove.value = !isRemove.value
 }
+
+const goToEditData = () => {
+    router.push(`/panel/konto/moje-quizy/${router.currentRoute.value.params.id}/edycja`)
+    allDataToEdit.value = [{
+        "dsd": "dfdf",
+        "image": singleQuiz.value.data.image,
+        "quizQuestion": quizQuestions.value?.data
+     }]
+}
+
 </script>
 
 <style scoped lang="scss">

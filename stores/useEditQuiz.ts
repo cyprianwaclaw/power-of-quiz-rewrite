@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 
-export const useQuiz = defineStore('quiz', {
+export const useEditQuiz = defineStore('editQuiz', {
     state: () => ({
         isSendSuccess: false as boolean,
         id: '',
@@ -11,7 +11,7 @@ export const useQuiz = defineStore('quiz', {
         category_id: '',
         questionsArray: [{
             id: '',
-            question: '',
+            title: '',
             answers: [
                 { id: '', answer: '', isCorrect: false },
                 { id: '', answer: '', isCorrect: false },
@@ -23,6 +23,8 @@ export const useQuiz = defineStore('quiz', {
         removedQuestionIndexArray: [] as any,
         allDataToEdit: [] as any
     }),
+
+    persist: true,
 
     actions: {
         apiDataQuiz() {
@@ -52,10 +54,10 @@ export const useQuiz = defineStore('quiz', {
                 .every(value => value !== null && value !== '' && value !== undefined);
 
             const questionsValid = this.questionsArray.every(question => {
-                const hasquestion = question.question.trim().length > 0;
+                const hasTitle = question.title.trim().length > 0;
                 const allAnswersFilled = question.answers.every(answer => answer.answer.trim().length > 0);
                 const hasCorrectAnswer = question.answers.some(answer => answer.isCorrect);
-                return hasquestion && allAnswersFilled && hasCorrectAnswer;
+                return hasTitle && allAnswersFilled && hasCorrectAnswer;
             })
 
             return hasBasicData && questionsValid;
@@ -67,7 +69,7 @@ export const useQuiz = defineStore('quiz', {
                 const axiosInstance = useNuxtApp().$axiosInstance as any;
 
                 for (const question of questionsArray) {
-                    const newQuestionData = { "question": question.question, "quiz_id": this.id };
+                    const newQuestionData = { "question": question.title, "quiz_id": this.id };
                     let newQuestion;
                     if (axiosMethod == 'post') {
                         newQuestion = await axiosInstance.post(`/questions`, newQuestionData);
@@ -94,7 +96,7 @@ export const useQuiz = defineStore('quiz', {
             const axiosInstance = useNuxtApp().$axiosInstance as any
             try {
                 for (const question of questionsArray) {
-                    const newQuestionData = ref({ "question": question.question, "quiz_id": this.id });
+                    const newQuestionData = ref({ "question": question.title, "quiz_id": this.id });
                     const newQuestion = await axiosInstance.post(`/questions`, newQuestionData.value);
                     for (const answer of question.answers) {
                         const newAnswerData = ref({

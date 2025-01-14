@@ -1,19 +1,24 @@
 <template>
    <div>
       <h2 class="text-2xl md:text-3xl flex place-items-center font-medium">
-         Dodaj nowy quiz
+         Nowy quiz
       </h2>
+      <!-- {{ quizState.isAllData() }}
+      {{ quizState.apiDataQuiz() }}
+      {{ newImageFile }}
+      {{ newImage }} -->
       <div class="md:flex md:w-full md:gap-[28px] place-items-center md:mt-[42px]">
          <SectionQuizForm :error="showErrorMessage" />
          <div>
             <SectionChangeImage />
             <div v-if="quizState.isAllData() === true ? false : true && (newImageFile ? false : true) && showErrorMessage"
-               class="mb-[32px] mt-[24px]">
-               <p class="text-error-notification">Wybierz zdjęcie quizu</p>
-            </div>
+            class="mb-[32px] mt-[24px]">
+            <p class="text-error-notification">Wybierz zdjęcie quizu</p>
          </div>
       </div>
-      <SectionQuestionsForms :array="Array" :error="showErrorMessage" />
+   </div>
+   <SectionQuestionsForms :array="Array" :error="showErrorMessage" />
+   <!-- {{ questionsArray }} -->
    </div>
    <div class="w-full md:w-[200px] -mb-[70px]">
       <ButtonLoading isLoading="false" @click="onSubmit" :loading="isLoadingButton"
@@ -30,9 +35,10 @@ import { useImage } from "@/stores/imageStore"
 const imageState = useImage()
 const { newImageFile, newImage } = storeToRefs(imageState)
 const axiosInstance = useNuxtApp().$axiosInstance as any
-const axiosInstanceData = useNuxtApp().$axiosInstanceData as any;
+const axiosInstanceData = useNuxtApp().$axiosInstanceData as any
+
 const quizState = useQuiz()
-const { questionsArray, isSendSuccess } = storeToRefs(quizState);
+const { questionsArray, isSendSuccess } = storeToRefs(quizState)
 
 const showErrorMessage = ref<boolean>(false);
 const isLoadingButton = ref(false)
@@ -53,7 +59,7 @@ const onSubmit = async () => {
 
       const newQuiz = await axiosInstanceData.post('/quizzes', quizData)
       for (const question of questionsArray.value) {
-         const newQuestionData = ref({ "question": question.title, "quiz_id": newQuiz.data.data.id });
+         const newQuestionData = ref({ "question": question.question, "quiz_id": newQuiz.data.data.id });
          try {
             const newQuestion = await axiosInstance.post('/questions', newQuestionData.value)
 
