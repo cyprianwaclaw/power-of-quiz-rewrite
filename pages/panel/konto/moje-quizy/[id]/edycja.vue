@@ -5,11 +5,9 @@
             <Icon name="ph:caret-left-bold" size="22" class="primary-color back-arrow" />
             <p class="text-[18px] primary-color">Moje konto</p>
         </NuxtLink>
-        <!-- {{ allDataToEdit }}
-        {{ newImage }} -->
         <div class="flex flex-col md:flex-row md:place-items-center md:gap-[28px] mt-[34px]">
             <SectionQuizForm :error="showErrorMessage" />
-            <div class="mt-[px]">
+            <div>
                 <SectionChangeImage />
             </div>
         </div>

@@ -21,7 +21,7 @@ export const useQuiz = defineStore('quiz', {
         }],
         questionsArrayNew: [] as any,
         removedQuestionIndexArray: [] as any,
-        allDataToEdit: [] as any
+        // allDataToEdit: [] as any
     }),
 
     actions: {
@@ -35,14 +35,15 @@ export const useQuiz = defineStore('quiz', {
             };
         },
 
-        updateQuizData(data: { id: any, title: string; image: any; description: string; time: any; difficulty: string; category_id: any, questionsArray: any }) {
-            this.id = data.id;
-            this.title = data.title;
-            this.description = data.description;
-            this.time = data.time;
-            this.difficulty = data.difficulty;
-            this.category_id = data.category_id;
-            this.questionsArray = data.questionsArray;
+      
+        updateQuiz(id: any, title: string, image: any, description: string, time: any, difficulty: string, category_id: any, questionsArray: any) {
+            this.id = id;
+            this.title = title;
+            this.description = description;
+            this.time = time;
+            this.difficulty = difficulty;
+            this.category_id = category_id;
+            this.questionsArray = questionsArray;
         },
 
         isAllData(): boolean {

@@ -7,12 +7,12 @@
             </div>
         </div>
         <div v-else>
-            <div v-if="newImage" class="h-[300px] lg:w-[450px] 2xl:w-[550px] w-full flex flex-col -mt-[114px]">
+            <div v-if="newImage" class="h-[300px] lg:w-[450px] 2xl:w-[550px] w-full flex flex-col">
                 <p class="font-semibold text-[21px] md:flex hidden">
                     Wybrane zdjęcie
                 </p>
-                <NuxtImg v-if="!route.fullPath.includes('edycja')" :src="croppedImage" :key="croppedImage" class="image" />
-                <NuxtImg v-if="route.fullPath.includes('edycja')" :src="newImage" :key="croppedImage" class="image" />
+                <NuxtImg v-if="!route.fullPath.includes('test')" :src="croppedImage" :key="croppedImage" class="image" />
+                <NuxtImg v-if="route.fullPath.includes('test')" :src="newImage" :key="croppedImage" class="image" />
                 <div class="flex  justify-end -mt-[10px]">
                     <p @click="deletePhoto()" class="text-red-600 px-5 py-3 cursor-pointer">Usuń</p>
                     <button @click="handleFileInputChange" class="button-primary cursor-pointer">Edytuj</button>
