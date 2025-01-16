@@ -6,7 +6,7 @@
         <div class="flex">
             <!-- sm:hidden -->
             <Transition @enter="onEnterMobile" @leave="onLeaveMobile" :css="false">
-                <div class="modal-down" v-if="props.modalActive">
+                <div class="modal-down h-[460px] md:h-[500px]" v-if="props.modalActive">
                     <div class="justify-center flex -mt-[17px] md:hidden">
                         <hr class="w-9 close border-[2px] rounded-2xl" />
                     </div>
@@ -19,19 +19,21 @@
                             @click="removeImage()" />
                     </div>
                     <div class="content">
-                        <div v-if="!selectedImageValue"
-                            class="image-retangle h-[260px] md:mt-3 md:w-[350px] lg:w-[450px] 2xl:w-[550px] w-full">
-                            <Icon name="carbon:cloud-upload" size="82" color="618CFB"
-                                class="justify-center flex w-full -mb-[21px] mt-3 md:mt-12" />
-                            <input type="file" ref="input" accept="image/*" class="default-file-input"
-                                @change="handleFileInputChange" />
-                            <div class="flex w-full justify-center items-center">
-                                <p class="flex md:hidden cursor-pointer">fKliknij tutaj aby dodać zdjęcie</p>
-                                <p class="hidden md:flex justify-center cursor-pointer">Kliknij tutaj aby dodać zdjęcie,<br>
-                                    lub
-                                    upuść tutaj zdjęcie</p>
+                        <label for="file-upload" class="cursor-pionter">
+                            <div v-if="!selectedImageValue" class="image-retangle h-[310px] md:w-full md:h-[380px] w-full">
+                                <Icon name="carbon:cloud-upload" size="82" color="618CFB"
+                                    class="justify-center flex w-full -mb-[21px] mt-[32px] md:mt-[56px]" />
+                                <input type="file" id="file-upload" ref="input" accept="image/*" class="default-file-input"
+                                    @change="handleFileInputChange" />
+                                <div class="flex w-full justify-center items-center">
+                                    <p class="flex md:hidden cursor-pointer -mt-[12px]">Kliknij tutaj aby dodać zdjęcie</p>
+                                    <p class="hidden md:flex justify-center cursor-pointer -mt-[12px]">Kliknij tutaj aby dodać
+                                        zdjęcie,<br>
+                                        lub
+                                        upuść tutaj zdjęcie</p>
+                                </div>
                             </div>
-                        </div>
+                        </label>
                         <div class="w-full">
                             <div v-if="isLoading">
                                 <div class="is-loading">
@@ -42,8 +44,14 @@
                                 </div>
                             </div>
                             <div v-else>
+                                <!-- {{ newImage }} -->
+                                <!-- {{ selectedImageValue }} -->
+                                <!-- <div v-if="selectedImageValue">
+                                    isImageNew
+                                </div> -->
+                                <!-- {{  isImage }} -->
                                 <div v-if="croppedImage">
-                                    <img :src="croppedImage" alt="Cropped Result" class="image" />
+                                    <img :src="croppedImage" alt="Cropped Result" class="image md:h-[320px] h-[270px]" />
                                     <div class="w-full flex justify-end mt-[14px] gap-[18px]">
                                         <button @click="removeImage()"
                                             class="text-[16px] font-medium text-red-500 cursor-pointer">Usuń</button>
@@ -51,12 +59,16 @@
                                     </div>
                                 </div>
                                 <div v-else>
-                                    <Cropper v-show="!isLoading" ref="cropper" :src="selectedImageValue"
-                                        :stencil-props="{ aspectRatio: routeName === 'panel-konto-ustawienia-moje-dane' ? 1 : 10 / 7 }"
-                                        :class="['cropper']" :auto-zoom="true" :auto-detect-crop-area="false"
-                                        :style="{ height: '340px', width: '100%', borderRadius: '12px', overflow: 'hidden' }" />
-                                    <div class="w-full flex justify-end mt-[14px]">
-                                        <button @click="getCroppedImage" class="button-primary">Gotowe</button>
+                                    <!-- <div v-if="!route.fullPath.includes('test')"> -->
+                                  <div v-if="selectedImageValue" class="md:mt-[5px] -mt-[10px]">
+
+                                        <Cropper v-show="!isLoading" ref="cropper" :src="selectedImageValue"
+                                            :stencil-props="{ aspectRatio: routeName === 'panel-konto-ustawienia-moje-dane' ? 1 : 10 / 7 }"
+                                            :class="['cropper']" :auto-zoom="true" :auto-detect-crop-area="false"
+                                            :style="{ height: '300px', width: '100%', borderRadius: '12px', overflow: 'hidden' }" />
+                                        <div class="w-full flex justify-end mt-[14px] md:mt-[21px]">
+                                            <button @click="getCroppedImage" class="button-primary">Gotowe</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -78,10 +90,12 @@ import { useImage } from "@/stores/imageStore"
 const imageState = useImage()
 const { newImage, newImageFile } = storeToRefs(imageState)
 const router = useRouter()
+const route = useRoute()
 const imageFile = ref(null) as any
 const croppedImage = ref(null) as any
 const cropper = ref()
 const routeName = ref() as any
+const isImage = ref(false)
 
 const props = defineProps({
     selectedImage: {
@@ -115,6 +129,10 @@ const removeImage = () => {
     emit('close')
 }
 
+watch(newImage, (newValue) => {
+   console.log(newValue)
+})
+
 watch(props, (newValue) => {
     if (newValue.modalActive == true) {
         croppedImage.value = null
@@ -147,8 +165,11 @@ const handleFileInputChange = (event: Event) => {
 }
 
 onMounted(() => {
-    console.log(router.currentRoute.value.name)
+    // console.log(router.currentRoute.value.name)
     routeName.value = router.currentRoute.value.name
+    if (newImage) {
+        isImage.value = true
+    }
 })
 
 const onEnterDesktop = (el: any) => {
@@ -208,6 +229,13 @@ const LeaveBg = (el: any) => {
     background: #f7f7f7;
     border: 2px dashed #9f9f9f;
     border-radius: 12px;
+    transition: all 0.1s ease;
+    cursor: pointer;
+
+    &:hover {
+        background: #ededed;
+        cursor: pointer;
+    }
 }
 
 
@@ -265,7 +293,6 @@ input {
     bottom: 10px;
     width: 100%;
     z-index: 100;
-    height: 506px
 }
 
 /* Dla ekranów o szerokości 700px i większych */
@@ -311,7 +338,7 @@ input {
     margin-bottom: 16px;
     object-fit: cover;
     width: 100%;
-    height: 340px;
+    // height: 340px;
 }
 
 .is-loading {
@@ -326,7 +353,7 @@ input {
     .image {
         border-radius: 12px;
         width: 100%;
-        height: 340px;
+        height: 300px;
     }
 
     .image-buttons {

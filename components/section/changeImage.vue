@@ -7,21 +7,22 @@
             </div>
         </div>
         <div v-else>
-            <div v-if="newImage" class="h-[300px] lg:w-[450px] 2xl:w-[550px] w-full flex flex-col">
+            <div v-if="newImage">
                 <p class="font-semibold text-[21px] md:flex hidden">
                     Wybrane zdjęcie
                 </p>
+                <!-- {{ newImage }} -->
                 <NuxtImg v-if="!route.fullPath.includes('test')" :src="croppedImage" :key="croppedImage" class="image" />
                 <NuxtImg v-if="route.fullPath.includes('test')" :src="newImage" :key="croppedImage" class="image" />
                 <div class="flex  justify-end -mt-[10px]">
-                    <p @click="deletePhoto()" class="text-red-600 px-5 py-3 cursor-pointer">Usuń</p>
+                    <p @click="deletePhoto()" v-if="!route.fullPath.includes('test')" class="text-red-600 px-5 py-3 cursor-pointer">Usuń</p>
                     <button @click="handleFileInputChange" class="button-primary cursor-pointer">Edytuj</button>
                 </div>
             </div>
             <label v-else for="file-upload" class="cursor-pionter">
-                <div class="image-retangle h-[420px] lg:w-[450px] 2xl:w-[550px] w-full">
+                <div class="image-retangle h-[385px]  md:h-[420px] mt-[30px] mb-[42px] md:mb-[0px] md:mt-[0px] lg:w-[450px] 2xl:w-[550px] w-full">
                     <Icon name="carbon:cloud-upload" size="82" color="618CFB"
-                        class="justify-center flex w-full -mb-[32px] mt-3 md:mt-[72px]" />
+                        class="justify-center flex w-full -mb-[32px] mt-[72px]" />
                     <input type="file" id="file-upload" ref="input" accept="image/*" class="default-file-input"
                         @change="handleFileInputChange" />
                     <div class="flex  justify-center items-center">

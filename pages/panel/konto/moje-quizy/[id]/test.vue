@@ -9,11 +9,12 @@
             ładowanie
         </div>
         <div v-else>
+            {{ newImageFile }}
             <div class="flex flex-col md:flex-row md:place-items-center md:gap-[28px] mt-[34px]">
                 <SectionQuizForm :error="showErrorMessage" />
-                <div class="-mt-[120px]">
+                <!-- <div class="-mt-[120px]"> -->
                     <SectionChangeImage />
-                </div>
+                <!-- </div> -->
             </div>
             <SectionQuestionsForms :error="showErrorMessage" />
             <SectionQuestionsFormsNew :error="showErrorMessage" />
@@ -31,6 +32,7 @@ import { storeToRefs } from "pinia"
 import { useQuiz } from "@/stores/useQuiz"
 import { useImage } from "@/stores/imageStore"
 const axiosInstance = useNuxtApp().$axiosInstance as any
+const axiosInstanceData = useNuxtApp().$axiosInstanceData as any
 
 const router = useRouter()
 const isLoading = ref(true)
@@ -113,6 +115,20 @@ const onSubmit = async () => {
             await axiosInstance.patch(`/quizzes/${singleQuiz.value.id}`, modifiedData);
         }
 
+        console.log(newImage.value)
+        console.log(singleQuiz.value.image)
+        if (newImage.value !== singleQuiz.value.image) {
+            // image: newImageFile.value
+            const quizData = {
+                // ...quizState.apiDataQuiz(),
+                image: newImageFile.value
+            }
+            // await axiosInstanceData.patch(`/quizzes/${singleQuiz.value.id}/image`, quizData);
+
+            await axiosInstanceData.post(`/quizzes/${singleQuiz.value.id}/image`, quizData);
+            // const newQuiz = await axiosInstanceData.patch('/quizzes', quizData)
+            console.log("inne zdjecia")
+        }
         await updateQuestionTitles()
         await updateAnswers()
 
@@ -136,8 +152,8 @@ const onSubmit = async () => {
         if (removedQuestionIndexArray.length >= 1) {
             // console.log(removedQuestionIndexArray)
             for (const removed of removedQuestionIndexArray) {
-                        await axiosInstance.delete(`/questions/${removed}`)
-                    }
+                await axiosInstance.delete(`/questions/${removed}`)
+            }
         }
 
         const quiz = await axiosInstance.get(`quiz/${router.currentRoute.value.params.id}`);
