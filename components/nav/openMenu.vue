@@ -3,7 +3,7 @@
     <div @mouseenter="showMenu" @mouseleave="showMenu">
       <div class=" flex gap-[12px] place-items-center cursor-pointer">
         <SectionUserAvatar :size="36" :avatar="user?.avatar" />
-        <!-- <div class="flex flex-col">
+        <div class="flex flex-col">
           <p class="text-[15px] flex place-items-center font-medium -mb-[2px]">
             {{ user?.user_name ? user?.user_name : '' }} {{ user?.user_surname ? user?.user_surname : '' }}
           </p>
@@ -14,7 +14,7 @@
           <div v-else>
             <p class="text-[12px] text-gray">Standard</p>
           </div>
-        </div> -->
+        </div>
       </div>
       <div class="absolute right-[24px] pt-[21px]" v-if="isOpen">
         <div class="modal-menu">
@@ -64,7 +64,7 @@ const showMenu = () => {
 }
 
 const linksArray = [
-  { name: "Zaproś znajomych", link: "/panel/zaproszeni" },
+  // { name: "Zaproś znajomych", link: "/panel/zaproszeni" },
   { name: "Dodaj quiz", link: "/panel/quiz/dodaj-nowy" },
   { name: "Dodaj konkurs", link: "/panel/konto/konkursy/nowy" },
   { name: "Moje konto", link: "/panel/konto" },

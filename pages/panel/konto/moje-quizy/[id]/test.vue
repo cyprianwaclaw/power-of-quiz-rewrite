@@ -9,18 +9,18 @@
             ładowanie
         </div>
         <div v-else>
-            {{ newImageFile }}
+            <!-- {{ newImageFile }} -->
             <div class="flex flex-col md:flex-row md:place-items-center md:gap-[28px] mt-[34px]">
                 <SectionQuizForm :error="showErrorMessage" />
                 <!-- <div class="-mt-[120px]"> -->
-                    <SectionChangeImage />
+                <SectionChangeImage />
                 <!-- </div> -->
             </div>
             <SectionQuestionsForms :error="showErrorMessage" />
             <SectionQuestionsFormsNew :error="showErrorMessage" />
 
-            <div class="w-full -mb-[70px]">
-                <ButtonLoading isLoading="false" @click="onSubmit" :loading="isLoadingButton"
+            <div class="w-[200px] -mb-[70px]">
+                <ButtonLoading isLoading="isLoadingButton" @click="onSubmit" :loading="isLoadingButton"
                     :text="isButtonText ? isButtonText : 'Zapisz zmiany'"
                     :class="[isButtonText ? 'button-send-success' : 'button-send']" />
             </div>
@@ -79,6 +79,13 @@ const updateQuestionTitles = async () => {
         const questionData = {
             question: question.question,
         }
+        setTimeout(() => {
+            isLoadingButton.value = false
+        }, 250)
+        isButtonText.value = "Zapisano"
+        setTimeout(() => {
+            isButtonText.value = ""
+        }, 2500)
         await axiosInstance.patch(`/questions/${question.id}`, questionData);
 
     }
@@ -104,78 +111,103 @@ const updateAnswers = async () => {
             answer: answer.answer,
             correct: answer.correct,
         }
+        setTimeout(() => {
+            isLoadingButton.value = false
+        }, 250)
+        isButtonText.value = "Zapisano"
+        setTimeout(() => {
+            isButtonText.value = ""
+        }, 2500)
         await axiosInstance.patch(`/answers/${answer.id}`, answerData);
     }
 }
 
 const onSubmit = async () => {
-    try {
-        const modifiedData = getModifiedQuizData(singleQuiz.value, quizState.apiDataQuiz());
-        if (Object.keys(modifiedData).length > 0) {
-            await axiosInstance.patch(`/quizzes/${singleQuiz.value.id}`, modifiedData);
-        }
-
-        console.log(newImage.value)
-        console.log(singleQuiz.value.image)
-        if (newImage.value !== singleQuiz.value.image) {
-            // image: newImageFile.value
-            const quizData = {
-                // ...quizState.apiDataQuiz(),
-                image: newImageFile.value
-            }
-            // await axiosInstanceData.patch(`/quizzes/${singleQuiz.value.id}/image`, quizData);
-
-            await axiosInstanceData.post(`/quizzes/${singleQuiz.value.id}/image`, quizData);
-            // const newQuiz = await axiosInstanceData.patch('/quizzes', quizData)
-            console.log("inne zdjecia")
-        }
-        await updateQuestionTitles()
-        await updateAnswers()
-
-        // console.log(questionsArrayNew.length )
-
-        //! Nowe pytania i odpowiedzi, musi usuwac tablice [] po wyslaniu 
-        if (questionsArrayNew.length >= 1) {
-            // console.log(questionsArrayNew)
-            for (const question of questionsArrayNew) {
-                const newQuestionData = ref({ "question": question.question, "quiz_id": singleQuiz.value.id });
-                const newQuestion = await axiosInstance.post('/questions', newQuestionData.value)
-
-                for (const answer of question.answers) {
-                    const newAnswerData = ref({ "answer": answer.answer, "question_id": newQuestion.data.data.id, "correct": answer.isCorrect, });
-                    await axiosInstance.post('/answers', newAnswerData.value);
-
-                }
-            }
-        }
-
-        if (removedQuestionIndexArray.length >= 1) {
-            // console.log(removedQuestionIndexArray)
-            for (const removed of removedQuestionIndexArray) {
-                await axiosInstance.delete(`/questions/${removed}`)
-            }
-        }
-
-        const quiz = await axiosInstance.get(`quiz/${router.currentRoute.value.params.id}`);
-        const questionsResponse = await axiosInstance.get(`quizzes/${router.currentRoute.value.params.id}/data`);
-
-        singleQuiz.value = quiz.data.data;
-        quizQuestionsOriginal.value = JSON.parse(JSON.stringify(questionsResponse.data.data)); // Kopia oryginalnych pytań
-        quizQuestionsModified.value = questionsResponse.data.data; // Tablica do modyfikacji
-
-        updateQuiz(
-            singleQuiz.value.id,
-            singleQuiz.value.title,
-            singleQuiz.value.image,
-            singleQuiz.value.description,
-            singleQuiz.value.time,
-            singleQuiz.value.difficulty_id,
-            singleQuiz.value.category_id,
-            quizQuestionsModified.value
-        );
-    } catch (error) {
-        console.error("Błąd podczas aktualizacji tytułów pytań lub odpowiedzi:", error);
+    isLoadingButton.value = true
+    // try {
+    const modifiedData = getModifiedQuizData(singleQuiz.value, quizState.apiDataQuiz());
+    if (Object.keys(modifiedData).length > 0) {
+        await axiosInstance.patch(`/quizzes/${singleQuiz.value.id}`, modifiedData);
     }
+
+    // console.log(newImage.value)
+    // console.log(singleQuiz.value.image)
+    if (newImage.value !== singleQuiz.value.image) {
+        // image: newImageFile.value
+        const quizData = {
+            // ...quizState.apiDataQuiz(),
+            image: newImageFile.value
+        }
+        // await axiosInstanceData.patch(`/quizzes/${singleQuiz.value.id}/image`, quizData);
+
+        await axiosInstanceData.post(`/quizzes/${singleQuiz.value.id}/image`, quizData);
+        // const newQuiz = await axiosInstanceData.patch('/quizzes', quizData)
+        // console.log("inne zdjecia")
+    }
+    await updateQuestionTitles()
+    await updateAnswers()
+
+
+    //! Nowe pytania i odpowiedzi, musi usuwac tablice [] po wyslaniu 
+    if (questionsArrayNew.length >= 1) {
+        for (const question of questionsArrayNew) {
+            const newQuestionData = ref({ "question": question.question, "quiz_id": singleQuiz.value.id });
+            const newQuestion = await axiosInstance.post('/questions', newQuestionData.value)
+
+            for (const answer of question.answers) {
+                const newAnswerData = ref({ "answer": answer.answer, "question_id": newQuestion.data.data.id, "correct": answer.isCorrect, });
+                await axiosInstance.post('/answers', newAnswerData.value);
+
+            }
+        }
+    }
+
+    if (removedQuestionIndexArray.length >= 1) {
+        for (const removed of removedQuestionIndexArray) {
+            await axiosInstance.delete(`/questions/${removed}`)
+        }
+    }
+
+    const quiz = await axiosInstance.get(`quiz/${router.currentRoute.value.params.id}`)
+    const questionsResponse = await axiosInstance.get(`quizzes/${router.currentRoute.value.params.id}/data`)
+
+    singleQuiz.value = quiz.data.data;
+    quizQuestionsOriginal.value = JSON.parse(JSON.stringify(questionsResponse.data.data))
+    quizQuestionsModified.value = questionsResponse.data.data
+
+    updateQuiz(
+        singleQuiz.value.id,
+        singleQuiz.value.title,
+        singleQuiz.value.image,
+        singleQuiz.value.description,
+        singleQuiz.value.time,
+        singleQuiz.value.difficulty_id,
+        singleQuiz.value.category_id,
+        quizQuestionsModified.value
+    )
+
+    if (newImage.value !== singleQuiz.value.image || questionsArrayNew.length >= 1 || removedQuestionIndexArray.length >= 1) {
+        setTimeout(() => {
+            isLoadingButton.value = false
+        }, 250)
+        isButtonText.value = "Zapisano"
+        setTimeout(() => {
+            isButtonText.value = ""
+        }, 2500)
+    }
+    setTimeout(() => {
+        isLoadingButton.value = false
+    }, 250)
+    // setTimeout(() => {
+    //     isLoadingButton.value = false
+    // }, 250)
+    // isButtonText.value = "Zapisano"
+    // setTimeout(() => {
+    //     isButtonText.value = ""
+    // }, 2500)
+    // } catch (error) {
+    //     console.error("Błąd podczas aktualizacji tytułów pytań lub odpowiedzi:", error);
+    // }
 };
 
 
@@ -183,6 +215,16 @@ const onSubmit = async () => {
 
 <style scoped lang="scss">
 @import "@/assets/style/variables.scss";
+
+.button-send-success {
+    background: $color-success !important;
+    transition: background-color 0.4s ease-in-out;
+}
+
+.button-send {
+    background-color: $primary;
+    transition: background-color 0.4s ease-in-out;
+}
 
 .isLoaded {
     background: linear-gradient(110deg, #c7c7c7 8%, #d4d4d4 18%, #c7c7c7 33%);
