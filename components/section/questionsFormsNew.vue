@@ -3,21 +3,22 @@
         <div v-for="(single, questionIndex) in questionsArrayNew" :key="questionIndex"
             class=" bg-white pt-7 pb-8 px-2 mt-7 rounded-[24px] relative">
             <div class="flex justify-between place-items-center mx-[21px]">
-                <p class="font-semibold text-[18px]">Pytanie {{ questionsArray.length  + 1 }}</p>
-                <div class="w-[48px] h-[48px] absolute right-3 mt-3 " v-if="questionsArrayNew.length >= 2 || questionsArray.length >= 2"
+                <p class="font-semibold text-[18px]">Pytanie {{ questionsArray.length + questionIndex + 1}}</p>
+                <div class="w-[48px] h-[48px] absolute right-3 mt-3 "
+                    v-if="questionsArrayNew.length >= 2 || questionsArray.length >= 2"
                     @click="removeQuestion(questionIndex)">
                     <Icon name="carbon:close" size="30"
                         class="text-error-notification close border-transparent rounded-[6px]" />
                 </div>
             </div>
             <div class="mr-[28px] ml-5">
-                <textarea v-model="single.title" wrap="soft" rows="1" class=" w-full mt-3 "
+                <textarea v-model="single.question" wrap="soft" rows="1" class=" w-full mt-3 "
                     :ref="(el) => setTitleTextareaRef(questionIndex, el)"
-                    @input="resizeTitleTextarea(titleTextareas, questionIndex)" placeholder="Pytanie..." />
-                <div v-if="(isSend || props.error) && single?.title?.length < 3" class="mt-2 mb-1">
+                    @input="resizeTitleTextarea(questionTextareas, questionIndex)" placeholder="Pytanie..." />
+                <div v-if="(isSend || props.error) && single?.question?.length < 3" class="mt-2 mb-1">
                     <p class="text-error-notification">Wprowadź min 3 znaki</p>
                 </div>
-                <div v-if="(isSend || props.error) && single?.title?.length > 120" class="mt-2 mb-1">
+                <div v-if="(isSend || props.error) && single?.question?.length > 120" class="mt-2 mb-1">
                     <p class="text-error-notification">Pytanie nie moźe być dłuższe niż 120 znaków</p>
                 </div>
             </div>
@@ -55,10 +56,10 @@ import { storeToRefs } from 'pinia'
 import { useQuiz } from "@/stores/useQuiz"
 
 const quizState = useQuiz()
-const { errorState, questionsArrayNew, questionsArray } = storeToRefs(quizState)
+const { questionsArrayNew, questionsArray } = storeToRefs(quizState)
 
 const textareas = ref<Record<string, HTMLTextAreaElement | null>>({});
-const titleTextareas = ref<Record<number, HTMLTextAreaElement | null>>({});
+const questionTextareas = ref<Record<number, HTMLTextAreaElement | null>>({});
 
 const props = defineProps({
     error: {
@@ -74,7 +75,7 @@ const setTextareaRef = (questionIndex: any, answerIndex: any, el: any) => {
 };
 
 const setTitleTextareaRef = (questionIndex: any, el: any) => {
-    titleTextareas.value[questionIndex] = el
+    questionTextareas.value[questionIndex] = el
 }
 
 
@@ -88,20 +89,20 @@ const selectAnswer = (questionIndex: any, answerIndex: any) => {
 const validateQuestion = (questionIndex: number): boolean => {
     const question = questionsArrayNew.value[questionIndex];
 
-    if (question.title.length < 3 || question.title.length > 120) {
-        errorState.value = true;
+    if (question.question.length < 3 || question.question.length > 120) {
+        // errorState.value = true;
         return false;
     }
 
     for (const answer of question.answers) {
         if (answer.answer.length < 3 || answer.answer.length > 120) {
-            errorState.value = true;
+            // errorState.value = true;
             return false;
         }
     }
 
     if (isAllFalse(questionIndex)) {
-        errorState.value = true;
+        // errorState.value = true;
         return false;
     }
 
@@ -109,7 +110,7 @@ const validateQuestion = (questionIndex: number): boolean => {
 };
 
 const validateAllQuestions = (): boolean => {
-    errorState.value = false;
+    // errorState.value = false;
     for (let i = 0; i < questionsArrayNew.value.length; i++) {
         if (!validateQuestion(i)) {
             return false;
@@ -122,10 +123,10 @@ const validateAllQuestions = (): boolean => {
 const addQuestion = () => {
     isSend.value = true
     if (validateAllQuestions()) {
-        errorState.value = true;
+        // errorState.value = true;
         isSend.value = false
         questionsArrayNew.value.push({
-            title: '',
+            question: '',
             answers: [
                 { answer: '', isCorrect: false },
                 { answer: '', isCorrect: false },

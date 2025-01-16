@@ -16,11 +16,13 @@
                 </div>
             </div>
             <SectionQuestionsForms :error="showErrorMessage" />
-            <!-- <div class="w-full -mb-[70px]">
+            <SectionQuestionsFormsNew :error="showErrorMessage" />
+
+            <div class="w-full -mb-[70px]">
                 <ButtonLoading isLoading="false" @click="onSubmit" :loading="isLoadingButton"
-                :text="isButtonText ? isButtonText : 'Zapisz zmiany'"
-                :class="[isButtonText ? 'button-send-success' : 'button-send']" />
-            </div> -->
+                    :text="isButtonText ? isButtonText : 'Zapisz zmiany'"
+                    :class="[isButtonText ? 'button-send-success' : 'button-send']" />
+            </div>
         </div>
     </NuxtLayout>
 </template>
@@ -33,28 +35,119 @@ const axiosInstance = useNuxtApp().$axiosInstance as any
 const router = useRouter()
 const isLoading = ref(true)
 const singleQuiz = ref() as any
-const quizQuestions = ref() as any
-// import { useImage } from "@/stores/imageStore"
-
+const quizQuestionsOriginal = ref()
+const quizQuestionsModified = ref()
+const isButtonText = ref()
+const isLoadingButton = ref(false)
 const imageState = useImage()
 const { newImage, newImageFile } = storeToRefs(imageState)
 const quizState = useQuiz()
-const { title } = storeToRefs(quizState)
-// const isRemove = ref(false)
-const showErrorMessage = ref<boolean>(false);
-
+const { title, updateQuiz, questionsArrayNew, removedQuestionIndexArray } = quizState
+const showErrorMessage = ref<boolean>(false)
 
 onMounted(async () => {
-    // console.log("Title:" + title.value)
-    // newImage.value = allDataToEdit.value[0]?.image
-    if (!title.value) {
-        const quiz = await axiosInstance.get(`quiz/${router.currentRoute.value.params.id}`)
-        const questions = await axiosInstance.get(`quizzes/${router.currentRoute.value.params.id}/data`)
+    const quiz = await axiosInstance.get(`quiz/${router.currentRoute.value.params.id}`)
+    const questionsResponse = await axiosInstance.get(`quizzes/${router.currentRoute.value.params.id}/data`)
 
-        singleQuiz.value = quiz.data.data
-        quizQuestions.value = questions.data
+    singleQuiz.value = quiz.data.data;
+    quizQuestionsOriginal.value = JSON.parse(JSON.stringify(questionsResponse.data.data))
+    quizQuestionsModified.value = questionsResponse.data.data
 
-        quizState.updateQuiz(
+    updateQuiz(
+        singleQuiz.value.id,
+        singleQuiz.value.title,
+        singleQuiz.value.image,
+        singleQuiz.value.description,
+        singleQuiz.value.time,
+        singleQuiz.value.difficulty_id,
+        singleQuiz.value.category_id,
+        quizQuestionsModified.value
+    );
+
+    newImage.value = singleQuiz.value.image
+    isLoading.value = false
+})
+
+
+const updateQuestionTitles = async () => {
+    const modifiedQuestions = quizQuestionsModified.value.filter((modifiedQuestion, index) => {
+        return modifiedQuestion.question !== quizQuestionsOriginal.value[index].question
+    })
+    for (const question of modifiedQuestions) {
+        const questionData = {
+            question: question.question,
+        }
+        await axiosInstance.patch(`/questions/${question.id}`, questionData);
+
+    }
+}
+
+const updateAnswers = async () => {
+    const modifiedAnswers = []
+    for (const question of quizQuestionsModified.value) {
+        const originalQuestion = quizQuestionsOriginal.value.find(q => q.id === question.id)
+        if (originalQuestion) {
+            const answersModified = question.answers.filter((modifiedAnswer, index) => {
+                return (
+                    modifiedAnswer.answer !== originalQuestion.answers[index].answer ||
+                    modifiedAnswer.correct !== originalQuestion.answers[index].correct
+                );
+            });
+            modifiedAnswers.push(...answersModified);
+        }
+    }
+
+    for (const answer of modifiedAnswers) {
+        const answerData = {
+            answer: answer.answer,
+            correct: answer.correct,
+        }
+        await axiosInstance.patch(`/answers/${answer.id}`, answerData);
+    }
+}
+
+const onSubmit = async () => {
+    try {
+        const modifiedData = getModifiedQuizData(singleQuiz.value, quizState.apiDataQuiz());
+        if (Object.keys(modifiedData).length > 0) {
+            await axiosInstance.patch(`/quizzes/${singleQuiz.value.id}`, modifiedData);
+        }
+
+        await updateQuestionTitles()
+        await updateAnswers()
+
+        // console.log(questionsArrayNew.length )
+
+        //! Nowe pytania i odpowiedzi, musi usuwac tablice [] po wyslaniu 
+        if (questionsArrayNew.length >= 1) {
+            // console.log(questionsArrayNew)
+            for (const question of questionsArrayNew) {
+                const newQuestionData = ref({ "question": question.question, "quiz_id": singleQuiz.value.id });
+                const newQuestion = await axiosInstance.post('/questions', newQuestionData.value)
+
+                for (const answer of question.answers) {
+                    const newAnswerData = ref({ "answer": answer.answer, "question_id": newQuestion.data.data.id, "correct": answer.isCorrect, });
+                    await axiosInstance.post('/answers', newAnswerData.value);
+
+                }
+            }
+        }
+
+        if (removedQuestionIndexArray.length >= 1) {
+            // console.log(removedQuestionIndexArray)
+            for (const removed of removedQuestionIndexArray) {
+                        await axiosInstance.delete(`/questions/${removed}`)
+                    }
+        }
+
+        const quiz = await axiosInstance.get(`quiz/${router.currentRoute.value.params.id}`);
+        const questionsResponse = await axiosInstance.get(`quizzes/${router.currentRoute.value.params.id}/data`);
+
+        singleQuiz.value = quiz.data.data;
+        quizQuestionsOriginal.value = JSON.parse(JSON.stringify(questionsResponse.data.data)); // Kopia oryginalnych pytań
+        quizQuestionsModified.value = questionsResponse.data.data; // Tablica do modyfikacji
+
+        updateQuiz(
             singleQuiz.value.id,
             singleQuiz.value.title,
             singleQuiz.value.image,
@@ -62,14 +155,12 @@ onMounted(async () => {
             singleQuiz.value.time,
             singleQuiz.value.difficulty_id,
             singleQuiz.value.category_id,
-            quizQuestions.value.data
-        )
-
-        newImage.value = singleQuiz.value.image
-        // quiz.data.data
+            quizQuestionsModified.value
+        );
+    } catch (error) {
+        console.error("Błąd podczas aktualizacji tytułów pytań lub odpowiedzi:", error);
     }
-    isLoading.value = false
-})
+};
 
 
 </script>
