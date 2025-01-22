@@ -40,6 +40,11 @@
     --section-gap: 160px;
 }
 
+.isLoading {
+    height: 200px;
+    background: linear-gradient(110deg, #c7c7c7 8%, #d4d4d4 18%, #c7c7c7 33%);
+}
+
 .text-error-notification {
     color: $color-error;
     font-size: 13px;

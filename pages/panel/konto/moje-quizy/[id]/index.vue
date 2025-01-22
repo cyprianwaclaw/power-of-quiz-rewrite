@@ -13,9 +13,11 @@
         <div class="md:flex md:flex-row-reverse md:gap-[28px] md:mt-[32px] mt-[32px] flex flex-col">
 
             <div class="w-full mb-[34px] md:mb-[0px]">
-                <NuxtImg :src="singleQuiz?.data.image" class="image md:h-[420px] h-[300px]" />
+                <div>
+                    <NuxtImg :src="singleQuiz?.data.image"  class="image md:h-[420px] h-[300px]" placeholer />
+                </div>
             </div>
-<!-- {{ singleQuiz?.data }} -->
+            <!-- {{ singleQuiz?.data }} -->
             <div class="bg-white rounded-[18px] p-[30px] w-full">
                 <div class=" mb-[28px] gap-[5px] flex flex-col">
                     <div class="flex gap-[7px]">
@@ -108,9 +110,9 @@ onMounted(async () => {
 
     newImage.value = singleQuiz.value.data.image,
 
-    setTimeout(async () => {
-        isLoading.value = false;
-    }, 200);
+        setTimeout(async () => {
+            isLoading.value = false;
+        }, 200);
 });
 
 const removeModal = () => {

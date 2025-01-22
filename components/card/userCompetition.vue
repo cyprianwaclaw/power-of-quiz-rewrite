@@ -14,10 +14,18 @@
     <div class="grid xl:grid-cols-2 gap-6 md:gap-y-[12px] md:gap-x-[34px] w-full cursor-default">
       <div v-for="(competition, index) in props.competitions" :key="index">
         <div class="bg-white w-full h-[300px] md:h-[140px] p-[18px] rounded-2xl md:flex" @click="isClick(competition)">
-          <img :src="competition.image" class="image-class h-[155px] md:h-[120px] w-full md:w-[160px]" />
+          <!-- dfsf -->
+          <!-- <div v-if="isLoading" class="spinner">Ładowanie...</div> -->
+          <!-- <NuxtImg src="/path/to/image.jpg" alt="Opis obrazu" width="300" height="200" @load="onImageLoad"
+            class="image" /> -->
+            <!-- <img src="./assets/file/hero.webp" /> -->
+          <NuxtImg :src="competition.image" class="image-class h-[155px] md:h-[120px] w-full md:w-[160px]" loading="lazy" placeholder="../assets/file/hero.webp" />
+          <!-- v-slot="{ src, isLoaded, imgAttrs }" -->
+          <!-- <img :src="competition.image" class="image-class h-[155px] md:h-[120px] w-full md:w-[160px]" /> -->
           <!-- {{ competition.image }} -->
           <div class="details md:ml-[18px]">
-            <h3 class="title text-[19px] md:text-[18px] font-medium md:font-semibold hover:underline-offset-4">{{ truncateText(competition.title, 25) }}</h3>
+            <h3 class="title text-[19px] md:text-[18px] font-medium md:font-semibold hover:underline-offset-4">{{
+              truncateText(competition.title, 25) }}</h3>
             <div class="flex mt-3 md:mt-[12px] gap-3 float-left mb-[4px]">
               <p class="des text-nowrap">{{ competition.time.date }} od {{ competition.time.start_format }} do {{
                 competition.time.end_format }}</p>
@@ -31,7 +39,7 @@
             </div>
             <div v-if="competition.is_finished" class="flex gap-[16px] mt-[8px] md:mt-[4px]">
               <div class="flex place-items-center gap-[6px]">
-                <Icon name="ph:crown-simple-fill" class="text-yellow-500 text-[23px] md:text-[19px] mb-[3px]"  />
+                <Icon name="ph:crown-simple-fill" class="text-yellow-500 text-[23px] md:text-[19px] mb-[3px]" />
                 <p class="prize text-nowrap text-[16px] md:text-[15px]">
                   {{ competition.place }} miejsce
                 </p>
@@ -71,6 +79,15 @@ const openAlert = ref(false);
 const openCompetition = ref(false);
 const currentCompetition = ref() as any;
 const competitionCountdown = ref<Record<number, { isTime: boolean; time: string | null }>>({});
+
+
+
+const isLoading = ref(true);
+
+function onImageLoad() {
+  isLoading.value = false;
+}
+
 
 // !przekazac plan w propsie !props.plan
 const isClick = (competition: any) => {
