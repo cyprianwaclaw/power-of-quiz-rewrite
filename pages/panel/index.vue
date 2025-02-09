@@ -1,18 +1,18 @@
 <template>
   <div class="mt-1 md:mt-6">
-    <!-- <div class="flex gap-[10px] items-place-center md:gap-4 mb-12"> -->
+    <!-- <div class="flex gap-[10px] items-place-center md:gap-4 mb-12">
       <SectionUserAvatar :size="45" :avatar="user.avatar" />
-      <!-- <h2 class="text-2xl md:text-3xl flex place-items-center font-medium0">
+      <h2 class="text-2xl md:text-3xl flex place-items-center font-medium0">
         {{ user.user_name ? user.user_name : '' }} {{ user.user_surname ? user.user_surname : '' }}
       </h2>
     </div> -->
-    <!-- <div class="flex flex-col md:hidden">
+    <div class="flex flex-col md:hidden">
       <NavOpenMenu />
       <h2 class="title-h2 mb-[6px] md:mt-8">Wybrane dla Ciebie</h2>
       <p class="text mb-7">Wybrane quizy na podstawie Twoich ostatnich wyborów</p>
       <CardIndexQuiz :quizes="quizForYou" :plan="hasPremium?.has_premium" :isLoading="isLoading" :n="12" />
-    </div> -->
-    <div class="grid md:grid-cols-2 grid-rows-1 gap-8 my-12">
+    </div>
+    <!-- <div class="grid md:grid-cols-2 grid-rows-1 gap-8 my-12">
       <SectionCardStatistic />
       <div class="hidden md:grid gap-8">
         <SectionCardInvite />
@@ -20,7 +20,7 @@
           <SectionCardPackage />
         </div>
       </div>
-    </div>
+    </div> -->
     <div class="md:flex hidden flex-col mt-8 md:mt-20">
       <h2 class="title-h2 mb-[6px] md:mt-8">Wybrane dla Ciebie</h2>
       <p class="text mb-7">Wybrane quizy na podstawie Twoich ostatnich wyborów</p>
