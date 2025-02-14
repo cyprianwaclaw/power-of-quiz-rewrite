@@ -8,7 +8,7 @@
     </div> -->
     <div class="flex flex-col md:hidden">
       <NavOpenMenu />
-      <h2 class="title-h2 mb-[6px] md:mt-8">Wybrane dla Ciebie</h2>
+      <h2 class="title-h2 mb-[6px] md:mt-8 mt-3.5z">Wybrane dla Ciebie</h2>
       <p class="text mb-7">Wybrane quizy na podstawie Twoich ostatnich wyborów</p>
       <CardIndexQuiz :quizes="quizForYou" :plan="hasPremium?.has_premium" :isLoading="isLoading" :n="12" />
     </div>
@@ -21,7 +21,7 @@
         </div>
       </div>
     </div> -->
-    <div class="md:flex hidden flex-col mt-8 md:mt-20">
+    <div class="md:flex hidden flex-col mt-7">
       <h2 class="title-h2 mb-[6px] md:mt-8">Wybrane dla Ciebie</h2>
       <p class="text mb-7">Wybrane quizy na podstawie Twoich ostatnich wyborów</p>
       <CardIndexQuiz :quizes="quizForYou" :plan="hasPremium?.has_premium" :isLoading="isLoading" :n="12" />
