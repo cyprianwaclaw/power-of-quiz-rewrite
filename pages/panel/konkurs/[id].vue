@@ -1,36 +1,37 @@
 <template>
     <div class="w-full flex-col justify-center mx-auto md:w-[700px]">
-            <NuxtLink to="/panel/quiz?section=konkursy" class="flex md:hidden place-items-center -mt-[10px] mb-[18px]">
-                <Icon name="ph:caret-left-bold" size="22" class="primary-color back-arrow" />
-                <p class="go primary-color">Konkursy</p>
-            </NuxtLink>
-            <p class="md:flex hidden text-[19px] font-semibold my-[15px]">
-                {{ router.currentRoute.value.query.name }}
-            </p>
-               <div class="image-wrapper h-[210px] md:h-[350px]">
-                   <img :src="competitionSubmissionCookie.info?.image" />
-                </div>
-                            <p class="md:flex hidden text-[19px] font-semibold mt-[32px]">
-                {{ currentQuestionsArray?.question }}
-            </p>
-            <div v-if="currentQuestionsArray ? true : false" class="flex flex-col gap-[10px] mt-[16px] w-full md:grid md:grid-cols-2">
-                <div v-for="(answer, index) in currentQuestionsArray?.answers" :key="index">
-                    <div class="w-full default-state rounded" @click="sendAnswer(currentQuestionsArray.id, answer.id)"
-                        :class="[
-                            isClick === answer.id && isGoodAnswer === false ? 'bad-answer' : '',
-                            isClick === answer.id && isGoodAnswer === true ? 'good-answer' : '',
-                        ]">
-                        {{ answer.answer }}
-                    </div>
+        <NuxtLink to="/panel/quiz?section=konkursy" class="flex md:hidden place-items-center -mt-[10px] mb-[18px]">
+            <Icon name="ph:caret-left-bold" size="22" class="primary-color back-arrow" />
+            <p class="go primary-color">Konkursy</p>
+        </NuxtLink>
+        <p class="md:flex hidden text-[19px] font-semibold my-[15px]">
+            {{ router.currentRoute.value.query.name }}
+        </p>
+        <div class="image-wrapper h-[210px] md:h-[350px]">
+            <img :src="competitionSubmissionCookie.info?.image" />
+        </div>
+        <p class="md:flex hidden text-[19px] font-semibold mt-[32px]">
+            {{ currentQuestionsArray?.question }}
+        </p>
+        {{ router.currentRoute.value.query?.name }}
+        <div v-if="currentQuestionsArray ? true : false"
+            class="flex flex-col gap-[10px] mt-[16px] w-full md:grid md:grid-cols-2">
+            <div v-for="(answer, index) in currentQuestionsArray?.answers" :key="index">
+                <div class="w-full default-state rounded" @click="sendAnswer(currentQuestionsArray.id, answer.id)" :class="[
+                    isClick === answer.id && isGoodAnswer === false ? 'bad-answer' : '',
+                    isClick === answer.id && isGoodAnswer === true ? 'good-answer' : '',
+                ]">
+                    {{ answer.answer }}
                 </div>
             </div>
-            <div v-else class="bg-white p-[21px] rounded-xl">
-                <p class="primary-color font-medium text-[18px]">Rozwiązano konkurs</p>
-                <p class="mt-[7px]">
-                    Po zakończymym konkursie zostaną ogłoszone wyniki, śledź informacje <NuxtLink to="/panel/konto/konkursy?name=wyniki"
-                        class="underline">TUTAJ
-                    </NuxtLink>
-                </p>
+        </div>
+        <div v-else class="bg-white p-[21px] rounded-xl">
+            <p class="primary-color font-medium text-[18px]">Rozwiązano konkurs</p>
+            <p class="mt-[7px]">
+                Po zakończymym konkursie zostaną ogłoszone wyniki, śledź informacje <NuxtLink
+                    to="/panel/konto/konkursy?name=wyniki" class="underline">TUTAJ
+                </NuxtLink>
+            </p>
         </div>
     </div>
 </template>
@@ -39,6 +40,19 @@ import gsap from 'gsap'
 const router = useRouter()
 const axiosInstance = useNuxtApp().$axiosInstance as any
 const competitionSubmissionCookie = useCookie('competition_submission') as any
+
+definePageMeta({
+    middleware: "auth",
+})
+
+useSeoMeta({
+     title: () => `Konkurs - ${router.currentRoute.value.query?.name}`, // Dynamiczny tytuł
+    ogTitle: 'Pakiet premium',
+    description: competitionSubmissionCookie.value.info,
+    ogDescription: competitionSubmissionCookie.value.info,
+    ogImage: competitionSubmissionCookie.info?.image,
+    twitterCard: 'summary_large_image',
+})
 
 const competitionId = ref(router.currentRoute.value.params.id)
 const isLoading = ref(true)

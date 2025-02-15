@@ -213,7 +213,6 @@ const startGame = async (id: number) => {
             competition_id: id,
             first_question: newCompetition.data.next_question,
             info: newCompetition.data.competition_info,
-
         }
         quizSubmissionCookie.value = JSON.stringify(submissionData)
         router.push(`/panel/konkurs/${id}?name=${props.competition.title}`)

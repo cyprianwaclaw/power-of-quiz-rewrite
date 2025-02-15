@@ -9,7 +9,7 @@
                 </p>
                 <button class="button-primary" @click="goToPayment">Zapłać teraz</button>
             </div>
-            {{ plans }}
+            <!-- {{ plans }} -->
         </div>
         <div class="bg-white p-7 rounded-[18px] mt-[34px]">
             <div class="flex gap-[24px] w-full justify-end">
@@ -40,8 +40,18 @@ import { useUser } from "@/stores/useUser";
 const axiosInstance = useNuxtApp().$axiosInstance as any;
 
 const router = useRouter()
+
 definePageMeta({
     middleware: "auth",
+})
+
+useSeoMeta({
+    title: 'Pakiet premium',
+    ogTitle: 'Pakiet premium',
+    // description: 'This is my amazing site, let me tell you all about it.',
+    // ogDescription: 'This is my amazing site, let me tell you all about it.',
+    // ogImage: 'https://example.com/image.png',
+    twitterCard: 'summary_large_image',
 })
 
 const plans = ref()
@@ -72,7 +82,10 @@ const goToPayment = async () => {
     await axiosInstance.post('/buy-plan', {
         "plan": 3
     })
+
 }
+
+// https://www.google.com/search?q=%7B%22message%22%3A%22Client+error%3A+%60POST+https%3A%5C%2F%5C%2Fsandbox.przelewy24.pl%5C%2Fapi%5C%2Fv1%5C%2Ftransaction%5C%2Fregister%60+resulted+in+a+%60401+Unauthorized%60+response%3A%5Cn%7B%5C%22error%5C%22%3A%5C%22Incorrect+authentication%5C%22%2C%5C%22code%5C%22%3A401%7D%5Cn%22%7D&rlz=1C5CHFA_enPL1074PL1074&oq=%7B%22message%22%3A%22Client+error%3A+%60POST+https%3A%5C%2F%5C%2Fsandbox.przelewy24.pl%5C%2Fapi%5C%2Fv1%5C%2Ftransaction%5C%2Fregister%60+resulted+in+a+%60401+Unauthorized%60+response%3A%5Cn%7B%5C%22error%5C%22%3A%5C%22Incorrect+authentication%5C%22%2C%5C%22code%5C%22%3A401%7D%5Cn%22%7D&gs_lcrp=EgZjaHJvbWUyBggAEEUYOdIBBzM2MmowajeoAgCwAgA&sourceid=chrome&ie=UTF-8
 
 </script>
 <style lang="scss" scoped>
