@@ -170,13 +170,24 @@ onMounted(async () => {
     newImage.value = null
     await fetchQuestions();
     isLoading.value = false;
-});
+})
 
 onBeforeRouteUpdate(async (to) => {
     isLoading.value = true;
     await fetchQuestions(to.query);
     isLoading.value = false;
-});
+})
+
+definePageMeta({
+    middleware: "auth",
+})
+
+useSeoMeta({
+    title: 'Nowy konkurs',
+    ogTitle: 'Nowy konkurs',
+    twitterCard: 'summary_large_image',
+})
+
 </script>
 
 <style scoped lang="scss">

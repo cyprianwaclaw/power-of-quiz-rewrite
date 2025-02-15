@@ -29,6 +29,17 @@
 </template>
 <script lang="ts" setup>
 
+
+definePageMeta({
+    middleware: "auth",
+})
+
+useSeoMeta({
+    title: 'Faktury i płatności',
+    ogTitle: 'Faktury i płatności',
+    twitterCard: 'summary_large_image',
+})
+
 </script>
 
 <style scoped lang="scss">

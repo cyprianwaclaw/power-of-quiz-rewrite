@@ -83,6 +83,17 @@ import { useUser } from "@/stores/useUser"
 
 const userState = useUser();
 const { user, settings } = storeToRefs(userState);
+
+definePageMeta({
+    middleware: "auth",
+})
+
+useSeoMeta({
+    title: 'Ustawienia',
+    ogTitle: 'Ustawienia',
+    twitterCard: 'summary_large_image',
+})
+
 </script>
 
 <style scoped lang="scss">

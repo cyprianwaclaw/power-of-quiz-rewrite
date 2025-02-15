@@ -97,6 +97,17 @@ const handleClick = () => {
 const showAlert = () => {
     isAlert.value = !isAlert.value
 }
+
+definePageMeta({
+    middleware: "auth",
+})
+
+useSeoMeta({
+    title: 'Ustawienia - bank',
+    ogTitle: 'Ustawienia - bank',
+    twitterCard: 'summary_large_image',
+})
+
 </script>
 
 <style scoped lang="scss">

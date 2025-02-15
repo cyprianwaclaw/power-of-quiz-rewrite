@@ -210,6 +210,16 @@ const onSubmit = async () => {
     // }
 };
 
+definePageMeta({
+    middleware: "auth",
+})
+
+useSeoMeta({
+    title: 'Edycja quizu',
+    ogTitle: 'Edycja quizu',
+    twitterCard: 'summary_large_image',
+})
+
 
 </script>
 

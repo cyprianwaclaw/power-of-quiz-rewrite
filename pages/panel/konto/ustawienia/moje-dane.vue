@@ -160,12 +160,6 @@ const schemaPersonal = yup.object().shape({
             return surnameRegex.test(value);
         })
         .max(20, "Nazwisko nie może mieć więcej niż 20 znaków"),
-    // user_email: yup.string().test("valid-email", "Nieprawidłowy adres e-mail", (value) => {
-    //     // if (!value) return false;
-    //     if (!value || value === "") return true;
-    //     const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
-    //     return emailRegex.test(value);
-    // }),
     phone: yup.string().test("valid-phone", "Błędny format numeru telefonu", (value) => {
         if (!value || value === "") return true;
         const phoneRegex = /^\d{9}$/;
@@ -252,6 +246,16 @@ const showAlert = () => {
 const isClick = () => {
     isOpen.value = !isOpen.value
 }
+
+definePageMeta({
+    middleware: "auth",
+})
+
+useSeoMeta({
+    title: 'Ustawienia - moje dane',
+    ogTitle: 'Ustawienia - moje dane',
+    twitterCard: 'summary_large_image',
+})
 
 </script>
 

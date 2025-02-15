@@ -13,7 +13,6 @@
         <p class="md:flex hidden text-[19px] font-semibold mt-[32px]">
             {{ currentQuestionsArray?.question }}
         </p>
-        {{ router.currentRoute.value.query?.name }}
         <div v-if="currentQuestionsArray ? true : false"
             class="flex flex-col gap-[10px] mt-[16px] w-full md:grid md:grid-cols-2">
             <div v-for="(answer, index) in currentQuestionsArray?.answers" :key="index">
@@ -46,7 +45,7 @@ definePageMeta({
 })
 
 useSeoMeta({
-     title: () => `Konkurs - ${router.currentRoute.value.query?.name}`, // Dynamiczny tytuł
+    title: () => `Konkurs - ${router.currentRoute.value.query?.name}`, // Dynamiczny tytuł
     ogTitle: 'Pakiet premium',
     description: competitionSubmissionCookie.value.info,
     ogDescription: competitionSubmissionCookie.value.info,

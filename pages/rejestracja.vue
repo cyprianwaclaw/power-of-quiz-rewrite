@@ -161,7 +161,14 @@ const registerUser = async (values: any) => {
 };
 onMounted(() => {
   auth.nullError();
-});
+})
+
+useSeoMeta({
+  title: 'Power od quiz - rejestracja',
+  ogTitle: 'Power od quiz - rejestracja',
+  twitterCard: 'summary_large_image',
+})
+
 </script>
 
 <style scoped lang="scss">

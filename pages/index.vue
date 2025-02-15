@@ -97,6 +97,14 @@ const login = (values: any) => {
 onMounted(() => {
   auth.nullError();
 });
+
+useSeoMeta({
+  title: 'Power od quiz - logowanie',
+  ogTitle: 'Power od quiz - logowanie',
+  twitterCard: 'summary_large_image',
+})
+
+
 </script>
 
 <style scoped lang="scss">

@@ -53,6 +53,16 @@ onBeforeRouteUpdate(async (to) => {
     isLoading.value = false;
 })
 
+definePageMeta({
+    middleware: "auth",
+})
+
+useSeoMeta({
+    title: 'Moje quizy',
+    ogTitle: 'Moje quizy',
+    twitterCard: 'summary_large_image',
+})
+
 </script>
 
 <style scoped lang="scss">

@@ -95,7 +95,15 @@ onBeforeRouteUpdate(async (to) => {
     }
 })
 
+definePageMeta({
+    middleware: "auth",
+})
 
+useSeoMeta({
+    title: 'Ustawienia - środki',
+    ogTitle: 'Ustawienia - środki',
+    twitterCard: 'summary_large_image',
+})
 </script>
 
 <style scoped lang="scss">

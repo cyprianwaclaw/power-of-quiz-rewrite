@@ -40,9 +40,6 @@ const quizObject = ref() as any
 
 onMounted(() => {
     newImage.value = allDataToEdit.value[0]?.image
-    // quizQuestions.value = JSON.parse(localStorage.getItem('quizQuestions') as string);
-    // quizObject.value = JSON.parse(localStorage.getItem('quizData') as string);
-    // updateQuizData(quizState)
 })
 
 const onSubmit = async () => {
@@ -107,6 +104,16 @@ watch(updatedQuiz, (newValue) => {
         questionsArray.value.push(...questionsArrayNew.value);
         questionsArrayNew.value = []
     }
+})
+
+definePageMeta({
+    middleware: "auth",
+})
+
+useSeoMeta({
+    title: 'Edycja quizu',
+    ogTitle: 'Edycja quizu',
+    twitterCard: 'summary_large_image',
 })
 </script>
 

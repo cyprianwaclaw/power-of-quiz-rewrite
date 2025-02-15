@@ -3,10 +3,6 @@
       <h2 class="text-2xl md:text-3xl flex place-items-center font-medium">
          Nowy quiz
       </h2>
-      <!-- {{ quizState.isAllData() }}
-      {{ quizState.apiDataQuiz() }}
-      {{ newImageFile }}
-      {{ newImage }} -->
       <div class="md:flex md:w-full md:gap-[28px] place-items-center md:mt-[42px]">
          <SectionQuizForm :error="showErrorMessage" />
          <div>
@@ -18,7 +14,6 @@
       </div>
    </div>
    <SectionQuestionsForms :array="Array" :error="showErrorMessage" />
-   <!-- {{ questionsArray }} -->
    </div>
    <div class="w-full md:w-[200px] -mb-[70px]">
       <ButtonLoading isLoading="false" @click="onSubmit" :loading="isLoadingButton"
@@ -98,6 +93,16 @@ onMounted(() => {
    quizState.$reset()
    newImageFile.value = null
    newImage.value = null
+})
+
+definePageMeta({
+   middleware: "auth",
+})
+
+useSeoMeta({
+   title: 'Nowy quiz',
+   ogTitle: 'Nowy quiz',
+   twitterCard: 'summary_large_image',
 })
 
 </script>

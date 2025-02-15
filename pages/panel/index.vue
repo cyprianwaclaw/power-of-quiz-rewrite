@@ -72,6 +72,17 @@ onMounted(async () => {
 
 })
 
+definePageMeta({
+  middleware: "auth",
+})
+
+useSeoMeta({
+  title: 'Power of quiz',
+  ogTitle: 'Power of quiz',
+  twitterCard: 'summary_large_image',
+})
+
+
 
 </script>
 

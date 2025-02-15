@@ -19,7 +19,6 @@
                     <p class="md:flex hidden text-[19px] font-semibold my-[15px]">
                         {{ getSingleQuizById.data.data.title}}
                     </p>
-                    <!-- {{ getSingleQuizById.data.data.id }} -->
                     <div class="image-wrapper h-[210px] md:h-[350px]">
                         <img :src="getSingleQuizById.data.data?.image" class="image" />
                         <NuxtLink to="/panel/quiz/"
@@ -128,7 +127,7 @@ onMounted(async () => {
 })
 
 // 📌 Computed dla dynamicznych wartości SEO
-const pageTitle = computed(() => getSingleQuizById.value?.data?.data?.title || 'Quiz')
+const pageTitle = computed(() => 'Quiz - '+ getSingleQuizById.value?.data?.data?.title || '')
 const pageDescription = computed(() => getSingleQuizById.value?.data?.data?.description || 'Opis quizu')
 const pageImage = computed(() => getSingleQuizById.value?.data?.data?.image || '')
 
@@ -168,82 +167,6 @@ definePageMeta({
     middleware: "auth",
 })
 </script>
-
-<!-- <script lang="ts" setup>
-const router = useRouter()
-const axiosInstance = useNuxtApp().$axiosInstance as any
-const quizSubmissionCookie = useCookie('quiz_submission') as any
-
-const quizId = ref(router.currentRoute.value.params.id)
-const isLoading = ref(true)
-const isClick = ref<number | null>(null)
-const isGoodAnswer = ref<boolean | null>(null)
-const currentQuestionsArray = ref() as any
-const getSingleQuizById = ref() as any
-const isNextQuestions = ref()
-const correctAnswer = ref<number>(0)
-const allQuiz = ref()
-
-onMounted(async () => {
-    const res = await axiosInstance.get("/quizzes/all?per_page=3")
-    allQuiz.value = res.data;
-
-    getSingleQuizById.value = await axiosInstance.get(`/quizzes/${quizId.value}`)
-
-    if (quizSubmissionCookie.value?.quiz_id == quizId.value) {
-        // !gramy w quiz ze strony 'quizy'
-        const getNextQuestion = await axiosInstance.get(`/quiz/submission/${quizSubmissionCookie.value.submission_id}/getNextQuestion`)
-        currentQuestionsArray.value = getNextQuestion.data.data
-        setTimeout(() => {
-            isLoading.value = false
-        }, 300)
-    } else {
-        // !gramy w quiz, do którego mamy link
-        const newQuiz = await axiosInstance.get(`/quiz/${quizId.value}/start`)
-        const submissionData = {
-            submission_id: newQuiz.data.data.submission_id,
-            quiz_id: router.currentRoute.value.params.id
-        }
-        quizSubmissionCookie.value = JSON.stringify(submissionData)
-        currentQuestionsArray.value = newQuiz.data.data.next_question
-        setTimeout(() => {
-            isLoading.value = false
-        }, 300)
-    }
-})
-
-const sendAnswer = async (questionId: number, answerId: number) => {
-    isClick.value = answerId
-    const sendQuestion = await axiosInstance.post(`/quiz/submission/${quizSubmissionCookie.value.submission_id}/answerQuestion`, {
-        question_id: questionId,
-        answer_id: answerId
-    })
-    isNextQuestions.value = sendQuestion.data.data
-    isGoodAnswer.value = sendQuestion.data.data.is_correct === 1 ? true : false
-    isGoodAnswer.value == true ? correctAnswer.value++ : ''
-    setTimeout(() => {
-        isClick.value = null
-        isGoodAnswer.value = null
-    }, 350)
-    setTimeout(() => {
-        currentQuestionsArray.value = sendQuestion.data.data.next_question
-    }, 450)
-
-}
-
-definePageMeta({
-    middleware: "auth",
-})
-
-useSeoMeta({
-    title: () => `Quiz - ${getSingleQuizById.value?.data?.data.title}`,
-    ogTitle: () => `Quiz - ${getSingleQuizById.value?.data?.data.title}`,
-    description: getSingleQuizById.value?.data?.data.description,
-    ogDescription: getSingleQuizById.value?.data?.data.description,
-    ogImage: getSingleQuizById.value?.data.data?.image,
-    twitterCard: 'summary_large_image',
-})
-</script> -->
 <style lang="scss" scoped>
 @import "@/assets/style/variables.scss";
 

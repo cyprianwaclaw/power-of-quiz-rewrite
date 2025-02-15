@@ -6,11 +6,6 @@
     </NuxtLayout>
 </template>
 <script lang="ts" setup>
-
-definePageMeta({
-    middleware: "auth",
-})
-
 const router = useRouter()
 
 const buttonsArray = reactive([
@@ -27,6 +22,16 @@ onMounted(()=>{
     if (router.currentRoute.value.query.name == 'wyniki') {     
         router.push('/panel/konto?pageName=competition&section=results&page=1')
     }
+})
+
+definePageMeta({
+    middleware: "auth",
+})
+
+useSeoMeta({
+    title: 'Konkursy',
+    ogTitle: 'Konkursy',
+    twitterCard: 'summary_large_image',
 })
 
 </script>

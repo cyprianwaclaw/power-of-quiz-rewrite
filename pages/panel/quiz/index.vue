@@ -87,10 +87,6 @@
 import { useUser } from "@/stores/useUser";
 const axiosInstance = useNuxtApp().$axiosInstance as any;
 
-definePageMeta({
-    middleware: "auth",
-})
-
 const userState = useUser();
 const router = useRouter();
 const route = useRoute();
@@ -180,6 +176,16 @@ onBeforeRouteUpdate(async (to) => {
 const clearSearchTerm = () => {
     router.push('/panel/quiz')
 }
+
+definePageMeta({
+    middleware: "auth",
+})
+
+useSeoMeta({
+    title: 'Gry',
+    ogTitle: 'Gry',
+    twitterCard: 'summary_large_image',
+})
 
 </script>
 

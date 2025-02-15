@@ -94,8 +94,6 @@ onMounted(async () => {
     singleQuiz.value = quiz.data
     quizQuestions.value = questions.data;
     console.log(singleQuiz.value)
-    // localStorage.setItem('quizData', JSON.stringify(quiz.data.data));
-    // localStorage.setItem('quizQuestions', JSON.stringify(questions.data.data));
 
     quizState.updateQuiz(
         singleQuiz.value.data.id, // Dodaj wszystkie wymagane parametry
@@ -121,23 +119,17 @@ const removeModal = () => {
 
 const goToEditData = () => {
     router.push(`/panel/konto/moje-quizy/${router.currentRoute.value.params.id}/test`)
-    // allDataToEdit.value = [{
-    //     "dsd": "dfdf",
-    //     "image": singleQuiz.value.data.image,
-    //     "quizQuestion": quizQuestions.value?.data,
-    //     "title": singleQuiz.value.data.title,
-    //     "time": singleQuiz.value.data.time,
-    //     "description": singleQuiz.value.data.description,
-    //     "category_id": singleQuiz.value.data.category_id,
-    //     "difficulty": singleQuiz.value.data.difficulty_id,
-
-    //     // title
-    //     // time,
-    //     // description,
-    //     // category_id,
-    //     // difficulty
-    //  }]
 }
+
+definePageMeta({
+    middleware: "auth",
+})
+
+useSeoMeta({
+    title: 'Moje quizy',
+    ogTitle: 'Moje quizy',
+    twitterCard: 'summary_large_image',
+})
 
 </script>
 

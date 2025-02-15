@@ -63,102 +63,15 @@
     </div>
 </template>
 <script lang="ts" setup>
-// import { storeToRefs } from "pinia"
-// import { useUser } from "@/stores/useUser"
-// const axiosInstance = useNuxtApp().$axiosInstance as any
+definePageMeta({
+    middleware: "auth",
+})
 
-// const route = useRoute()
-// const isLoading = ref(true)
-// const isLoadingButton = ref(true)
-// const router = useRouter()
-// const userQuizzes = ref() as any
-// const userState = useUser();
-// const { user } = storeToRefs(userState)
-
-// const allButtonsArray = (routeName: any) => {
-//     if (routeName == null || routeName == 'quiz') {
-//         return [
-//             {
-//                 title: "Wszystkie",
-//                 link: `null-quiz`
-
-//             },
-//             {
-//                 title: "Zaakceptowane",
-//                 link: "true-quiz"
-//             },
-//             {
-//                 title: "Do akceptacji",
-//                 link: "false-quiz"
-//             }
-//         ]
-//     }
-//     if (routeName == 'competition') {
-//         return [
-//             {
-//                 title: "Wyniki",
-//                 link: "null-competition"
-//             },
-//         ]
-//     }
-//     if (routeName == 'founds') {
-//         return [
-//             {
-//                 title: "Saldo konta",
-//                 link: "null-founds"
-//             },
-//             {
-//                 title: "Historia wypłat",
-//                 link: "payouthistory-founds"
-//             },
-//         ]
-//     }
-// }
-
-// const buttonsArray = ref([
-//     {
-//         title: "Quizy",
-//         link: `null-quiz`
-//     },
-//     {
-//         title: "Konkursy",
-//         link: "null-competition"
-//     },
-//     {
-//         title: "Środki",
-//         link: "null-founds"
-//     },
-//     {
-//         title: "Faktury i płatności",
-//         link: "null-invoices"
-//     }
-// ])
-
-// onMounted(async () => {
-//     const res = await axiosInstance.get(`user/quizzes?${formatQueryString(route.query)}`);
-//     userQuizzes.value = res.data;
-
-//     if (route.query.pageName == undefined) {
-//         console.log("route.query.pageName")
-//         router.push({ query: { pageName: 'quiz', section: 'null' } })
-//         isLoading.value = false
-//         isLoadingButton.value = false
-//     } else {
-//         isLoading.value = false
-//         isLoadingButton.value = false
-//     }
-// });
-
-// onBeforeRouteUpdate(async (to) => {
-//     isLoading.value = true;
-//     const res = await axiosInstance.get(`user/quizzes?${formatQueryString(to.query)}`);
-//     userQuizzes.value = res.data;
-//     isLoading.value = false
-//     if (to.query.pageName == undefined) {
-//         router.push({ query: { pageName: 'quiz', section: 'null' } });
-//         // console.log("route.query.pageName")
-//     }
-// })
+useSeoMeta({
+    title: 'Moje konto',
+    ogTitle: 'Moje konto',
+    twitterCard: 'summary_large_image',
+})
 </script>
 
 <style scoped lang="scss">
