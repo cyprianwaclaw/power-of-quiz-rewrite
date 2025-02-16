@@ -38,7 +38,7 @@
             </NuxtLink>
             <div class="flex w-full justify-between place-items-center">
               <p class="text-[16px] font-medium cursor-default">Punkty: <span class="">{{ user.points }}</span></p>
-              <NuxtLink to="/panel/plan-premium" @click="showMenu" v-if="user.points > 0">
+              <NuxtLink to="/panel/konto?pageName=founds&section=null&page=1" @click="showMenu" v-if="user.points > 0">
                 <p class="primary-color text-[12px] hover:underline">
                   Wypłać
                 </p>

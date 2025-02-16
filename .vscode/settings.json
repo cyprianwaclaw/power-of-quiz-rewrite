@@ -1,4 +1,5 @@
 {
-    "workbench.colorTheme": "GitHub Dark Dimmed",
-    "nuxt.isNuxtApp": false
+    "workbench.colorTheme": "GitHub Dark",
+    "nuxt.isNuxtApp": false,
+    "liveServer.settings.port": 5501
 }
