@@ -3,7 +3,7 @@
     <input v-on="handlers" :value="textValue" :type="loginType" :placeholder="placeholder"
       :class="props.hasError ? 'isError' : null" wrap="soft" />
     <Icon :name="iconType" @click="changeType(loginType)"
-      class="absolute z-10 top-[20px] right-[24px] text-[#b7b6b6] hover:text-[#878787] hover:duration-150 cursor-pointer"
+      class="absolute z-10 top-[16px] right-[21px] text-[#b7b6b6] hover:text-[#878787] hover:duration-150 cursor-pointer"
       size="23" />
     <p v-if="props?.hasError" class="text-[#c22b3a] text-[13px] bg-white mt-1">
       {{ props?.hasError }}
@@ -74,22 +74,10 @@ const handlers = computed(() => {
     } else {
       on[t] = handleChange;
     }
-  });
+  })
+  return on
+})
 
-  return on;
-});
-
-
-// const resizeTextarea = () => {
-//   if (textarea.value) {
-//     textarea.value.style.height = 'auto';
-//     textarea.value.style.height = `${textarea.value.scrollHeight}px`
-//   }
-// };
-
-// onMounted(() => {
-//   resizeTextarea()
-// })
 </script>
 
 <style scoped lang="scss">
@@ -97,20 +85,18 @@ const handlers = computed(() => {
 
 input {
   background-color: #ECECEC;
-  padding: 14px 16px;
+  // padding: 1px 160px;
   width: 100%;
   color: #211f1f;
   font-size: 16px;
   letter-spacing: 0.17px;
   border: 1px solid transparent;
   outline: none;
-  border-radius: 12px;
+  border-radius: 10px;
   font-weight: 400;
   transition: border-color 0.24s ease-in-out, color 0.24s ease-in-out, background-color 0.24s ease-out;
   resize: none;
-  /* Prevents manual resizing by the user */
   overflow-y: auto;
-  /* Allows vertical scrolling */
 
   &:focus {
     background-color: #ffffff;

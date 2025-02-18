@@ -1,25 +1,9 @@
 <template>
   <div class="relative flex flex-col w-full">
-    <input
-      v-on="handlers"
-      :value="value"
-      :type="type"
-      :placeholder="placeholder"
-      :label="label"
-      @focus="inputFocus"
-      @blur="inputBlur"
-      :class="props.hasError ? 'isError' : null"
-    />
-    <p
-      v-if="props?.hasError && props?.hasError !== 'notShow'"
-      class="text-red-500 text-[13px] bg-white mt-1"
-    >
+    <input v-on="handlers" :value="value" :type="type" :placeholder="placeholder" :label="label"  :class="props.hasError ? 'isError' : null"  />
+    <p v-if="props?.hasError && props?.hasError !== 'notShow'" class="text-red-500 text-[13px] bg-white mt-1">
       {{ props?.hasError }}
     </p>
-    <!-- :style="{ 'border-color': color }" -->
-    <!-- <p v-if="props.hasError" class="text-red-500 text-[13px] bg-white mt-1">
-      {{ errorMessage }}
-    </p> -->
   </div>
 </template>
 
@@ -27,15 +11,6 @@
 import { useField } from "vee-validate";
 import { modes } from "@/functions";
 const color = ref("#9B9B9B") as any;
-
-// const hasError = ref(false);
-// const inputFocus = () => {
-//   color.value = "#2BB069";
-// };
-
-// const inputBlur = () => {
-//   color.value = "#9B9B9B";
-// };
 
 const props = defineProps({
   name: {
@@ -55,7 +30,6 @@ const props = defineProps({
   },
   hasError: {
     type: String,
-    // default: true,
   },
   label: {
     type: String,
@@ -77,15 +51,7 @@ const handlers = computed(() => {
   const on: Record<string, any> = {
     blur: handleBlur,
     input: [(e: any) => handleChange(e, false)],
-  };
-
-  // const isError = (err: boolean, color: string) => {
-  //   if (!err) {
-  //     return "red";
-  //   } else {
-  //     return color;
-  //   }
-  // };
+  }
 
   const triggers = modes[props.mode]({
     errorMessage,
@@ -98,53 +64,63 @@ const handlers = computed(() => {
     } else {
       on[t] = handleChange;
     }
-  });
+  })
 
-  return on;
-});
-// watch(props as any, (newValue) => {
-//   if (newValue.error == true) {
-//     color.value = "#ef4444";
-//   } else {
-//     color.value = "#9B9B9B";
-//   }
-// });
+  return on
+})
+
 </script>
 
 <style scoped lang="scss">
 @import "@/assets/style/variables.scss";
-
-//.success input {
-//  color: #212427;
-//  background: white;
-//}
 
 input {
   display: flex;
   font-size: 16px;
   width: 100%;
   border: 2px solid $input-border;
-  height: 54px;
+  height: 55px;
   overflow: hidden;
   border-radius: 10px;
-  padding: 9px 16px;
+  padding: 10px 18px !important;
   font-weight: 400;
   transition: border-color 0.3s ease;
+
+    &:hover {
+    border: 2px solid #d4d4d4;
+  }
+
+  &:focus {
+    border: 2px solid $primary;
+  }
+
+  &::placeholder {
+    letter-spacing: 0.17px;
+    font-size: 16px;
+    font-weight: 400;
+    color: #9D9D9D;
+  }
+
+  &:focus::placeholder {
+    font-weight: 400;
+    color: #d9d9d9;
+  }
 }
 
 .isError {
   border: 2px solid $color-error;
-}
 
-.isError:focus {
-  border: 2px solid $color-error;
-  transition: border 0.3s ease-in, transform 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  &:focus {
+    border: 2px solid $color-error;
+    transition: border 0.3s ease-in, transform 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  }
 }
 
 label {
   margin-bottom: 15px;
   position: relative;
 }
+
 .text {
   position: absolute;
   font-size: 15px;
@@ -154,17 +130,5 @@ label {
   font-size: 15px;
   color: $input-border;
   transition: 0.3s ease;
-}
-
-input:focus {
-  display: flex;
-  font-size: 16px;
-  width: 100%;
-  border: 2px solid $primary;
-  height: 54px;
-  overflow: hidden;
-  border-radius: 10px;
-  padding: 9px 16px;
-  font-weight: 400;
 }
 </style>

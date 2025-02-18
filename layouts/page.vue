@@ -1,9 +1,6 @@
 <template>
   <div class="w-full">
     <NavUser />
-    <!-- :class="router.currentRoute.value.matched[0]?.name === 'panel-quiz-id' ? 'game-container' : 'own-container'"> -->
-    <!-- pb-[200px] -->
-    <!-- {{ isQuizGamePage }} -->
     <div class="min-h-screen page-background own-container">
       <slot />
     </div>

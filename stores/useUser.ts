@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import axios from 'axios';
 
 export const useUser = defineStore('user', {
     state: () => ({
@@ -7,35 +8,44 @@ export const useUser = defineStore('user', {
         hasPremium: null as any,
     }),
 
+    persist: true,
+    
     actions: {
-        async login() {
-            try {
-                const axiosInstance = useNuxtApp().$axiosInstance as any
-                const res = await axiosInstance.get(`/user/current`)
-
-                this.user = res.data;
-            } catch (error) {
-                console.error("Błąd logowania:", error)
-            }
+        async currentUser(token: any) {
+            const API_URL = useRuntimeConfig().public.API_URL;
+            const res = await axios.get(`${API_URL}/user/current`, {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                }
+            });
+            this.user = res.data;
         },
 
         updateUserAvatarState(avatarLink: string) {
             this.user.avatar = avatarLink
         },
-        
-        async getUserSettings() {
-            try {
-                const axiosInstance = useNuxtApp().$axiosInstance as any
-                const res = await axiosInstance.get(`/user/settings`)
 
-                this.settings = res.data;
-            } catch (error) {
-                console.error("Błąd logowania:", error)
-            }
+        async getUserSettings(token: any) {
+            const API_URL = useRuntimeConfig().public.API_URL;
+            const res = await axios.get(`${API_URL}/user/settings`, {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                }
+            });
+            this.settings = res.data;
         },
-        async userPlan() {
-            const axiosInstance = useNuxtApp().$axiosInstance as any
-            const res = await axiosInstance.get(`/user/hasPremium`)
+
+        async userPlan(token: any) {
+            // const res = await axiosInstance.get(`/user/hasPremium`)
+            const API_URL = useRuntimeConfig().public.API_URL;
+            const res = await axios.get(`${API_URL}/user/hasPremium`, {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                }
+            });
             this.hasPremium = res.data
 
         }

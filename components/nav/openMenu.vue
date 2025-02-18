@@ -7,7 +7,7 @@
           <p class="text-[15px] flex place-items-center font-medium -mb-[2px]">
             {{ user?.user_name ? user?.user_name : '' }} {{ user?.user_surname ? user?.user_surname : '' }}
           </p>
-          <div v-if="hasPremium ? true : false" class="flex place-items-center gap-[4px]">
+          <div v-if="!hasPremium" class="flex place-items-center gap-[4px]">
             <Icon name="fa:diamond" size="15" class="primary-color" />
             <p class="text-[12px] primary-color font-semibold">PREMIUM</p>
           </div>
@@ -37,13 +37,16 @@
               <Icon name="ph:arrow-right-bold" size="21" class="primary-color" />
             </NuxtLink>
             <div class="flex w-full justify-between place-items-center">
-              <p class="text-[16px] font-medium cursor-default">Punkty: <span class="">{{ user.points }}</span></p>
+              <p class="text-[16px] font-medium cursor-default">Punkty: <span class="">{{ user?.points }}</span></p>
               <NuxtLink to="/panel/konto?pageName=founds&section=null&page=1" @click="showMenu" v-if="user.points > 0">
-                <p class="primary-color text-[12px] hover:underline">
+                <p class="primary-color text-[12px] hover:underline cursor-pointer">
                   Wypłać
                 </p>
               </NuxtLink>
             </div>
+            <p class="text-red-500 text-[15px] mt-[14px] hover:underline cursor-pointer" @click="logout()">
+              Wyloguj się
+            </p>
           </div>
         </div>
       </div>
@@ -51,7 +54,10 @@
   </div>
 </template>
 <script setup lang="ts">
-import { useUser } from "@/stores/useUser"
+import { useUser } from "@/stores/useUser";
+import { useAuth } from "@/stores/useAuth";
+
+const axiosInstance = useNuxtApp().$axiosInstance as any;
 const route = useRoute()
 const router = useRouter()
 
@@ -59,12 +65,13 @@ const userState = useUser()
 const { user, hasPremium } = storeToRefs(userState)
 const isOpen = ref(false)
 
+const authState = useAuth()
+
 const showMenu = () => {
   isOpen.value = !isOpen.value
 }
 
 const linksArray = [
-  // { name: "Zaproś znajomych", link: "/panel/zaproszeni" },
   { name: "Dodaj quiz", link: "/panel/quiz/dodaj-nowy" },
   { name: "Dodaj konkurs", link: "/panel/konto/konkursy/nowy" },
   { name: "Moje konto", link: "/panel/konto" },
@@ -78,6 +85,13 @@ const showMenuLink = (routeName: string) => {
     router.push(routeName)
   }
   showMenu()
+}
+
+const logout = () => {
+  // console.log('test')
+  isOpen.value = !isOpen.value
+  authState.logout()
+
 }
 </script>
 <style lang="scss" scoped>

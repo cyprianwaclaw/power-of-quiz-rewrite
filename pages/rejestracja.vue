@@ -1,87 +1,111 @@
 <template>
-  <div class="auth-background" @click="auth.nullError()">
-    <div class="width-login sm:shaddow-effect">
-      <h2 class="mb-[18px] text-[28px] font-semibold">Rejestracja</h2>
-      {{ errorValue?.errors }}
-      <p v-if="errorValue?.errors?.otherError ? true : false" class="text-red-500 text-[14px] mb-4 -mt-4">
-        {{ errorValue?.errors?.otherError }}
-      </p>
-      <Form @submit="registerUser" @click="auth.nullError()" :validation-schema="schema"
-        v-slot="{ meta, values, errors }">
-        <div class="flex flex-col sm:gap-[16px] mb-7">
-          <div class="sm:flex gap-[24px]">
-            <InputBase name="name" placeholder="Imię i nazwisko" type="text" :hasError="errors?.name"
-              class="mb-3 md:mb-0" />
-            <InputBase name="email" placeholder="E-mail" type="text" class="mb-3 md:mb-0"
-              :hasError="errors?.email || errorValue?.errors?.email[0]" />
+  <NuxtLayout name="auth">
+    <div class="auth-background" @click="auth.nullError()">
+      <div class="width-login sm:shaddow-effect">
+        <div v-if="router.currentRoute.value.query?.email && router.currentRoute.value.query?.verification_code">
+            <Icon name="ph:check-circle-light" size="75" class="green"/>
+            <p class="text-[22px] font-semibold mt-[8px]">Adres e-mail potwierdzony</p>
+            <p class="mt-[3px]">Za chwile zostaniesz przekierowany na strone główną</p>
+            <div class="w-[160px] mt-[21px]">
+              <NuxtLink to="/"><p class="button-primary">Strona główna</p></NuxtLink>
+            </div>
           </div>
-          <InputBase name="invitationCode" placeholder="Kod polecajacy" type="text" class="mb-3 md:mb-0"
-            :hasError="errorValue?.errors" />
-          <!-- <div class="relative"> -->
-          <div class="sm:flex gap-[24px]">
-            <Icon :name="iconType" @click="changeType(loginType)"
-              class="absolute z-50 top-[16px] right-[24px] text-[#b7b6b6] hover:text-[#878787] hover:duration-150 cursor-pointer"
-              size="23" />
-            <!-- <div> -->
-
-            <div class="relative w-full">
-              <Icon :name="iconTypePassword" @click="changeType('password')"
-                class="absolute z-50 top-[16px] right-[24px] text-[#b7b6b6] hover:text-[#878787] hover:duration-150 cursor-pointer"
-                size="23" />
-              <InputBase name="password" placeholder="Hasło" :type="typePassword" :hasError="errors?.password"
-                class="mb-3 md:mb-0" />
+          <div v-else>
+            <div v-if="loggedIn || token?.length ? false : true">
+              <h2 class="mb-[19px] text-[28px] font-semibold">Rejestracja</h2>
+            <Form @submit="registerUser" @click="auth.nullError()" :validation-schema="schema"
+              v-slot="{ meta, values, errors }">
+              <div class="flex flex-col sm:gap-[10px] mb-7">
+                <div class="sm:flex gap-[10px]">
+                  <InputBase name="name" placeholder="Imię" type="text" :hasError="errors?.name" class="mb-3 md:mb-0" />
+                  <InputBase name="surname" placeholder="Nazwisko" type="text" class="mb-3 md:mb-0"
+                    :hasError="errors?.surname" />
+                </div>
+                <InputBase name="email" placeholder="E-mail" type="text" class="mb-3 md:mb-0"
+                  :hasError="errors?.email || errorValue?.errors?.email[0]" />
+                <InputBase name="confirmEmail" placeholder="Potwierdz  e-mail" type="text" class="mb-3 md:mb-0"
+                  :hasError="errors?.confirmEmail" />
+                <div class="sm:flex gap-[10px]">
+                  <div class="relative w-full">
+                    <Icon :name="iconTypePassword" @click="changeType('password')"
+                      class="bg-white px-[10px] w-[50px] right-[8px] absolute z-50 top-[20px] text-[#b7b6b6] hover:text-[#5f5f5f] hover:duration-150 cursor-pointer"
+                      size="23" />
+                    <InputBase name="password" placeholder="Hasło" :type="typePassword" :hasError="errors?.password"
+                      class="mb-3 md:mb-0" />
+                  </div>
+                  <div class="relative w-full">
+                    <Icon :name="iconTypeConfirmPassword" @click="changeType('confirmPassword')"
+                      class=" bg-white px-[10px] w-[50px] right-[8px] top-[20px] absolute z-50  text-[#b7b6b6] hover:text-[#5f5f5f] hover:duration-150 cursor-pointer"
+                      size="23" />
+                    <InputBase name="confirmPassword" placeholder="Potwierdz hasło" :type="typeConfirmPassword"
+                      :hasError="errors?.confirmPassword" class="mb-3 md:mb-0" />
+                  </div>
+                </div>
+              </div>
+              <ButtonLoading :disable="!meta.valid ||
+                errorValue ||
+                !values.password ||
+                values.password.length === 0 ||
+                !values.name ||
+                values.name.length === 0 ||
+                !values.surname ||
+                values.surname.length === 0 ||
+                !values.email ||
+                values.email.length === 0 ||
+                !values.confirmEmail ||
+                values.confirmEmail.length === 0 ||
+                !values.confirmPassword ||
+                values.confirmPassword.length === 0
+                " isLoading="false" :loading="isLoadingButton" text="Potwierdź adres e-mail" />
+            </Form>
+            <div
+              class="flex sm:flex-row flex-col w-full justify-start mt-9 pt-7 border-t-[1px] border-[#dddddd] gap-[6px]">
+              <p class="text-[15px]">Masz już konto?</p>
+              <NuxtLink to="/">
+                <p class="text-[15px] font-medium hover:underline primary-color">Zaloguj się</p>
+              </NuxtLink>
             </div>
-            <!-- </div> -->
-            <div class="relative w-full">
-              <Icon :name="iconTypeConfirmPassword" @click="changeType('confirmPassword')"
-                class="absolute z-50 top-[16px] right-[24px] text-[#b7b6b6] hover:text-[#878787] hover:duration-150 cursor-pointer"
-                size="23" />
-              <InputBase name="confirmPassword" placeholder="Potwierdz hasło" :type="typeConfirmPassword"
-                :hasError="errors?.confirmPassword" class="mb-3 md:mb-0" />
+          </div>
+          <div v-else>
+            <div class="flex w-full justify-between">
+              <p class="text-[17px] font-medium w-[300px]">Wpisz kod, który został wysłany na Twój adres e-mail</p>
+              <p class="text-[15px]"
+                :class="resentCodeText == 'Wyślij ponownie' ? ' hover:underline primary-color cursor-pointer' : ' font-medium text-[#21a67a]'"
+                @click="resentCode()">{{ resentCodeText }}</p>
             </div>
+            <Form @submit="verifyEmailAddress" @click="auth.nullError()" class="mt-6">
+              <div class="flex flex-col sm:gap-[10px] mb-7 w-[220px]">
+                <InputBase name="code" placeholder="Kod weryfikacyjny" type="text" :hasError="errorValue" />
+              </div>
+              <ButtonLoading :disable="false" isLoading="false" :loading="isLoadingButton" text="Gotowe" />
+            </Form>
           </div>
         </div>
-        <ButtonLoading :disable="!meta.valid ||
-          errorValue ||
-          !values.password ||
-          values.password.length === 0 ||
-          !values.name ||
-          values.name.length === 0 ||
-          !values.email ||
-          values.email.length === 0 ||
-          !values.confirmPassword ||
-          values.confirmPassword.length === 0
-          " isLoading="false" :loading="isLoadingButton" text="Zarejestruj się" />
-      </Form>
-      <div class="flex sm:flex-row flex-col w-full justify-center mt-10 pt-3 border-t-[1px] border-[#E6E8EA]">
-        <p class="text-des mr-2">Masz konto?</p>
-        <NuxtLink to="/"><span class="navigate">Zaloguj się</span></NuxtLink>
       </div>
     </div>
-  </div>
+  </NuxtLayout>
 </template>
 
 <script setup lang="ts">
 import * as Yup from "yup";
 import { useAuth } from "@/stores/useAuth";
+import { useUser } from "@/stores/useUser"
 import * as yup from "yup";
 import { Form, Field, useForm, ErrorMessage, useField } from "vee-validate";
-const axiosInstance = useNuxtApp().$axiosInstance;
 const auth = useAuth();
+const userState = useUser()
+const { user } = storeToRefs(userState)
 
 definePageMeta({
   middleware: "user",
 });
 
-const { isLoadingButton, errorValue } = storeToRefs(auth);
-
-const error = ref("") as any;
-const success = ref("") as any;
-const loginData = ref("") as any;
-
+const { isLoadingButton, errorValue, token, loggedIn, email } = storeToRefs(auth)
+const isQueryVerify = ref(false)
+const resentCodeText = ref("Wyślij ponownie")
+const router = useRouter()
 const typePassword = ref<string>("password");
 const typeConfirmPassword = ref<string>("password");
-
 const iconTypePassword = ref<string>("ph:eye");
 const iconTypeConfirmPassword = ref<string>("ph:eye");
 
@@ -99,44 +123,53 @@ const changeType = (typeName: string) => {
 };
 
 const schema = yup.object({
-  name: yup.string().test("valid-name", "Nieprawidłowe imię i nazwisko", (value) => {
-    if (!value) return true;
-    const nameRegex = /^[A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]+\s[A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]+$/;
-    return nameRegex.test(value);
-  }),
+  name: yup.string()
+    .test("valid-name", "Nieprawidłowe imię", (value) => {
+      if (!value) return true;
+      const nameRegex = /^[A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż\s]*$/u;
+      return nameRegex.test(value);
+    })
+    .max(20, "Imię nie może mieć więcej niż 20 znaków"),
+  surname: yup.string()
+    .test("valid-name", "Nieprawidłowe nazwisko", (value) => {
+      if (!value) return true;
+      const nameRegex = /^[A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż\s]*$/u;
+      return nameRegex.test(value);
+    }),
   email: yup.string().test("valid-email", "Nieprawidłowy adres e-mail", (value) => {
     if (!value || value === "") return true;
     const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
     return emailRegex.test(value);
   }),
+  confirmEmail: yup.string().oneOf([yup.ref("email")], "E-mail nie są identyczne"),
   password: yup
     .string()
     .test("valid-password", "Nieprawidłowe hasło", (value) => {
       if (!value || value === "") return true;
       if (!/[a-z]/.test(value)) {
         throw new yup.ValidationError(
-          "Hasło musi zawierać co najmniej jedną małą literę.",
+          "Hasło musi zawierać co najmniej jedną małą literę",
           null,
           "password"
         );
       }
       if (!/[A-Z]/.test(value)) {
         throw new yup.ValidationError(
-          "Hasło musi zawierać co najmniej jedną dużą literę.",
+          "Hasło musi zawierać co najmniej jedną dużą literę",
           null,
           "password"
         );
       }
       if (!/\d/.test(value)) {
         throw new yup.ValidationError(
-          "Hasło musi zawierać co najmniej jedną cyfrę.",
+          "Hasło musi zawierać co najmniej jedną cyfrę",
           null,
           "password"
         );
       }
       if (!/[ @$\\!%*?&()#<>^\-_=+;:"/'|[\]{}]/.test(value)) {
         throw new yup.ValidationError(
-          "Hasło musi zawierać co najmniej jeden znak specjalny.",
+          "Hasło musi zawierać co najmniej jeden znak specjalny",
           null,
           "password"
         );
@@ -144,25 +177,60 @@ const schema = yup.object({
 
       return true;
     })
-    .max(20, "Hasło nie może mieć więcej niż 20 znaków"),
+    .max(24, "Hasło nie może mieć więcej niż 24 znaki"),
 
   confirmPassword: yup.string().oneOf([yup.ref("password")], "Hasła nie są identyczne"),
 });
 
 const registerUser = async (values: any) => {
-  await new Promise((resolve) => setTimeout(resolve, 600));
   await auth.register(
     values.name,
+    values.surname,
     values.email,
-    values.invitationCode,
+    values.confirmEmail,
     values.password,
     values.confirmPassword
-  );
-};
-onMounted(() => {
-  auth.nullError();
-})
+  )
 
+}
+
+const verifyEmailAddress = async (values: any) => {
+  try {
+    await auth.verifyEmail(values.code, null)
+
+    setTimeout(async () => {
+      await userState.currentUser(token.value)
+      await userState.getUserSettings(token.value)
+      await userState.userPlan(token.value)
+      router.push("/panel")
+    }, 300)
+  } catch (error) {
+    console.error("Błąd podczas weryfikacji e-maila:", error)
+  }
+}
+
+const resentCode = async () => {
+  resentCodeText.value = "Wysłano"
+  await auth.sendNewCode()
+  setTimeout(() => {
+    resentCodeText.value = "Wyślij ponownie"
+  }, 1600)
+}
+
+onMounted(async () => {
+  auth.nullError()
+  if (router.currentRoute.value.query.email && router.currentRoute.value.query.verification_code) {
+    await auth.verifyEmail(router.currentRoute.value.query.verification_code, router.currentRoute.value.query.email)
+    setTimeout(async () => {
+      await userState.currentUser(token.value)
+      await userState.getUserSettings(token.value)
+      await userState.userPlan(token.value)
+    }, 200)
+    setTimeout(async () => {
+      router.push("/panel")
+    }, 600)
+  }
+})
 useSeoMeta({
   title: 'Power od quiz - rejestracja',
   ogTitle: 'Power od quiz - rejestracja',
@@ -170,7 +238,6 @@ useSeoMeta({
 })
 
 </script>
-
 <style scoped lang="scss">
 @import "@/assets/style/variables.scss";
 
@@ -191,7 +258,7 @@ useSeoMeta({
 @media only screen and (min-width: 880px) {
   .width-login {
     position: absolute;
-    width: 700px;
+    width: 620px;
     background: white;
     border-radius: 16px;
     padding: 55px;
