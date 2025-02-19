@@ -75,7 +75,7 @@
             </div>
             <Form @submit="verifyEmailAddress" @click="auth.nullError()" class="mt-6">
               <div class="flex flex-col sm:gap-[10px] mb-7 w-[220px]">
-                <InputBase name="code" placeholder="Kod weryfikacyjny" type="text" :hasError="errorValue" />
+                <InputBase name="code" placeholder="Kod weryfikacyjny" type="text" :hasError="errorValue?.message" />
               </div>
               <ButtonLoading :disable="false" isLoading="false" :loading="isLoadingButton" text="Gotowe" />
             </Form>
@@ -87,7 +87,6 @@
 </template>
 
 <script setup lang="ts">
-import * as Yup from "yup";
 import { useAuth } from "@/stores/useAuth";
 import { useUser } from "@/stores/useUser"
 import * as yup from "yup";
@@ -211,7 +210,7 @@ const verifyEmailAddress = async (values: any) => {
 
 const resentCode = async () => {
   resentCodeText.value = "Wysłano"
-  await auth.sendNewCode()
+  await auth.sendNewCode("rejestracja")
   setTimeout(() => {
     resentCodeText.value = "Wyślij ponownie"
   }, 1600)
@@ -232,8 +231,8 @@ onMounted(async () => {
   }
 })
 useSeoMeta({
-  title: 'Power od quiz - rejestracja',
-  ogTitle: 'Power od quiz - rejestracja',
+  title: 'Power of quiz - rejestracja',
+  ogTitle: 'Power of quiz - rejestracja',
   twitterCard: 'summary_large_image',
 })
 

@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia'
+import { defineStore } from 'pinia';
 import axios from 'axios';
 
 export const useAuth = defineStore('auth', {
@@ -8,21 +8,26 @@ export const useAuth = defineStore('auth', {
         token: null as any,
         email: null as any,
         isLoadingButton: false as boolean,
-        errorValue: null as any | null,
+        errorValue: null as any,
     }),
 
     persist: true,
 
     actions: {
         async login(email: string, password: string) {
+            const router = useRouter()
             const API_URL = useRuntimeConfig().public.API_URL;
             try {
                 this.isLoadingButton = true;
-                // await new Promise((resolve) => setTimeout(resolve, 500));
-                const res = await axios.post(`${API_URL}/login`, { email, password });
-                this.token = res.data.token
-                this.loggedIn = true
-                // window?.location?.reload()
+                const res = await axios.post(`${API_URL}/login`, { email, password });  
+                this.email = email
+                if (res.data.isVerified === true) {   
+                    this.token = res.data.token
+                    this.loggedIn = true
+                    router.push('/panel')
+                } else {
+                    router.push('/zweryfikuj-email')
+                }
             } catch (error: any) {
                 this.errorValue = error.response.data
                 this.isLoadingButton = false;
@@ -44,8 +49,7 @@ export const useAuth = defineStore('auth', {
             const API_URL = useRuntimeConfig().public.API_URL;
             try {
                 this.isLoadingButton = true;
-                // await new Promise((resolve) => setTimeout(resolve, 600));
-                const res = await axios.post(`${API_URL}/register`, { name, surname, email, confirmEmail, password, confirmPassword });
+                const res = await axios.post(`${API_URL}/register`, { name, surname, email, confirmEmail, password, confirmPassword, "page_name": "rejestracja", });
                 this.token = res.data.token
                 this.loggedIn = false
                 this.email = email
@@ -58,9 +62,8 @@ export const useAuth = defineStore('auth', {
             }
         },
 
-        async verifyEmail(code: any, email:any) {
+        async verifyEmail(code: any, email: any) {
             const API_URL = useRuntimeConfig().public.API_URL;
-            // await new Promise((resolve) => setTimeout(resolve, 600));
             const resData = {
                 "verification_code": code,
                 "email": email ? email : this.email
@@ -69,23 +72,28 @@ export const useAuth = defineStore('auth', {
                 this.isLoadingButton = true;
                 await new Promise((resolve) => setTimeout(resolve, 400));
                 const res = await axios.post(`${API_URL}/verify-email`, resData);
+                console.log(res)
+                this.token = res.data.token
                 this.loggedIn = true
+                window?.location?.reload()
                 this.isLoadingButton = false;
             }
             catch (error: any) {
                 this.isLoadingButton = false;
-                this.errorValue = error.response.data.message
+                this.errorValue = error.response.data
                 this.isLoadingButton = false;
 
             }
         },
 
-        async sendNewCode() {
+        async sendNewCode(pageName: any) {
             const API_URL = useRuntimeConfig().public.API_URL;
             const resData = {
-                "email": this.email
+                "email": this.email,
+                "page_name": pageName,
             }
             await axios.post(`${API_URL}/send-new-code`, resData);
-        }
+        },
     }
+
 })
