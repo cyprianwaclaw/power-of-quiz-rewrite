@@ -1,6 +1,7 @@
 <template>
   <div class="relative flex flex-col w-full">
-    <input v-on="handlers" :value="value" :type="type" :placeholder="placeholder" :label="label"  :class="[props.hasError ? 'isError' : '', props.customType === 'password' ? 'input-password' : '']"/>
+    <input v-on="handlers" :value="value" :type="type" :placeholder="placeholder" :label="label"
+      :class="[props.hasError ? 'isError' : '', props.customType === 'password' ? 'input-password' : '']" />
     <p v-if="props?.hasError && props?.hasError !== 'notShow'" class="text-red-500 text-[13px] bg-white mt-1">
       {{ props?.hasError }}
     </p>
@@ -89,7 +90,7 @@ input {
   font-weight: 400;
   transition: border-color 0.3s ease;
 
-    &:hover {
+  &:hover {
     border: 2px solid #d4d4d4;
   }
 
@@ -109,8 +110,9 @@ input {
     color: #d9d9d9;
   }
 }
+
 .input-password {
-   padding: 10px 56px 10px 18px !important;
+  padding: 10px 56px 10px 18px !important;
 }
 
 .isError {
@@ -119,6 +121,11 @@ input {
   &:focus {
     border: 2px solid $color-error;
     transition: border 0.3s ease-in, transform 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  }
+
+  &:hover{
+    border: 2px solid $color-error;
+    // transition: border 0.3s ease-in, transform 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
   }
 }
 
@@ -136,5 +143,4 @@ label {
   font-size: 15px;
   color: $input-border;
   transition: 0.3s ease;
-}
-</style>
+}</style>

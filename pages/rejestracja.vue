@@ -28,9 +28,9 @@
                 <div class="sm:flex gap-[10px]">
                   <div class="relative w-full">
                     <Icon :name="iconTypePassword" @click="changeType('password')"
-                      class="bg-white px-[10px] w-[50px] right-[8px] absolute z-50 top-[20px] text-[#b7b6b6] hover:text-[#5f5f5f] hover:duration-150 cursor-pointer"
+                      class=" bg-transparent px-[10px] w-[50px] right-[8px] top-[16px] absolute z-50  text-[#b7b6b6] hover:text-[#5f5f5f] hover:duration-150 cursor-pointer"
                       size="23" />
-                    <InputBase name="password" placeholder="Hasło" :type="typePassword" :hasError="errors?.password"
+                    <InputBase name="password" placeholder="Hasło" :type="typePassword" :hasError="errors?.password" customType="password"
                       class="mb-3 md:mb-0" />
                   </div>
                   <div class="relative w-full">
