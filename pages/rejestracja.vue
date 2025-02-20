@@ -36,7 +36,7 @@
                   <div class="relative w-full">
                     <!-- dsdsd -->
                     <Icon :name="iconTypeConfirmPassword" @click="changeType('confirmPassword')"
-                      class=" bg-white px-[10px] w-[50px] right-[8px] top-[18px] absolute z-50  text-[#b7b6b6] hover:text-[#5f5f5f] hover:duration-150 cursor-pointer"
+                      class=" bg-white px-[10px] w-[50px] right-[8px] top-[16px] absolute z-50  text-[#b7b6b6] hover:text-[#5f5f5f] hover:duration-150 cursor-pointer"
                       size="23" />
                     <InputBase name="confirmPassword" placeholder="Potwierdz hasło" :type="typeConfirmPassword"
                       :hasError="errors?.confirmPassword" class="mb-3 md:mb-0" />
