@@ -190,6 +190,7 @@ const sentVerificationCode = async (values: any) => {
     const res = await axios.post(`${API_URL}/reset-password-code`, {
       email: values.email
     })
+    email.value = values.email
     isLoadingButton.value = false
     isChangePassword.value = true
   } catch (error: any) {

@@ -28,7 +28,7 @@
             </div>
           </div>
           <div class="mt-[21px] pt-[21px] border-t border-gray-300">
-            <NuxtLink to="/panel/plan-premium" @click="showMenu" v-if="!hasPremium ? true : false"
+            <NuxtLink to="/panel/plan-premium" @click="showMenu" v-if="hasPremium ? true : false"
               class="flex place-items-center w-full justify-between mb-[10px]">
               <div class="flex place-items-center gap-[4px]">
                 <Icon name="fa:diamond" size="18" class="primary-color" />

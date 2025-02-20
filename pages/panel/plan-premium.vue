@@ -78,10 +78,18 @@ onMounted(async () => {
 })
 
 const goToPayment = async () => {
-    // window.open(router.resolve('/dsdd').href, '_blank')
-    await axiosInstance.post('/buy-plan', {
-        "plan": 3
-    })
+    try {
+        const res = await axiosInstance.post('/buy-plan', {
+            "plan": 3
+        })
+
+        const paymentsLink = res.data.data
+        window.open(paymentsLink, '_blank');
+
+    } catch (error: any) {
+        console.error("Payments error", error)
+    }
+
 
 }
 

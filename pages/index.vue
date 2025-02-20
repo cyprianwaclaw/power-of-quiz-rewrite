@@ -47,15 +47,17 @@
 </template>
 
 <script setup lang="ts">
-import * as Yup from "yup";
-import { Form } from "vee-validate";
 import { useAuth } from "@/stores/useAuth";
+import { useUser } from "@/stores/useUser"
+import * as yup from "yup";
+import { Form, Field, useForm, ErrorMessage, useField } from "vee-validate";
+const auth = useAuth();
+const userState = useUser()
+const { user } = storeToRefs(userState)
 
 definePageMeta({
   middleware: "user",
-});
-
-const auth = useAuth();
+})
 
 const { isLoadingButton, errorValue, token, loggedIn } = storeToRefs(auth);
 
@@ -72,7 +74,14 @@ const changeType = (typeName: string) => {
   }
 };
 const login = (values: any) => {
-  auth.login(values.email, values.password);
+  auth.login(values.email, values.password)
+
+  setTimeout(async () => {
+    await userState.currentUser(token.value)
+    await userState.getUserSettings(token.value)
+    await userState.userPlan(token.value)
+  }, 300)
+
 };
 onMounted(() => {
   auth.nullError()

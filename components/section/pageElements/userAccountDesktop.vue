@@ -20,8 +20,7 @@
             </div>
             <div v-if="router.currentRoute.value.query?.pageName === 'competition'">
                 <div v-if="router.currentRoute.value.query?.section === 'results'">
-                    <CardUserCompetition :competitions="userCompetition?.data" :plan="true" :isLoading="isLoading"
-                        :n="8" />
+                    <CardUserCompetition :competitions="userCompetition?.data" :plan="true" :isLoading="isLoading" :n="8" />
                     <SectionPagination :last_page="userCompetition?.pagination?.last_page"
                         :current_page="userCompetition?.pagination?.current_page" :isLoading="isLoading" />
 
@@ -65,6 +64,20 @@
                         :current_page="allPayouts?.pagination?.current_page" :isLoading="isLoading" />
                 </div>
             </div>
+
+            <div v-if="router.currentRoute.value.query?.pageName === 'invoices'" class="w-full flex shrink-0">
+                <div v-if="router.currentRoute.value.query?.section === 'null'" class="w-full">
+                    <CardPayments :payments="payments?.data.data" :n="14" :isLoading="isLoading" />
+                    <SectionPagination :last_page="payments?.pagination?.last_page"
+                        :current_page="payments?.pagination?.current_page" :isLoading="isLoading" />
+                </div>
+                <div v-else class="w-full">
+                    <!-- sdafdf
+                    <CardPayouts :payouts="allPayouts.payouts" :n="14" :isLoading="isLoading" />
+                    <SectionPagination :last_page="allPayouts?.pagination?.last_page"
+                        :current_page="allPayouts?.pagination?.current_page" :isLoading="isLoading" /> -->
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -82,6 +95,7 @@ const router = useRouter()
 const userQuizzes = ref() as any
 const competitionData = ref() as any
 const allPayouts = ref() as any
+const payments = ref() as any
 const userCompetition = ref() as any
 const isOpen = ref(false)
 const isWithdraw = ref(false)
@@ -136,6 +150,18 @@ const allButtonsArray = (routeName: any) => {
             },
         ]
     }
+    if (routeName == 'invoices') {
+        return [
+            {
+                title: "Wszystkie",
+                link: "null-invoices"
+            },
+            {
+                title: "Wyniki",
+                link: "results-invoices"
+            },
+        ]
+    }
 }
 
 const buttonsArray = ref([
@@ -164,24 +190,30 @@ onMounted(async () => {
 
     if (route.query.pageName == undefined) {
         router.push({ query: { pageName: 'quiz', section: 'null' } })
-            isLoading.value = false
-            isLoadingButton.value = false
+        isLoading.value = false
+        isLoadingButton.value = false
     }
     if (route.query.pageName == 'competition') {
         const res = await axiosInstance.get(`/user/competitions?${formatQueryString(route.query)}&page=${route.query.page}&per_page=${4}`);
         competitionData.value = res.data;
-            isLoading.value = false
-            isLoadingButton.value = false
+        isLoading.value = false
+        isLoadingButton.value = false
     }
     if (route.query.pageName == 'founds') {
         const res = await axiosInstance.get(`payouts?${formatQueryString(route.query)}`);
         allPayouts.value = res.data;
-            isLoading.value = false
-            isLoadingButton.value = false
+        isLoading.value = false
+        isLoadingButton.value = false
+    }
+    if (route.query.pageName == 'invoices') {
+        const res = await axiosInstance.get(`payments?${formatQueryString(route.query)}&page=${route.query.page}`);
+        payments.value = res.data
+        isLoading.value = false
+        isLoadingButton.value = false
     }
     else {
-            isLoading.value = false
-            isLoadingButton.value = false
+        isLoading.value = false
+        isLoadingButton.value = false
     }
 })
 
@@ -208,7 +240,15 @@ onBeforeRouteUpdate(async (to) => {
         const res = await axiosInstance.get(`/user/competitions?${formatQueryString(to.query)}&per_page=${8}`);
         userCompetition.value = res.data
     }
-    isLoading.value = false
+    if (to.query.pageName == 'invoices') {
+        console.log(to.query.page)
+        // & page=${ to.query.page }
+        const res = await axiosInstance.get(`payments?${formatQueryString(to.query)}`);
+        payments.value = res.data
+        // isLoading.value = false
+        // isLoadingButton.value = false
+    }
+    // isLoading.value = false
     if (to.query.pageName == undefined) {
         router.push({ query: { pageName: 'quiz', section: 'null' } });
     }
