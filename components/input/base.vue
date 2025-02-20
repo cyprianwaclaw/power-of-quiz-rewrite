@@ -1,6 +1,6 @@
 <template>
   <div class="relative flex flex-col w-full">
-    <input v-on="handlers" :value="value" :type="type" :placeholder="placeholder" :label="label"  :class="props.hasError ? 'isError' : null"  />
+    <input v-on="handlers" :value="value" :type="type" :placeholder="placeholder" :label="label"  :class="[props.hasError ? 'isError' : '', props.customType === 'password' ? 'input-password' : '']"/>
     <p v-if="props?.hasError && props?.hasError !== 'notShow'" class="text-red-500 text-[13px] bg-white mt-1">
       {{ props?.hasError }}
     </p>
@@ -20,6 +20,9 @@ const props = defineProps({
     type: Boolean || null,
   },
   type: {
+    type: String,
+  },
+  customType: {
     type: String,
   },
   icon: {
@@ -82,7 +85,7 @@ input {
   height: 55px;
   overflow: hidden;
   border-radius: 10px;
-  padding: 10px 18px !important;
+  padding: 10px 18px;
   font-weight: 400;
   transition: border-color 0.3s ease;
 
@@ -105,6 +108,9 @@ input {
     font-weight: 400;
     color: #d9d9d9;
   }
+}
+.input-password {
+   padding: 10px 56px 10px 18px !important;
 }
 
 .isError {
