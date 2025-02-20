@@ -1,7 +1,7 @@
 <template>
   <NuxtLayout name="auth">
-    <div class="auth-background" @click="auth.nullError()">
-      <div class="width-login sm:shaddow-effect">
+    <div  @click="auth.nullError()" class="auth-background">
+      <div class="width-login">
         <div v-if="router.currentRoute.value.query?.email && router.currentRoute.value.query?.verification_code">
             <Icon name="ph:check-circle-light" size="75" class="green"/>
             <p class="text-[22px] font-semibold mt-[8px]">Adres e-mail potwierdzony</p>
@@ -9,13 +9,15 @@
             <div class="w-[160px] mt-[21px]">
               <NuxtLink to="/"><p class="button-primary">Strona główna</p></NuxtLink>
             </div>
+            <!-- test1.png -->
           </div>
+          <!-- fixed -->
           <div v-else>
             <div v-if="loggedIn || token?.length ? false : true">
               <h2 class="mb-[19px] text-[28px] font-semibold">Rejestracja</h2>
             <Form @submit="registerUser" @click="auth.nullError()" :validation-schema="schema"
               v-slot="{ meta, values, errors }">
-              <div class="flex flex-col sm:gap-[10px] mb-7">
+              <div class="flex flex-col sm:gap-[10px] md:mb-7 mb-4">
                 <div class="sm:flex gap-[10px]">
                   <InputBase name="name" placeholder="Imię" type="text" :hasError="errors?.name" class="mb-3 md:mb-0" />
                   <InputBase name="surname" placeholder="Nazwisko" type="text" class="mb-3 md:mb-0"
@@ -59,7 +61,7 @@
                 " isLoading="false" :loading="isLoadingButton" text="Potwierdź adres e-mail" />
             </Form>
             <div
-              class="flex sm:flex-row flex-col w-full justify-start mt-9 pt-7 border-t-[1px] border-[#dddddd] gap-[6px]">
+              class="flex flex-row  w-full justify-start mt-9 pt-7 border-t-[1px] border-[#dddddd] gap-[6px]">
               <p class="text-[15px]">Masz już konto?</p>
               <NuxtLink to="/">
                 <p class="text-[15px] font-medium hover:underline primary-color">Zaloguj się</p>
@@ -243,26 +245,30 @@ useSeoMeta({
 @media only screen and (max-width: 880px) {
   .width-login {
     max-width: 500px;
-    position: relative;
-    top: 50%;
-    left: 50%;
-    width: 84%;
-    transform: translate(-50%, -50%);
+    // position: relative;
+    margin-top: 300px;
+    margin-bottom: 300px;
+    margin: 0 auto;
+    // margin-top: 320px !important;
+    // top: 1000%;
+    // left: 50%;
+    // width: 84%;
+    // transform: translate(-50%, -50%);
     background: white;
     border-radius: 16px;
-    padding: 28px;
+    padding: 35px;
   }
 }
 
 @media only screen and (min-width: 880px) {
   .width-login {
     position: absolute;
-    width: 620px;
+    width: 520px;
     background: white;
     border-radius: 16px;
-    padding: 55px;
+    padding: 46px;
     top: 50%;
-    left: 67%;
+    right: 0%;
     transform: translate(-50%, -50%);
   }
 }

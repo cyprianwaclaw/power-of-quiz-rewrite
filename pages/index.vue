@@ -18,9 +18,9 @@
               " />
             <div class="relative">
               <Icon :name="iconType" @click="changeType(loginType)"
-                class="bg-white px-[10px] w-[50px] right-[8px] absolute z-50 top-[20px] text-[#b7b6b6] hover:text-[#5f5f5f] hover:duration-150 cursor-pointer"
+                class="bg-transparent px-[10px] w-[50px] right-[8px] absolute z-50 top-[16px] text-[#b7b6b6] hover:text-[#5f5f5f] hover:duration-150 cursor-pointer"
                 size="23" />
-              <InputBase name="password" placeholder="Hasło" :type="loginType" :hasError="errorValue?.errors?.password
+              <InputBase name="password" placeholder="Hasło" :type="loginType"  customType="password" :hasError="errorValue?.errors?.password
                 ? errorValue?.errors?.password[0]
                 : errorValue?.errors?.notExist
                   ? 'notShow'
@@ -35,7 +35,7 @@
           </div>
           <ButtonLoading isLoading="false" :loading="isLoadingButton" text="Zaloguj się" />
         </Form>
-        <div class="flex sm:flex-row flex-col w-full justify-start mt-9 pt-7 border-t-[1px] border-[#dddddd] gap-[6px]">
+        <div class="flex flex-row w-full justify-start mt-9 pt-7 border-t-[1px] border-[#dddddd] gap-[6px]">
           <p class="text-[15px]">Nie masz konta?</p>
           <NuxtLink to="/rejestracja">
             <p class="text-[15px] font-medium hover:underline primary-color">Zarejestruj się</p>
@@ -111,7 +111,7 @@ useSeoMeta({
     transform: translate(-50%, -50%);
     background: white;
     border-radius: 16px;
-    padding: 55px;
+    padding: 35px;
   }
 }
 

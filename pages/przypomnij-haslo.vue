@@ -29,16 +29,16 @@
                 <div class="flex flex-col gap-[10px] -mt-[28px] mb-8">
                   <div class="relative w-full">
                     <Icon :name="iconTypePassword" @click="changeType('password')"
-                      class="bg-white px-[10px] w-[50px] right-[8px] absolute z-50 top-[20px] text-[#b7b6b6] hover:text-[#5f5f5f] hover:duration-150 cursor-pointer"
+                      class="bg-transparent px-[10px] w-[50px] right-[8px] absolute z-50 top-[16px] text-[#b7b6b6] hover:text-[#5f5f5f] hover:duration-150 cursor-pointer"
                       size="23" />
-                    <InputBase name="password" placeholder="Nowe hasło" :type="typePassword"
+                    <InputBase name="password" placeholder="Nowe hasło" :type="typePassword"  customType="password"
                       :hasError="errors?.password" />
                   </div>
                   <div class="relative w-full">
                     <Icon :name="iconTypeConfirmPassword" @click="changeType('confirmPassword')"
-                      class=" bg-white px-[10px] w-[50px] right-[8px] top-[20px] absolute z-50  text-[#b7b6b6] hover:text-[#5f5f5f] hover:duration-150 cursor-pointer"
+                      class=" bg-transparent px-[10px] w-[50px] right-[8px] top-[16px] absolute z-50  text-[#b7b6b6] hover:text-[#5f5f5f] hover:duration-150 cursor-pointer"
                       size="23" />
-                    <InputBase name="confirmPassword" placeholder="Powtórz hasło" :type="typeConfirmPassword"
+                    <InputBase name="confirmPassword" placeholder="Powtórz hasło" :type="typeConfirmPassword"  customType="password"
                       :hasError="errors?.confirmPassword" />
                   </div>
                 </div>
@@ -54,13 +54,13 @@
               <ButtonLoading isLoading="false" :loading="isLoadingButton" text="Dalej" />
             </Form>
             <div
-              class="flex sm:flex-row flex-col w-full justify-start mt-12 pt-8 border-t-[1px] border-[#dddddd] gap-[6px]">
+              class="flex flex-row w-full justify-start mt-12 pt-8 border-t-[1px] border-[#dddddd] gap-[6px]">
               <p class="text-[15px]">Nie masz konta?</p>
               <NuxtLink to="/rejestracja">
                 <p class="text-[15px] font-medium hover:underline primary-color">Zarejestruj się</p>
               </NuxtLink>
             </div>
-            <div class="flex sm:flex-row flex-col w-full justify-start mt-2 gap-[6px]">
+            <div class="flex flex-row w-full justify-start mt-2 gap-[6px]">
               <p class="text-[15px]">Masz już konto?</p>
               <NuxtLink to="/">
                 <p class="text-[15px] font-medium hover:underline primary-color">Zaloguj się</p>
@@ -72,7 +72,6 @@
     </div>
   </NuxtLayout>
 </template>
-<!-- testfdsfdsfdfd112@example.comr -->
 <script setup lang="ts">
 import axios from 'axios'
 import * as yup from "yup";
@@ -98,45 +97,45 @@ const API_URL = useRuntimeConfig().public.API_URL
 
 const changePasswordSchema = yup.object({
   verification_code: yup.string().required("Wpisz kod"),
-  // password: yup
-  //   .string()
-  //   .required("Wpisz nowe hasło")
-  //   .test("valid-password", "Nieprawidłowe hasło", (value) => {
-  //     if (!value || value === "") return true;
-  //     if (!/[a-z]/.test(value)) {
-  //       throw new yup.ValidationError(
-  //         "Hasło musi zawierać co najmniej jedną małą literę",
-  //         null,
-  //         "password"
-  //       );
-  //     }
-  //     if (!/[A-Z]/.test(value)) {
-  //       throw new yup.ValidationError(
-  //         "Hasło musi zawierać co najmniej jedną dużą literę",
-  //         null,
-  //         "password"
-  //       );
-  //     }
-  //     if (!/\d/.test(value)) {
-  //       throw new yup.ValidationError(
-  //         "Hasło musi zawierać co najmniej jedną cyfrę",
-  //         null,
-  //         "password"
-  //       );
-  //     }
-  //     if (!/[ @$\\!%*?&()#<>^\-_=+;:"/'|[\]{}]/.test(value)) {
-  //       throw new yup.ValidationError(
-  //         "Hasło musi zawierać co najmniej jeden znak specjalny",
-  //         null,
-  //         "password"
-  //       );
-  //     }
+  password: yup
+    .string()
+    .required("Wpisz nowe hasło")
+    .test("valid-password", "Nieprawidłowe hasło", (value) => {
+      if (!value || value === "") return true;
+      if (!/[a-z]/.test(value)) {
+        throw new yup.ValidationError(
+          "Hasło musi zawierać co najmniej jedną małą literę",
+          null,
+          "password"
+        );
+      }
+      if (!/[A-Z]/.test(value)) {
+        throw new yup.ValidationError(
+          "Hasło musi zawierać co najmniej jedną dużą literę",
+          null,
+          "password"
+        );
+      }
+      if (!/\d/.test(value)) {
+        throw new yup.ValidationError(
+          "Hasło musi zawierać co najmniej jedną cyfrę",
+          null,
+          "password"
+        );
+      }
+      if (!/[ @$\\!%*?&()#<>^\-_=+;:"/'|[\]{}]/.test(value)) {
+        throw new yup.ValidationError(
+          "Hasło musi zawierać co najmniej jeden znak specjalny",
+          null,
+          "password"
+        );
+      }
 
-  //     return true;
-  //   })
-  //   .max(24, "Hasło nie może mieć więcej niż 24 znaki"),
+      return true;
+    })
+    .max(24, "Hasło nie może mieć więcej niż 24 znaki"),
 
-  // confirmPassword: yup.string().required("Powtórz hasło").oneOf([yup.ref("password")], "Hasła nie są identyczne"),
+  confirmPassword: yup.string().required("Powtórz hasło").oneOf([yup.ref("password")], "Hasła nie są identyczne"),
 })
 
 const changePassword = async (values: any) => {
@@ -240,7 +239,7 @@ useSeoMeta({
     transform: translate(-50%, -50%);
     background: white;
     border-radius: 16px;
-    padding: 55px;
+    padding: 35px;
   }
 }
 
