@@ -1,20 +1,26 @@
 <template>
   <div class="w-full">
-    <NavUser />
+    <div v-if="!['rejestracja', 'przypomnij-hasło', 'index'].includes(router?.currentRoute.value.name)">
+      <NavUser />
+    </div>
     <div class="min-h-screen page-background own-container">
       <slot />
     </div>
+    <div v-if="!['rejestracja', 'przypomnij-hasło', 'index'].includes(router?.currentRoute.value.name)">
+
     <div class="md:hidden fixed bottom-0 z-30 w-full">
       <NavBottom />
     </div>
     <div class="hidden md:flex">
       <NavBottomDesktop />
     </div>
+    </div>
+
   </div>
 </template>
 
 <script setup lang="ts">
-const router = useRouter();
+const router = useRouter() as any
 
 // const isQuizGamePage = router.currentRoute.value.matched[0].name === "panel-quiz-id" ? true : false;
 </script>

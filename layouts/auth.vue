@@ -4,11 +4,11 @@
         <div class="min-h-screen page-background own-container">
             <slot />
         </div>
-        <div class="md:hidden fixed bottom-0 z-30 w-full">
+        <!-- <div class="md:hidden fixed bottom-0 z-30 w-full">
             <NavBottom />
-        </div>
-        <div class="hidden md:flex">
-        </div>
+        </div> -->
+        <!-- <div class="hidden md:flex">
+        </div> -->
     </div>
 </template>
 <script setup lang="ts">
