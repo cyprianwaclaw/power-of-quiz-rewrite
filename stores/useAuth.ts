@@ -24,6 +24,7 @@ export const useAuth = defineStore('auth', {
                 if (res.data.isVerified === true) {   
                     this.token = res.data.token
                     this.loggedIn = true
+                    window.location.reload()
                     router.push('/panel')
                 } else {
                     router.push('/zweryfikuj-email')
@@ -37,6 +38,7 @@ export const useAuth = defineStore('auth', {
             const router = useRouter()
             this.token = null
             this.loggedIn = false
+            window.location.reload()
             router.push('/')
         },
 

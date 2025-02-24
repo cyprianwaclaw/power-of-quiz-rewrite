@@ -203,6 +203,7 @@ const verifyEmailAddress = async (values: any) => {
       await userState.currentUser(token.value)
       await userState.getUserSettings(token.value)
       await userState.userPlan(token.value)
+      window.location.reload()
       router.push("/panel")
     }, 300)
   } catch (error) {
