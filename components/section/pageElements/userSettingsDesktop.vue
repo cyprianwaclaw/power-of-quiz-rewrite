@@ -1,13 +1,13 @@
 <template>
     <ModalUpdateSettings :modalActive="isAlert" @close="showAlert()" />
     <ModalChangeImage :modalActive="isModal" @close="isModalShow1" />
-    <h2 class="text-3xl flex place-items-center font-medium cursor-default">
+    <h2 class="text-3xl flex place-items-center font-medium cursor-default select-none">
         Ustawienia
     </h2>
     <div class="mt-[28px]">
         <ButtonLink :array="buttonsArray" query="pageName" :isLoading="isLoadingButtonSkeleton" :n="4" />
     </div>
-    <div class="flex gap-[21px]">
+    <div class="flex gap-[21px] select-none">
         <div class="w-[180px]">
             <ButtonLink :array="allButtonsArray(router.currentRoute.value.query?.pageName)" :onlyText="true" query="section"
                 :n="3" :isLoading="isLoadingButtonSkeleton" />
@@ -33,8 +33,8 @@
                     </div>
                     <div class=" ml-[12px] mb-[52px] mt-6" @click="handleClick()">
                         <Form @submit="updatePersonal" :initial-values="settings.personal"
-                            class=" flex gap-[16px] flex-col w-[550px]">
-                            <div class="flex gap-[16px]">
+                            class=" flex gap-[10px] flex-col w-[550px]">
+                            <div class="flex gap-[10px]">
                                 <InputSettings name="name" placeholder="Imię" :hasError="showError?.name" />
                                 <InputSettings name="surname" placeholder="Nazwisko" :hasError="showError?.surname" />
                             </div>
@@ -49,9 +49,9 @@
                 </div>
                 <!-- Change email adress -->
                 <div v-if="router.currentRoute.value.query?.section === 'true'" class="px-[12px]">
-                    <p class="font-semibold text-[20px] mt-[14px] mb-3.5">Zmień adres e-mail</p>
+                    <p class="font-semibold text-[20px] mt-[14px] mb-2">Zmień adres e-mail</p>
                     <div class="white-retangle" @click="handleClick()">
-                        <Form @submit="updatePersonal1" class=" flex gap-[16px] flex-col w-[550px]">
+                        <Form @submit="updatePersonal1" class=" flex gap-[10px] flex-col w-[550px]">
                             <InputSettings name="company_name" placeholder="Nowy adres e-mail"
                                 :hasError="showError?.company_name || showError?.errors?.company_name?.message" />
                             <InputSettings name="nip" placeholder="Powtórz e-mail" :hasError="showError?.nip" />
@@ -66,7 +66,7 @@
                 <!-- Change current password -->
                 <div v-if="router.currentRoute.value.query?.section === 'false'" class="px-[12px]" @click="handleClick">
                     <!-- {{ showError }} -->
-                    <p class="font-semibold text-[20px] mt-[14px] mb-3.5">Zmień hasło</p>
+                    <p class="font-semibold text-[20px] mt-[14px] mb-2">Zmień hasło</p>
                     <div class="white-retangle " @click="handleClick()">
                         <Form @submit="updatePassword" class=" flex gap-[10px] flex-col w-[550px]">
                             <InputPassword name="current_password" placeholder="Aktualne hasło"
@@ -98,13 +98,13 @@
                         class=" flex gap-[10px] flex-col mt-[3px]">
                         <InputSettings name="company_name" placeholder="Nazwa działalności"
                             :hasError="showError?.company_name || showError?.errors?.company_name?.message" />
-                        <div class="flex gap-[16px] mt-[7px]">
+                        <div class="flex gap-[10px]">
                             <InputSettings name="nip" placeholder="Numer NIP" :hasError="showError?.nip" />
                             <InputSettings name="regon" placeholder="Numer REGON"
                                 :hasError="showError?.regon || showError?.errors?.regon?.message" />
                         </div>
                         <p class="mt-10 mb-1 text-[20px] font-medium">Siedziba firmy</p>
-                        <div class="flex gap-[16px] mt-[7px]">
+                        <div class="flex gap-[10px] mt-[7px]">
 
                             <InputSettings name="postcode" placeholder="Kod pocztowy"
                                 :hasError="showError?.postcode || showError?.errors?.address_postcode?.message" />
@@ -114,7 +114,7 @@
                         </div>
                         <InputSettings name="street" placeholder="Ulica"
                             :hasError="showError?.street || showError?.errors?.street?.message" />
-                        <div class="flex gap-[16px] mt-[7px] w-full">
+                        <div class="flex gap-[10px]  w-full">
                             <InputSettings name="building_number" placeholder="Numer budynku"
                                 :hasError="showError?.building_number || showError?.errors?.building_number?.message" />
                             <InputSettings name="house_number" placeholder="Numer lokalu"
@@ -135,7 +135,7 @@
                 <div class="white-retangle px-[21px] -mt-1" @click="handleClick()">
                     <p class="mb-6 text-[20px] font-medium">Dane bankowe</p>
                     <Form @submit="updateFinancial" :initial-values="settings.financial"
-                        class=" flex flex-col mt-[3px] gap-[14px]">
+                        class=" flex flex-col mt-[3px] gap-[10px]">
                         <InputSettings name="iban" placeholder="Numer IBAN"
                             :hasError="showError?.iban || showError?.errors?.iban?.message" />
                         <InputSettings name="bank_name" placeholder="Nazwa banku" :hasError="showError?.bank_name" />
@@ -325,6 +325,8 @@ const schemaChangePassword = yup.object().shape({
 
     confirm_password: yup.string().required("Powtórz hasło").oneOf([yup.ref("password")], "Hasła nie zgadzają się"),
 })
+
+
 const schemaPersonal = yup.object().shape({
     name: yup
         .string()
@@ -397,7 +399,6 @@ const updatePassword = (values: any, actions: any) => {
         schemaChangePassword.validate(values, { abortEarly: false })
             .then(async (validData) => {
                 try {
-                    console.log(validData)
                     const res = await axiosInstance.post('/change-password', validData);
                     showAlert()
                     actions.setValues({
@@ -425,14 +426,6 @@ const updatePassword = (values: any, actions: any) => {
 
 const mappedSettingsData = () => {
     return {
-        // "company_name": settings.value?.company?.name,
-        // "nip": settings.value.company.nip,
-        // "regon": settings.value.company.regon,
-        // "postcode": settings.value.company.address.postcode,
-        // "city": settings.value.company.address.city,
-        // "street": settings.value.company.address.street,
-        // "building_number": settings.value.company.address.building_number,
-        // "house_number": settings.value.company.address.house_number,
         "company_name": settings.value?.company?.name,
         "nip": settings.value?.company?.nip,
         "regon": settings.value?.company?.regon,
