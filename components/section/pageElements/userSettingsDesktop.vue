@@ -47,40 +47,58 @@
                         </Form>
                     </div>
                 </div>
+
+
                 <!-- Change email adress -->
-                <div v-if="router.currentRoute.value.query?.section === 'true'" class="px-[12px]">
-                    <p class="font-semibold text-[20px] mt-[14px] mb-2">Zmień adres e-mail</p>
-                    <div class="white-retangle" @click="handleClick()">
-                        <Form @submit="updatePersonal1" class=" flex gap-[10px] flex-col w-[550px]">
-                            <InputSettings name="company_name" placeholder="Nowy adres e-mail"
-                                :hasError="showError?.company_name || showError?.errors?.company_name?.message" />
-                            <InputSettings name="nip" placeholder="Powtórz e-mail" :hasError="showError?.nip" />
-                            <div class="flex w-full justify-start mt-4 mb-5">
-                                <div class="w-[140px]">
-                                    <ButtonLoading isLoading="false" :loading="isLoadingButton" text="Dalej" />
+                <div v-if="router.currentRoute.value.query?.section === 'true'" class="px-[12px]" @click="handleClick()">
+                    <p class="font-semibold text-[20px] mt-[12px] mb-2">Zmień adres e-mail</p>
+                    <div class="white-retangle">
+                        <div v-if="!isDataChangeEmail?.success">
+                            <Form @submit="sentChangeEmailCode" class=" flex gap-[10px] flex-col w-[550px]">
+                                <InputSettings name="new_email" placeholder="Nowy adres e-mail"
+                                    :hasError="showError?.new_email ? showError?.new_email : false || isDataChangeEmailError?.message" />
+                                <InputSettings name="confirm_email" placeholder="Powtórz e-mail"
+                                    :hasError="showError?.confirm_email ? showError?.confirm_email : false" />
+                                <div class="flex w-full justify-start mt-4 mb-5">
+                                    <div class="w-[140px]">
+                                        <ButtonLoading isLoading="false" :loading="isLoadingButton" text="Dalej" />
+                                    </div>
                                 </div>
+                            </Form>
+                        </div>
+                        <div v-else>
+                            <div class="flex w-[500px] justify-between mb-[24px] -mt-[6px]">
+                                <p class="text-[16px] font-medium w-[300px]">Wpisz kod, który został wysłany na nowy adres
+                                    e-mail</p>
+                                <p class="text-[15px]"
+                                    :class="resentCodeText == 'Wyślij ponownie' ? ' hover:underline primary-color cursor-pointer' : ' font-medium text-[#21a67a]'"
+                                    @click="resentCode()">{{ resentCodeText }}</p>
                             </div>
-                        </Form>
+                            <Form @submit="changeEmail" class=" flex gap-[10px] flex-col w-[220px]">
+                                <InputSettings name="code" placeholder="Kod weryfikacyjny"
+                                    :hasError="showError?.data?.messageError ? showError?.data?.messageError : false" />
+                                <div class="flex w-full justify-start mt-4 mb-5">
+                                    <div class="w-[140px]">
+                                        <ButtonLoading isLoading="false" :loading="isLoadingButton" text="Gotowe" />
+                                    </div>
+                                </div>
+                            </Form>
+                        </div>
                     </div>
                 </div>
+
+
                 <!-- Change current password -->
                 <div v-if="router.currentRoute.value.query?.section === 'false'" class="px-[12px]" @click="handleClick">
-                    <!-- {{ showError }} -->
                     <p class="font-semibold text-[20px] mt-[14px] mb-2">Zmień hasło</p>
                     <div class="white-retangle " @click="handleClick()">
                         <Form @submit="updatePassword" class=" flex gap-[10px] flex-col w-[550px]">
                             <InputPassword name="current_password" placeholder="Aktualne hasło"
-                                :hasError="
-                                showError?.current_password ? showError?.current_password : false || showError?.data?.messageError"
-                                 />
+                                :hasError="showError?.current_password ? showError?.current_password : false || showError?.data?.messageError" />
                             <InputPassword name="password" placeholder="Nowe hasło"
-                                :hasError="
-                                 showError?.password ? showError?.password : false"
-                                />
+                                :hasError="showError?.password ? showError?.password : false" />
                             <InputPassword name="confirm_password" placeholder="Powtórz hasło"
-                                :hasError="
-                                  showError?.confirm_password ? showError?.confirm_password : false"
-                                 />
+                                :hasError="showError?.confirm_password ? showError?.confirm_password : false" />
                             <div class="flex w-full justify-start mt-4 mb-5">
                                 <div class="w-[140px]">
                                     <ButtonLoading isLoading="false" :loading="isLoadingButtonPassword" text="Zmień" />
@@ -155,20 +173,22 @@
     </div>
 </template>
 <script lang="ts" setup>
-import { storeToRefs } from "pinia"
-import * as yup from "yup"
-import { Form } from "vee-validate"
+import { useAuth } from "@/stores/useAuth";
 import { useUser } from "@/stores/useUser"
+import * as yup from "yup";
+import { Form, Field, useForm, ErrorMessage, useField } from "vee-validate";
+const auth = useAuth();
+const { token } = storeToRefs(auth)
 const axiosInstance = useNuxtApp().$axiosInstance as any
 
-
 const userState = useUser()
-const { settings, user } = storeToRefs(userState) as any;
+const { settings, user, changeEmailData, isDataChangeEmail, isDataChangeEmailError } = storeToRefs(userState) as any;
 
 
 const route = useRoute()
 const isLoading = ref(true)
 const isLoadingButtonSkeleton = ref(true)
+const resentCodeText = ref("Wyślij ponownie")
 const router = useRouter()
 const userQuizzes = ref() as any
 // const competitionData = ref() as any
@@ -187,6 +207,8 @@ const avatar = ref(user.value.avatar) as any
 
 const handleClick = () => {
     showError.value = false
+    isDataChangeEmailError.value = null
+
 }
 
 const isModal = ref(false)
@@ -212,9 +234,6 @@ const isModalShow1 = async (value: any) => {
     }
 }
 
-const updatePersonal1 = () => {
-    console.log('test')
-}
 
 const isAlert = ref(false)
 const showAlert = () => {
@@ -392,6 +411,69 @@ const updatePersonal = async (values: any) => {
     }
 
 }
+const schemaChangeEmail = yup.object().shape({
+
+    new_email: yup.string().required("Wpisz nowy adres e-mail").test("valid-email", "Nieprawidłowy adres e-mail", (value) => {
+        if (!value || value === "") return true;
+        const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+        return emailRegex.test(value);
+    }),
+    confirm_email: yup.string().required("Powtórz adres e-mail").oneOf([yup.ref("new_email")], "E-mail nie są identyczne"),
+})
+
+
+const sentChangeEmailCode = (values: any, actions: any) => {
+    isLoadingButton.value = true
+    setTimeout(async () => {
+        schemaChangeEmail.validate(values, { abortEarly: false })
+            .then(async (validData) => {
+                isLoadingButton.value = true
+                await userState.sendNewCodeChangeEmail("change-email", token.value, validData?.new_email)
+                changeEmailData.value = validData?.new_email
+                isLoadingButton.value = false
+            })
+            .catch((err) => {
+                if (err.inner) {
+                    showError.value = err.inner.reduce((acc: any, error: any) => {
+                        if (!acc[error.path]) {
+                            acc[error.path] = error.message
+                        }
+                        return acc;
+                    }, {})
+                }
+            });
+        isLoadingButton.value = false
+    }, 600)
+}
+
+
+const resentCode = async () => {
+    resentCodeText.value = "Wysłano"
+    await userState.sendNewCodeChangeEmail("change-email", token.value, changeEmailData.value)
+    setTimeout(() => {
+        resentCodeText.value = "Wyślij ponownie"
+    }, 1600)
+}
+
+const changeEmail = async (values: any) => {
+
+    try {
+        const res = await axiosInstance.post('/change-email', {
+            new_email: changeEmailData.value,
+            confirm_email: changeEmailData.value,
+            code: values.code,
+        })
+        showAlert()
+        await userState.currentUser(token.value)
+        isDataChangeEmail.value = null
+        changeEmailData.value = null
+        isDataChangeEmailError.value = null
+
+    } catch (error: any) {
+        showError.value = error.response
+    }
+}
+
 
 const updatePassword = (values: any, actions: any) => {
     isLoadingButtonPassword.value = true
@@ -578,13 +660,16 @@ const updateFinancial = async (values: any) => {
 
 
 onMounted(async () => {
+    isDataChangeEmail.value = null
+    changeEmailData.value = null
+    isDataChangeEmailError.value = null
 
     if (route.query.pageName == undefined) {
         router.push({ query: { pageName: 'profile', section: 'null' } })
     }
 
-        isLoading.value = false
-        isLoadingButtonSkeleton.value = false
+    isLoading.value = false
+    isLoadingButtonSkeleton.value = false
 })
 
 

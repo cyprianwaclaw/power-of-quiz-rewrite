@@ -6,10 +6,14 @@ export const useUser = defineStore('user', {
         user: null as any,
         settings: null as any,
         hasPremium: null as any,
+        changeEmailData: null as any,
+        isDataChangeEmail: null as any,
+        isDataChangeEmailError: null as any
+
     }),
 
     persist: true,
-    
+
     actions: {
         async currentUser(token: any) {
             const API_URL = useRuntimeConfig().public.API_URL;
@@ -45,9 +49,34 @@ export const useUser = defineStore('user', {
                     "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json",
                 }
+                //    'send-new-code-change-email'
             });
             this.hasPremium = res.data
 
+        },
+
+        async sendNewCodeChangeEmail(pageName: string, token: string, email: string) {
+            try {
+                const API_URL = useRuntimeConfig().public.API_URL;
+                const resData = { email, page_name: pageName };
+
+             const res =   await axios.post(`${API_URL}/send-new-code-change-email`, resData, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    }
+                })
+              this.isDataChangeEmail = res.data
+            } catch (error:any) {
+                // this.error = error.response.data
+                this.isDataChangeEmailError = error.response.data
+
+
+                // console.error("Błąd podczas wysyłania emaila:", error);
+            }
         }
+
+
+
     }
 });
