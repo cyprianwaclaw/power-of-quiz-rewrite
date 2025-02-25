@@ -6,9 +6,9 @@
       class="absolute z-10 top-[16px] right-[21px] text-[#b7b6b6] hover:text-[#878787] hover:duration-150 cursor-pointer"
       size="23" /> -->
     <Icon :name="iconType" @click="changeType(loginType)"
-      class="bg-transparent px-[10px] w-[50px] right-[8px] absolute z-50 top-[14px] text-[#b7b6b6] hover:text-[#5f5f5f] hover:duration-150 cursor-pointer"
+      class="bg-transparent px-[10px] w-[50px] right-[8px] absolute z-50 top-[13px] text-[#b7b6b6] hover:text-[#5f5f5f] hover:duration-150 cursor-pointer"
       size="23" />
-    <p v-if="props?.hasError" class="text-[#c22b3a] text-[13px] bg-white mt-1">
+    <p v-if="props?.hasError" class="text-[#ef142a] text-[13px] bg-white mt-1">
       {{ props?.hasError }}
     </p>
   </div>
@@ -88,7 +88,7 @@ const handlers = computed(() => {
 
 input {
   background-color: #ECECEC;
-  // padding: 1px 160px;
+  padding: 1px 160px;
   width: 100%;
   color: #211f1f;
   font-size: 16px;
@@ -132,6 +132,13 @@ input {
   color: $color-error !important;
   letter-spacing: 0.17px;
   font-weight: 400;
+
+    &::placeholder {
+    letter-spacing: 0.17px;
+    font-size: 16px;
+    font-weight: 400;
+   color: $color-error !important;
+  }
 }
 
 label {
