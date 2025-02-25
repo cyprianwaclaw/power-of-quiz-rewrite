@@ -64,16 +64,23 @@
                     </div>
                 </div>
                 <!-- Change current password -->
-                <div v-if="router.currentRoute.value.query?.section === 'false'" class="px-[12px]">
+                <div v-if="router.currentRoute.value.query?.section === 'false'" class="px-[12px]" @click="handleClick">
+                    <!-- {{ showError }} -->
                     <p class="font-semibold text-[20px] mt-[14px] mb-3.5">Zmień hasło</p>
                     <div class="white-retangle " @click="handleClick()">
-                        <Form @submit="updatePassword" class=" flex gap-[12px] flex-col w-[550px]">
+                        <Form @submit="updatePassword" class=" flex gap-[10px] flex-col w-[550px]">
                             <InputPassword name="current_password" placeholder="Aktualne hasło"
-                                :hasError="showError?.errors?.current_password ? showError?.errors?.current_password[0] : false || showError?.current_password" />
-                            <InputPassword name="new_password" placeholder="Nowe hasło"
-                                :hasError="showError?.errors?.new_password ? showError?.errors?.new_password[0] : false || showError?.new_password" />
+                                :hasError="
+                                showError?.current_password ? showError?.current_password : false || showError?.data?.messageError"
+                                 />
+                            <InputPassword name="password" placeholder="Nowe hasło"
+                                :hasError="
+                                 showError?.password ? showError?.password : false"
+                                />
                             <InputPassword name="confirm_password" placeholder="Powtórz hasło"
-                                :hasError="showError?.errors?.confirm_password ? showError?.errors?.confirm_password[0] : false || showError?.confirm_password" />
+                                :hasError="
+                                  showError?.confirm_password ? showError?.confirm_password : false"
+                                 />
                             <div class="flex w-full justify-start mt-4 mb-5">
                                 <div class="w-[140px]">
                                     <ButtonLoading isLoading="false" :loading="isLoadingButtonPassword" text="Zmień" />
@@ -278,7 +285,7 @@ const schemaChangePassword = yup.object().shape({
     current_password: yup
         .string()
         .required("Wpisz aktualne hasło"),
-    new_password: yup
+    password: yup
         .string()
         .required("Wpisz nowe hasło")
         .test("valid-password", "Nieprawidłowe hasło", (value) => {
@@ -287,28 +294,28 @@ const schemaChangePassword = yup.object().shape({
                 throw new yup.ValidationError(
                     "Hasło musi zawierać co najmniej jedną małą literę.",
                     null,
-                    "new_password"
+                    "password"
                 );
             }
             if (!/[A-Z]/.test(value)) {
                 throw new yup.ValidationError(
                     "Hasło musi zawierać co najmniej jedną dużą literę.",
                     null,
-                    "new_password"
+                    "password"
                 );
             }
             if (!/\d/.test(value)) {
                 throw new yup.ValidationError(
                     "Hasło musi zawierać co najmniej jedną cyfrę.",
                     null,
-                    "new_password"
+                    "password"
                 );
             }
             if (!/[ @$\\!%*?&()#<>^\-_=+;:"/'|[\]{}]/.test(value)) {
                 throw new yup.ValidationError(
                     "Hasło musi zawierać co najmniej jeden znak specjalny.",
                     null,
-                    "new_password"
+                    "password"
                 );
             }
 
@@ -316,7 +323,7 @@ const schemaChangePassword = yup.object().shape({
         })
         .max(20, "Hasło nie może mieć więcej niż 20 znaków"),
 
-    confirm_password: yup.string().required("Powtórz hasło").oneOf([yup.ref("new_password")], "Hasła nie zgadzają się"),
+    confirm_password: yup.string().required("Powtórz hasło").oneOf([yup.ref("password")], "Hasła nie zgadzają się"),
 })
 const schemaPersonal = yup.object().shape({
     name: yup
@@ -390,15 +397,16 @@ const updatePassword = (values: any, actions: any) => {
         schemaChangePassword.validate(values, { abortEarly: false })
             .then(async (validData) => {
                 try {
-                    const res = await axiosInstance.post('/user/settings/password', validData);
+                    console.log(validData)
+                    const res = await axiosInstance.post('/change-password', validData);
                     showAlert()
                     actions.setValues({
                         current_password: '',
-                        new_password: '',
+                        password: '',
                         confirm_password: ''
                     })
                 } catch (error: any) {
-                    showError.value = error.response.data
+                    showError.value = error.response
                 }
             })
             .catch((err) => {

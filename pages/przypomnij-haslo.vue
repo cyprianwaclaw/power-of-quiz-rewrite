@@ -19,8 +19,7 @@
               <div class="flex flex-col gap-[10px]">
                 <div class="flex justify-between">
                   <div class="flex flex-col sm:gap-[10px] mb-7 w-[150px]">
-                    <InputBase name="verification_code" placeholder="Kod"
-                      :hasError="errors?.code || errorValue" />
+                    <InputBase name="verification_code" placeholder="Kod" :hasError="errors?.code || errorValue" />
                   </div>
                   <p class="text-[15px] pt-[21px]"
                     :class="resentCodeText == 'Wyślij ponownie' ? ' hover:underline primary-color cursor-pointer' : ' font-medium text-[#21a67a]'"
@@ -31,15 +30,15 @@
                     <Icon :name="iconTypePassword" @click="changeType('password')"
                       class="bg-transparent px-[10px] w-[50px] right-[8px] absolute z-50 top-[16px] text-[#b7b6b6] hover:text-[#5f5f5f] hover:duration-150 cursor-pointer"
                       size="23" />
-                    <InputBase name="password" placeholder="Nowe hasło" :type="typePassword"  customType="password"
+                    <InputBase name="password" placeholder="Nowe hasło" :type="typePassword" customType="password"
                       :hasError="errors?.password" />
                   </div>
                   <div class="relative w-full">
                     <Icon :name="iconTypeConfirmPassword" @click="changeType('confirmPassword')"
                       class=" bg-transparent px-[10px] w-[50px] right-[8px] top-[16px] absolute z-50  text-[#b7b6b6] hover:text-[#5f5f5f] hover:duration-150 cursor-pointer"
                       size="23" />
-                    <InputBase name="confirmPassword" placeholder="Powtórz hasło" :type="typeConfirmPassword"  customType="password"
-                      :hasError="errors?.confirmPassword" />
+                    <InputBase name="confirmPassword" placeholder="Powtórz hasło" :type="typeConfirmPassword"
+                      customType="password" :hasError="errors?.confirmPassword" />
                   </div>
                 </div>
               </div>
@@ -53,8 +52,7 @@
               </div>
               <ButtonLoading isLoading="false" :loading="isLoadingButton" text="Dalej" />
             </Form>
-            <div
-              class="flex flex-row w-full justify-start mt-12 pt-8 border-t-[1px] border-[#dddddd] gap-[6px]">
+            <div class="flex flex-row w-full justify-start mt-12 pt-8 border-t-[1px] border-[#dddddd] gap-[6px]">
               <p class="text-[15px]">Nie masz konta?</p>
               <NuxtLink to="/rejestracja">
                 <p class="text-[15px] font-medium hover:underline primary-color">Zarejestruj się</p>
@@ -142,7 +140,7 @@ const changePassword = async (values: any) => {
 
   try {
     isLoadingButton.value = true
-    const res = await axios.post(`${API_URL}/reset-password`, {
+    const res = await axios.post(`${API_URL}/forgot-password`, {
       email: email.value,
       verification_code: values.verification_code,
       password: values.password,
@@ -186,7 +184,7 @@ const changeType = (typeName: string) => {
 const sentVerificationCode = async (values: any) => {
   try {
     isLoadingButton.value = true
-    const res = await axios.post(`${API_URL}/reset-password-code`, {
+    const res = await axios.post(`${API_URL}/forgot-password-code`, {
       email: values.email
     })
     email.value = values.email

@@ -2,8 +2,11 @@
   <div class="relative flex flex-col w-full">
     <input v-on="handlers" :value="textValue" :type="loginType" :placeholder="placeholder"
       :class="props.hasError ? 'isError' : null" wrap="soft" />
-    <Icon :name="iconType" @click="changeType(loginType)"
+    <!-- <Icon :name="iconType" @click="changeType(loginType)"
       class="absolute z-10 top-[16px] right-[21px] text-[#b7b6b6] hover:text-[#878787] hover:duration-150 cursor-pointer"
+      size="23" /> -->
+    <Icon :name="iconType" @click="changeType(loginType)"
+      class="bg-transparent px-[10px] w-[50px] right-[8px] absolute z-50 top-[14px] text-[#b7b6b6] hover:text-[#5f5f5f] hover:duration-150 cursor-pointer"
       size="23" />
     <p v-if="props?.hasError" class="text-[#c22b3a] text-[13px] bg-white mt-1">
       {{ props?.hasError }}
