@@ -164,7 +164,7 @@ const isLoading = ref(true)
 const isLoadingButtonSkeleton = ref(true)
 const router = useRouter()
 const userQuizzes = ref() as any
-const competitionData = ref() as any
+// const competitionData = ref() as any
 const allPayouts = ref() as any
 const isOpen = ref(false)
 
@@ -417,15 +417,22 @@ const updatePassword = (values: any, actions: any) => {
 
 const mappedSettingsData = () => {
     return {
-        "company_name": settings.value.company.name,
-        "nip": settings.value.company.nip,
-        "regon": settings.value.company.regon,
-        "postcode": settings.value.company.address.postcode,
-        "city": settings.value.company.address.city,
-        "street": settings.value.company.address.street,
-        "building_number": settings.value.company.address.building_number,
-        "house_number": settings.value.company.address.house_number,
-
+        // "company_name": settings.value?.company?.name,
+        // "nip": settings.value.company.nip,
+        // "regon": settings.value.company.regon,
+        // "postcode": settings.value.company.address.postcode,
+        // "city": settings.value.company.address.city,
+        // "street": settings.value.company.address.street,
+        // "building_number": settings.value.company.address.building_number,
+        // "house_number": settings.value.company.address.house_number,
+        "company_name": settings.value?.company?.name,
+        "nip": settings.value?.company?.nip,
+        "regon": settings.value?.company?.regon,
+        "postcode": settings.value?.company?.address?.postcode,
+        "city": settings.value?.company?.address?.city,
+        "street": settings.value?.company?.address?.street,
+        "building_number": settings.value?.company?.address?.building_number,
+        "house_number": settings.value?.company?.address?.house_number,
     }
 }
 
