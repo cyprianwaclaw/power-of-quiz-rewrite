@@ -20,8 +20,8 @@
       <h2 class="title-h2 mb-6 md:mt-3">Twoje statystyki</h2>
       <div class="white-retangle">
         <div class="row-table-start -mt-1">
-          <h2 class="title">{{ user.points }}</h2>
-          <div class="flex place-items-center gap-1.5">
+          <h2 class="title">{{ user?.points }}</h2>
+          <div class="flex place-items-center gap-1.5 mb-[12px]">
             <p class="text-des-mobile">Punktów</p>
             <button @click="isClose()" class="flex md:hidden">
               <Icon
@@ -43,21 +43,21 @@
             </button>
           </div>
         </div>
-        <div class="row-table-start">
-          <h2 class="title">{{ user.answers.all }}</h2>
+        <div class="row-table-end  mt-[8px]">
+          <h2 class="title">{{ user?.answers?.all }}</h2>
           <p class="text-des-mobile">Udzielonych odpowiedzi:</p>
           <div class="flex columns-2 mt-5 mb-2">
             <div class="flex flex-col w-full">
-              <p class="correct">{{ user.answers.correct }}</p>
+              <p class="correct">{{ user?.answers?.correct }}</p>
               <p class="correct">Poprawne</p>
             </div>
             <div class="flex flex-col w-full">
-              <p class="bad">{{ user.answers.incorrect }}</p>
+              <p class="bad">{{ user?.answers?.incorrect }}</p>
               <p class="bad">Błędne</p>
             </div>
           </div>
         </div>
-        <div class="row-table-end md:mb-3">
+        <!-- <div class="row-table-end md:mb-3">
           <h2 class="title">{{ user.invited_people }}</h2>
           <p class="text-des-mobile">Zaproszone osoby</p>
           <div
@@ -72,7 +72,7 @@
               </span>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>

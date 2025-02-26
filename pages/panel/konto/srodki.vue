@@ -10,7 +10,7 @@
         <div v-if="!route.query.section">
             <div class="bg-white rounded-[18px] p-[30px]">
                 <p class="font-semibold text-[27px]">
-                    {{ user.points }} zł
+                    {{ user?.points }} zł
                 </p>
                 <p class="text-gray-400 text-[16px] font-regular mt-[7px]">
                     Twoje środki zgromadzone na koncie
@@ -19,7 +19,7 @@
                     <p class="primary-color font-semibold">Jak zdobyć środki?</p>
                 </button>
                 <div class="pt-[27px] border-t w-full flex justify-end mt-[26px]">
-                    <button v-if="user.points > 0" class="button-primary" @click="modalWithdraw">
+                    <button v-if="user?.points > 0" class="button-primary" @click="modalWithdraw">
                         Wypłać
                     </button>
                     <button v-else class="button-primary-disabled h-[45px]">

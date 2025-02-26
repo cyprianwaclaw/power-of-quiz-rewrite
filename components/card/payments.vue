@@ -23,13 +23,13 @@
                         <p class="text-[15px] text-[#BEBEBE]">{{ single.date }}</p>
                         <p class="text-[21px] font-semibold">{{ single.price }} zł</p>
                     </div>
-                    <div class="flex place-items-center gap-[12px]">
+                    <div class="flex place-items-center md:gap-[12px] gap-[4px]">
                         <p class="font-medium whitespace-nowrap" :class="{
                             'text-[#E21313]': single?.status_text === 'Błąd płatności',
                             'text-[#4BB21A]': single?.status_text === 'Zrealizowano',
                             'text-[#E1A817]': single?.status_text === 'Oczekująca'
                         }">{{ single?.status_text }} </p>
-                        <div v-if="!single?.ifirma_invoices" @click="downloadInvoice(single?.ifirma_invoices)"
+                        <div v-if="single?.status_text === 'Zrealizowano'" @click="downloadInvoice(single?.ifirma_invoices)"
                             class="download-invoice">
                             <Icon name="ph:download-simple" size="26" class="text-[#618CFB]" />
                         </div>
@@ -72,15 +72,17 @@ const downloadInvoice = async (invoice_id: any) => {
 }
 
 .download-invoice {
-    cursor: pointer;
-    padding: 11px 12px;
-    border-radius: 500px;
-    background-color: rgb(255, 255, 255);
-    transition: all 0.14s ease;
+  cursor: pointer;
+  padding: 11px 12px;
+  border-radius: 500px;
+  background-color: rgb(255, 255, 255);
+  transition: all 0.14s ease;
 
+  @media (min-width: 768px) { // Medium breakpoint w Tailwind (md)
     &:hover {
-        background-color: rgb(245, 245, 245);
+      background-color: rgb(245, 245, 245);
     }
+  }
 }
 
 .is-loading {

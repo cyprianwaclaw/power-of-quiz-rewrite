@@ -37,7 +37,7 @@
             <div v-if="router.currentRoute.value.query?.pageName === 'founds'" class="w-full flex shrink-0">
                 <div v-if="router.currentRoute.value.query?.section === 'null'">
                     <p class="font-semibold text-[27px]">
-                        {{ user.points }} zł
+                        {{ user?.points }} zł
                     </p>
                     <p class="text-gray-400 text-[16px] font-regular mt-[7px] cursor-default">
                         Twoje środki zgromadzone na koncie
@@ -46,10 +46,10 @@
                         <p class="primary-color font-semibold">Jak zdobyć środki?</p>
                     </button>
                     <div class="pt-[27px]  w-full flex justify-start mt-[12px]">
-                        <button v-if="user.points > 0" class="button-primary" @click="modalWithdraw">
+                           <button v-if="user?.points > 0" class="button-primary" @click="modalWithdraw">
                             Wypłać
                         </button>
-                        <button v-else class="button-primary-disabled">
+                        <button v-else class="button-primary-disabled h-[45px]">
                             Wypłać
                         </button>
                     </div>
@@ -256,4 +256,20 @@ onBeforeRouteUpdate(async (to) => {
 
 
 </script>
-<style lang="css" scoped></style>
+<style scoped lang="scss">
+@import "@/assets/style/variables.scss";
+
+.button-primary-disabled {
+  cursor: not-allowed !important;
+  background-color: #aec5ff !important;
+  padding: 10px 23px !important;
+  color: $white !important;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  font-size: 15px !important;
+  line-height: 22px !important;
+  letter-spacing: 0.05em !important;
+  display: block !important;
+  border-radius: 8px !important;
+}
+</style>
