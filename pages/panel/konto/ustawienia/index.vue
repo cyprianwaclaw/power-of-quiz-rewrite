@@ -8,10 +8,10 @@
                 <NuxtLink to="/panel/konto/ustawienia/moje-dane">
                     <div class="row-table-end flex place-items-center justify-between">
                         <div class="flex place-items-center mb-3 gap-[12px]">
-                            <SectionUserAvatar :size="52" :avatar="user.avatar" />
+                            <SectionUserAvatar :size="52" :avatar="user?.avatar" />
                             <div class="flex flex-col">
-                                <p class="font-semibold text-[17px]">{{ user.user_name }} {{ user?.user_surname }}</p>
-                                <p class=" text-gray-500 text-[14px]">{{ user.user_email }}</p>
+                                <p class="font-semibold text-[17px]">{{ user?.user_name }} {{ user?.user_surname }}</p>
+                                <p class=" text-gray-500 text-[14px]">{{ user?.user_email }}</p>
                             </div>
                         </div>
                         <Icon name="ph:caret-right-light" size="20" class="text-gray mb-2" />

@@ -4,7 +4,7 @@
     </h2>
     <div class="md:hidden flex flex-col">
         <div class="md:hidden flex flex-col mb-4">
-            <div class="columns-2 flex gap-5 mt-5">
+            <div class="columns-2 flex gap-3.5 mt-5">
                 <NuxtLink to="/panel/konto/moje-quizy" class="retangle gold">
                     <Icon name="ph:game-controller-fill" color="D19D38" size="34" />
                     <p class="retangle-title family">Quizy</p>
@@ -14,7 +14,7 @@
                     <p class="retangle-title family mb-1 text-black">Konkursy</p>
                 </NuxtLink>
             </div>
-            <div class="columns-2 flex gap-5">
+            <div class="columns-2 flex gap-3.5 mt-3.5">
                 <NuxtLink to="/panel/konto/srodki" class="retangle blue">
                     <Icon name="ph:wallet-fill" color="2B3BC7" size="34" />
                     <p class="retangle-title family">Środki</p>
@@ -25,7 +25,7 @@
                 </NuxtLink>
             </div>
         </div>
-        <div class="bg-white py-5 px-8 rounded-3xl relative mb-[38px]">
+        <div class="bg-white py-5 px-8 rounded-3xl relative mb-[38px] mt-[26px]">
             <SectionCardPackage />
         </div>
         <SectionCardStatistic />
@@ -83,8 +83,7 @@ useSeoMeta({
 
 .retangle {
     padding: 16px 16px 16px 23px;
-    margin-bottom: 20px;
-    border-radius: 8px;
+    border-radius: 10px;
     width: 100%;
 }
 
