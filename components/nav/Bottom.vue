@@ -8,7 +8,7 @@
       </NuxtLink>
     </div>
     <div class="w-full grid justify-center">
-      <NuxtLink to="/panel/quiz" active-class="active">
+      <NuxtLink to="/panel/quiz" :class="route.fullPath == '/panel/quiz' ? 'active' : ''">
         <Icon name="ph:game-controller" size="36" class="nav-icon" />
       </NuxtLink>
     </div>
@@ -16,8 +16,9 @@
       <Icon name="ph:plus-circle" size="36" class="nav-icon" />
     </div>
     <div class="w-full grid justify-center">
-      <NuxtLink to="/panel/znajomi" active-class="active">
-        <Icon name="ph:users" size="36" class="nav-icon" />
+      <NuxtLink to="/panel/quiz?section=konkursy"
+        :class="route.fullPath == '/panel/quiz?section=konkursy' ? 'active' : ''">
+        <Icon name="ph:shooting-star" size="36" class="nav-icon" />
       </NuxtLink>
     </div>
     <div class="w-full grid justify-center">
@@ -29,14 +30,13 @@
 </template>
 
 <script setup lang="ts">
-const route = useRoute();
-
-const isOpen = ref(false);
+const route = useRoute()
+const isOpen = ref(false)
 
 const isClose = () => {
   isOpen.value = !isOpen.value;
-};
-const routeName = RouteChange(route.path);
+}
+
 </script>
 
 <style lang="scss" scoped>

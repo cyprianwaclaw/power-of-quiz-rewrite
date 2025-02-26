@@ -62,10 +62,10 @@ const route = useRoute()
 const router = useRouter()
 
 const userState = useUser()
+const authState = useAuth()
 const { user, hasPremium } = storeToRefs(userState)
 const isOpen = ref(false)
 
-const authState = useAuth()
 
 const showMenu = () => {
   isOpen.value = !isOpen.value

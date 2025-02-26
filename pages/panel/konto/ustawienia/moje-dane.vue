@@ -40,7 +40,7 @@
                                         :hasError="showError?.confirm_email ? showError?.confirm_email : false" />
                                     <div class="flex w-full justify-start mt-4 mb-5">
                                         <div class="w-[140px]">
-                                            <ButtonLoading isLoading="false" :loading="isLoadingButton" text="Dalej" />
+                                            <ButtonLoading isLoading="false" :loading="isLoadingButtonEmail" text="Dalej" />
                                         </div>
                                     </div>
                                 </Form>
@@ -58,28 +58,13 @@
                                         :hasError="showError?.data?.messageError ? showError?.data?.messageError : false" />
                                     <div class="flex w-full justify-start mt-4 mb-5">
                                         <div class="w-[140px]">
-                                            <ButtonLoading isLoading="false" :loading="isLoadingButton" text="Gotowe" />
+                                            <ButtonLoading isLoading="false" :loading="isLoadingButtonEmail" text="Gotowe" />
                                         </div>
                                     </div>
                                 </Form>
                             </div>
                         </div>
-                    <!-- </div> -->
 
-
-        <!-- <p class="font-semibold text-[20px] mt-10 mb-5">Zmień adres e-mail</p>
-        <div class="white-retangle px-[21px]" @click="handleClick()">
-            <Form @submit="updatePersonal1" class=" flex gap-[10px] flex-col mt-[3px]">
-                <InputSettings name="company_name" placeholder="Nowy adres e-mail"
-                    :hasError="showError?.company_name || showError?.errors?.company_name?.message" />
-                <InputSettings name="nip" placeholder="Powtórz e-mail" :hasError="showError?.nip" />
-                <div class="flex w-full justify-end mt-4 mb-5">
-                    <div class="w-[140px]">
-                        <ButtonLoading isLoading="false" :loading="isLoadingButton" text="Dalej" />
-                    </div>
-                </div>
-            </Form>
-        </div> -->
 
         <p class="font-semibold text-[20px] mt-10 mb-5">Zmień hasło</p>
         <div class="white-retangle px-[21px]" @click="handleClick()">
@@ -113,6 +98,7 @@ const { token } = storeToRefs(auth)
 const isOpen = ref(false)
 const isLoadingButton = ref(false)
 const isLoadingButtonPassword = ref(false)
+const isLoadingButtonEmail = ref(false)
 const resentCodeText = ref("Wyślij ponownie")
 const isAlert = ref(false)
 const userState = useUser()
@@ -294,14 +280,14 @@ const schemaChangeEmail = yup.object().shape({
 })
 
 const sentChangeEmailCode = (values: any, actions: any) => {
-    isLoadingButton.value = true
+    isLoadingButtonEmail.value = true
     setTimeout(async () => {
         schemaChangeEmail.validate(values, { abortEarly: false })
             .then(async (validData) => {
-                isLoadingButton.value = true
-                await userState.sendNewCodeChangeEmail("change-email", token.value, validData?.new_email)
+                isLoadingButtonEmail.value = true
+                await userState.sendNewCodeChangeEmail("change-email", "109|s9RcTMlSb3j8GKAqr5uWhrLbL1gKiRUzKrH04IRN", validData?.new_email)
                 changeEmailData.value = validData?.new_email
-                isLoadingButton.value = false
+                isLoadingButtonEmail.value = false
             })
             .catch((err) => {
                 if (err.inner) {
@@ -313,7 +299,7 @@ const sentChangeEmailCode = (values: any, actions: any) => {
                     }, {})
                 }
             });
-        isLoadingButton.value = false
+        isLoadingButtonEmail.value = false
     }, 600)
 }
 

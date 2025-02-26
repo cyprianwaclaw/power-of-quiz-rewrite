@@ -72,8 +72,17 @@
 </template>
 
 <script setup lang="ts">
-const axiosInstance = useNuxtApp().$axiosInstance as any
 import gsap from 'gsap'
+import { useUser } from "@/stores/useUser";
+import { useAuth } from "@/stores/useAuth";
+
+const axiosInstance = useNuxtApp().$axiosInstance as any
+
+const userState = useUser()
+const authState = useAuth()
+const { user } = storeToRefs(userState)
+const { token } = storeToRefs(authState)
+
 
 const props = defineProps({
     modalActive: {
@@ -97,10 +106,10 @@ const widthdrawFunds = async () => {
             const res = await axiosInstance.post('/payouts', {
                 points: amount.value,
             });
+            await userState.currentUser(token.value)
             success.value = res.data.success || false;
         } catch (error) {
             success.value = false;
-            console.error('Error during withdrawal:', error);
         }
     }
 

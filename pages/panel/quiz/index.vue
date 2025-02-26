@@ -10,15 +10,16 @@
         </template>
     </ModalDown>
     <div class="md:mt-5 lg:mt-8 cursor-default">
-        <h2 class="hidden md:flex md:text-3xl place-items-center font-medium">
+         <!-- v-if="!router.currentRoute.value.query.searchTerm" -->
+        <h2 class=" md:flex text-[27px] md:text-3xl place-items-center font-medium mb-[10px] md:mb-[32px]">
             {{ router.currentRoute.value?.query.section == 'konkursy' ? 'Konkursy' : 'Quizy' }}
         </h2>
-        <h2 class="md:hidden flex text-[27px] md:text-3xl place-items-center font-medium">
+        <!-- <h2 class="md:hidden flex text-[27px] md:text-3xl place-items-center font-medium">
             {{ router.currentRoute.value?.query.searchTerm ? 'Quizy' : ' Wszystkie gry' }}
-        </h2>
-        <div v-if="!router.currentRoute.value.query.searchTerm" class="flex md:hidden mt-[24px] -mb-[1px]">
+        </h2> -->
+        <!-- <div v-if="!router.currentRoute.value.query.searchTerm" class="flex md:hidden mt-[24px] -mb-[1px]">
             <ButtonSecondary :array="buttonsArray" />
-        </div>
+        </div> -->
         <div v-if="router.currentRoute.value.query.searchTerm" class="mt-[23px]">
             <div class="flex justify-between">
                 <p class="text-gray-600 font-medium text-[15px]">Wyszukiwanie dla:</p>

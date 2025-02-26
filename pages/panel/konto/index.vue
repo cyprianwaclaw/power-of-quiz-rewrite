@@ -50,10 +50,10 @@
             </div>
         </div>
         <div class="flex justify-end -mb-[100px] mt-8">
-            <!-- @click="logoutUser()" -->
-            <div class="flex place-items-center gap-1.5">
-                <p class="one primary-color">Wyloguj się</p>
-                <Icon name="material-symbols:logout-rounded" size="18" class="primary-color margin-top" />
+
+            <div class="flex place-items-center gap-1.5" @click="authState.logout()">
+                <p class="one text-red-500">Wyloguj się</p>
+                <Icon name="material-symbols:logout-rounded" size="18" class="text-red-500 margin-top" />
             </div>
         </div>
     </div>
@@ -63,6 +63,10 @@
     </div>
 </template>
 <script lang="ts" setup>
+import { useAuth } from "@/stores/useAuth";
+
+const authState = useAuth()
+
 definePageMeta({
     middleware: "auth",
 })
