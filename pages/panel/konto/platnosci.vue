@@ -80,8 +80,45 @@ useSeoMeta({
     ogTitle: 'Twoje konto - płatności',
     twitterCard: 'summary_large_image',
 })
+
+
+
+
+
+
+
 </script>
 
 <style scoped lang="scss">
 @import "@/assets/style/variables.scss";
+
+
+
+
+
+
+.product-colors {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.color-option {
+    cursor: pointer;
+    border: 2px solid transparent;
+    border-radius: 50%;
+    padding: 5px;
+    transition: border-color 0.3s;
+}
+
+.color-option img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.color-option.selected {
+    border-color: #000;
+}
 </style>

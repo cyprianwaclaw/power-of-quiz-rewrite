@@ -8,14 +8,19 @@
     </div>
     <div v-if="!['rejestracja', 'przypomnij-hasło', 'index'].includes(router?.currentRoute.value.name)">
 
-    <div class="md:hidden fixed bottom-0 z-30 w-full">
-      <NavBottom />
+      <div class="md:hidden fixed bottom-0 z-30 w-full">
+        <NavBottom />
+      </div>
+      <div class="hidden md:flex">
+        <NavBottomDesktop />
+      </div>
     </div>
-    <div class="hidden md:flex">
-      <NavBottomDesktop />
+    <div class="bg-white h-[62px] flex place-items-center p-[24px]">
+      <div class="gap-[18px] flex w-full justify-end">
+        <NuxtLink class="text-slate-400 hover:text-slate-800 transition-all duration-200" to="/regulamin">Regulamin</NuxtLink>
+        <NuxtLink class="text-slate-400 hover:text-slate-800 transition-all duration-200" to="/polityka-prywatności">Polityka Prywatności</NuxtLink>
+      </div>
     </div>
-    </div>
-
   </div>
 </template>
 
