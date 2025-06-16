@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="mt-2">
-      <div v-if="!hasPremium">
+      <div v-if="hasPremium">
         <ModalAlert :modalActive="isOpen" name="Premium" title="Brak dostępu"
           des="Ta sekcja wymaga pakietu Premium. Dołącz już teraz i ciesz się pełnymi możliwościami" closeButton="Zamknij"
           actionButton="Zobacz pakiety" @close="isClose" />

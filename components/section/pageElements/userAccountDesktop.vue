@@ -67,6 +67,7 @@
 
             <div v-if="router.currentRoute.value.query?.pageName === 'invoices'" class="w-full flex shrink-0">
                 <div v-if="router.currentRoute.value.query?.section === 'null'" class="w-full">
+                    {{ payments?.data.data }}
                     <CardPayments :payments="payments?.data.data" :n="14" :isLoading="isLoading" />
                     <SectionPagination :last_page="payments?.pagination?.last_page"
                         :current_page="payments?.pagination?.current_page" :isLoading="isLoading" />

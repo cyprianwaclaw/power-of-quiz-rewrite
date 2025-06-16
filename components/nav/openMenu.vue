@@ -5,9 +5,10 @@
         <SectionUserAvatar :size="36" :avatar="user?.avatar" />
         <div class="flex flex-col">
           <p class="text-[15px] flex place-items-center font-medium -mb-[2px]">
+            <!-- {{ userTestRun?.data?.user_name }} -->
             {{ user?.user_name ? user?.user_name : '' }} {{ user?.user_surname ? user?.user_surname : '' }}
           </p>
-          <div v-if="!hasPremium" class="flex place-items-center gap-[4px]">
+          <div v-if="hasPremium" class="flex place-items-center gap-[4px]">
             <Icon name="fa:diamond" size="15" class="primary-color" />
             <p class="text-[12px] primary-color font-semibold">PREMIUM</p>
           </div>
@@ -67,6 +68,20 @@ const { user, hasPremium } = storeToRefs(userState)
 const isOpen = ref(false)
 
 
+const userTestRun = ref()
+const cookie = useCookie("auth") as any
+
+
+onMounted(async () => {
+
+  console.log(cookie.value?.token)
+
+await userState.currentUser(cookie.value?.token)
+  
+  userTestRun.value = await axiosInstance.get('/user/current')
+  console.log(userTestRun.value)
+})
+
 const showMenu = () => {
   isOpen.value = !isOpen.value
 }
@@ -88,7 +103,6 @@ const showMenuLink = (routeName: string) => {
 }
 
 const logout = () => {
-  // console.log('test')
   isOpen.value = !isOpen.value
   authState.logout()
 

@@ -10,7 +10,7 @@
                 <div v-if="search.length < 3">
                     <p class="mt-[32px] mb-[14px] text-[17px] font-medium">Popularne quizy</p>
                     <div class="overflow-auto overflow-y-scroll h-screen pb-[280px] scrollbar-hide rounded-[12px]">
-                        <CardSearchQuiz :quizes="allQuiz?.data" :plan="hasPremium?.has_premium" :isLoading="isLoading"
+                        <CardSearchQuiz :quizes="allQuiz?.data" :plan="hasPremium" :isLoading="isLoading"
                             :n="12" />
                     </div>
                 </div>
@@ -19,7 +19,7 @@
                         <p>Brak wyników</p>
                     </div>
                     <div class="overflow-auto overflow-y-scroll h-screen pb-[220px] rounded-[12px]">
-                        <CardSearchQuiz :quizes="searchRes" :plan="hasPremium?.has_premium" :isLoading="isLoading"
+                        <CardSearchQuiz :quizes="searchRes" :plan="hasPremium" :isLoading="isLoading"
                             :n="12" />
                     </div>
                 </div>

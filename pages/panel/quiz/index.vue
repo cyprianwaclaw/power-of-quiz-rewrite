@@ -60,13 +60,13 @@
         </div>
         <div v-if="router.currentRoute.value.query.section === 'konkursy' ? false : true">
             <div v-if="cookieView == 'two'">
-                <CardTwoQuiz :quizes="allQuiz?.data" :plan="hasPremium?.has_premium" :isLoading="isLoading" :n="10" />
+                <CardTwoQuiz :quizes="allQuiz?.data" :plan="hasPremium" :isLoading="isLoading" :n="10" />
             </div>
             <div v-if="cookieView == 'three'">
-                <CardSearchQuiz :quizes="allQuiz?.data" :plan="hasPremium?.has_premium" :isLoading="isLoading" :n="10" />
+                <CardSearchQuiz :quizes="allQuiz?.data" :plan="hasPremium" :isLoading="isLoading" :n="10" />
             </div>
             <div v-if="cookieView == 'four'">
-                <CardFourQuiz :quizes="allQuiz?.data" :plan="hasPremium?.has_premium" :isLoading="isLoading" :n="10" />
+                <CardFourQuiz :quizes="allQuiz?.data" :plan="hasPremium" :isLoading="isLoading" :n="10" />
             </div>
             <div v-if="allQuiz?.data.length == 0" class="flex justify-center mt-8">
                 Brak wyników
@@ -125,7 +125,7 @@ const filterShow = () => {
 }
 
 const sortingShowMobile = () => {
-    sortingMobile.value = !sortingMobile.value;
+    sortingMobile.value = !sortingMobile.value
 }
 
 onMounted(async () => {

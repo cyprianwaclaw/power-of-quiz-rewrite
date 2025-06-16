@@ -59,7 +59,7 @@ const currentQuiz = ref() as any;
 
 const isClick = (quiz: any) => {
   currentQuiz.value = quiz
-  if (!props.plan) {
+  if (props.plan) {
     openQuiz.value = !openQuiz.value;
   } else {
     openAlert.value = !openAlert.value;

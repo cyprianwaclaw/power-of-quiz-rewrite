@@ -9,7 +9,6 @@ export const useUser = defineStore('user', {
         changeEmailData: null as any,
         isDataChangeEmail: null as any,
         isDataChangeEmailError: null as any
-
     }),
 
     persist: true,
@@ -24,6 +23,7 @@ export const useUser = defineStore('user', {
                 }
             });
             this.user = res.data;
+            this.hasPremium = res.data.plan === "Premium" ? true : false
         },
 
         updateUserAvatarState(avatarLink: string) {
@@ -70,8 +70,6 @@ export const useUser = defineStore('user', {
             } catch (error:any) {
                 // this.error = error.response.data
                 this.isDataChangeEmailError = error.response.data
-
-
                 // console.error("Błąd podczas wysyłania emaila:", error);
             }
         }

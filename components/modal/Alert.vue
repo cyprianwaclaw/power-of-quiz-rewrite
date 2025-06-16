@@ -117,7 +117,7 @@ const onBefore = (el:any)=>{
 const router = useRouter()
 const changePage = () => {
   if (window.screen.width <= 900) {
-    router.push('/panel/pakiety')
+    router.push('/panel/pakiet-premium')
   }else{
     router.push('/panel/konto')
   }

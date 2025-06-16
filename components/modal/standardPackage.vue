@@ -20,7 +20,7 @@
                             pakietem Premium. Wykup subskrypcję
                             aby zyskać dostęp do tej sekcji</p>
                         <button class="button-primary w-[200px] mt-7">
-                            <NuxtLink to="/panel/quiz/${quiz?.id}">
+                            <NuxtLink to="/panel/plan-premium">
                                 <p class="text-center">Przejdź na Premium</p>
                             </NuxtLink>
                         </button>
@@ -42,7 +42,7 @@
                             pakietem Premium. Wykup subskrypcję
                             aby zyskać dostęp do tej sekcji</p>
                         <button class="button-primary w-[200px] mt-6">
-                            <NuxtLink to="/panel/quiz/${quiz?.id}">
+                            <NuxtLink to="/panel/plan-premium">
                                 <p class="text-center">Przejdź na Premium</p>
                             </NuxtLink>
                         </button>

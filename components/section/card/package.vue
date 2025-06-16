@@ -1,15 +1,14 @@
 <template>
-  {{ hasPremium }}
-  <div v-if="plan == 'Standard'">
+  <div v-if="!hasPremium" class="h-[180px]">
     <p class="text-des-mobile">Twój pakiet</p>
     <h3 class="font-medium text-2xl mb-2.5 mt-1 tracking-wide">Standard</h3>
-    <div class="text pr-4">
+    <div class="text pr-4 mb-[27px]">
       Aktualnie posiadasz pakiet Standard, przejdź na
       <span class="primary-color font-semibold"> PREMIUM </span>i zyskaj dodatkowe funkcję
     </div>
     <NuxtLink
-      to="/konto/pakiety"
-      class="button-primary-small mt-4 mb-2 w-[189px] place-items-center"
+      to="/konto/plan-premium"
+      class="button-primary mb-2 w-[189px] place-items-center"
     >
       Dostępne pakiety <Icon name="carbon:chevron-right" class="-mr-2" size="24" />
     </NuxtLink>
@@ -47,8 +46,9 @@
     <div class="text pr-4">
       Gratulacje, Twój pakiet
       <span class="primary-color font-semibold"> PREMIUM </span> jest aktywny. Dzięki temu
-      masz dostęp do pełnej wersji serwisu. Koniec dostępu do wersji Premium nastąpi
-      <span class="text-gray-400 font-bold">{{ date }}</span>
+      masz dostęp do pełnej wersji serwisu. 
+      <!-- Koniec dostępu do wersji Premium nastąpi
+      <span class="text-gray-400 font-bold">{{ date }}</span> -->
     </div>
   </div>
 </template>

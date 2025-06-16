@@ -11,7 +11,7 @@
           <div class="flex justify-between mx-5 mb-7">
             <button class="okej" @click="$emit('close')">Zamknij</button>
             <!-- Wklieć link do wszystkich pakietów -->
-            <NuxtLink to="/panel/pakiety">
+            <NuxtLink to="/panel/plan-premium">
                 <button class="button-primary-small">Zobacz pakiety</button>
             </NuxtLink>
         </div>
