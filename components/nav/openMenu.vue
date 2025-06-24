@@ -5,7 +5,6 @@
         <SectionUserAvatar :size="36" :avatar="user?.avatar" />
         <div class="flex flex-col">
           <p class="text-[15px] flex place-items-center font-medium -mb-[2px]">
-            <!-- {{ userTestRun?.data?.user_name }} -->
             {{ user?.user_name ? user?.user_name : '' }} {{ user?.user_surname ? user?.user_surname : '' }}
           </p>
           <div v-if="hasPremium" class="flex place-items-center gap-[4px]">
@@ -20,7 +19,7 @@
       <div class="absolute right-[24px] pt-[21px]" v-if="isOpen">
         <div class="modal-menu">
           <div class="flex flex-col gap-[7px]">
-            <div v-for="link in linksArray" :key="link.name">
+            <div v-for="link in links" :key="link.name">
               <div @click="showMenuLink(link.link)">
                 <p class="modal-menu-item">
                   {{ link.name }}
@@ -70,21 +69,8 @@ const isOpen = ref(false)
 
 const userTestRun = ref()
 const cookie = useCookie("auth") as any
+const links = ref([]) as any
 
-
-onMounted(async () => {
-
-  console.log(cookie.value?.token)
-
-await userState.currentUser(cookie.value?.token)
-  
-  userTestRun.value = await axiosInstance.get('/user/current')
-  console.log(userTestRun.value)
-})
-
-const showMenu = () => {
-  isOpen.value = !isOpen.value
-}
 
 const linksArray = [
   { name: "Dodaj quiz", link: "/panel/quiz/dodaj-nowy" },
@@ -92,6 +78,30 @@ const linksArray = [
   { name: "Moje konto", link: "/panel/konto" },
   { name: "Ustawienia", link: "/panel/konto/ustawienia" },
 ]
+
+onMounted(async () => {
+
+await userState.currentUser(cookie.value?.token)
+  
+  userTestRun.value = await axiosInstance.get('/user/current')
+  console.log(userTestRun.value)
+
+  if (user.value.user_email == "marocz@o2.pl") {
+    links.value = linksArray
+  } else {
+  links.value =  linksArray.filter(link => link.name !== 'Dodaj konkurs');
+  }
+
+})
+
+const showMenu = () => {
+  isOpen.value = !isOpen.value
+}
+
+
+const filteredLinks = computed(() => {
+  return linksArray.filter(link => link.name !== 'Dodaj konkurs');
+});
 
 const showMenuLink = (routeName: string) => {
   let routeCurrent = route?.name as any
