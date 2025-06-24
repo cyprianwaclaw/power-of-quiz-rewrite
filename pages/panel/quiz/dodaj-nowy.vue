@@ -59,7 +59,7 @@ const onSubmit = async () => {
             const newQuestion = await axiosInstance.post('/questions', newQuestionData.value)
 
             for (const answer of question.answers) {
-               const newAnswerData = ref({ "answer": answer.answer, "question_id": newQuestion.data.data.id, "correct": answer.isCorrect, });
+               const newAnswerData = ref({ "answer": answer.answer, "question_id": newQuestion.data.data.id, "correct": answer.correct, });
                await axiosInstance.post('/answers', newAnswerData.value);
 
             }
@@ -84,7 +84,6 @@ const onSubmit = async () => {
       isLoadingButton.value = false
    } else {
       scrollToTop()
-      console.log('Not all data are available')
       isLoadingButton.value = false
    }
 }
@@ -93,6 +92,7 @@ onMounted(() => {
    quizState.$reset()
    newImageFile.value = null
    newImage.value = null
+   questionsArray.value = []
 })
 
 definePageMeta({

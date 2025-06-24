@@ -35,7 +35,6 @@
     </div>
 </template>
 <script lang="ts" setup>
-import gsap from 'gsap'
 const router = useRouter()
 const axiosInstance = useNuxtApp().$axiosInstance as any
 const competitionSubmissionCookie = useCookie('competition_submission') as any

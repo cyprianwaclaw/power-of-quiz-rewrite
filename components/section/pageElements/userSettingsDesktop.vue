@@ -4,7 +4,9 @@
     <h2 class="text-3xl flex place-items-center font-medium cursor-default select-none">
         Ustawienia
     </h2>
-    <div class="mt-[28px]">
+    {{ user }}
+    {{ settings }}
+    <!-- <div class="mt-[28px]">
         <ButtonLink :array="buttonsArray" query="pageName" :isLoading="isLoadingButtonSkeleton" :n="4" />
     </div>
     <div class="flex gap-[21px] select-none">
@@ -13,7 +15,7 @@
                 :n="3" :isLoading="isLoadingButtonSkeleton" />
         </div>
         <div class="w-full flex bg-white rounded-[18px] p-[30px]">
-            <!-- profil -->
+            profil
             <div v-if="router.currentRoute.value.query?.pageName === 'profile'" class="w-full flex-col shrink-0">
                 <div v-if="router.currentRoute.value.query?.section === 'null'">
                     <div class="w-full flex mt-[12px] mb-[58px] ml-[12px] place-items-center">
@@ -49,7 +51,7 @@
                 </div>
 
 
-                <!-- Change email adress -->
+                Change email adress
                 <div v-if="router.currentRoute.value.query?.section === 'true'" class="px-[12px]" @click="handleClick()">
                     <p class="font-semibold text-[20px] mt-[12px] mb-2">Zmień adres e-mail</p>
                     <div class="white-retangle">
@@ -88,7 +90,7 @@
                 </div>
 
 
-                <!-- Change current password -->
+                Change current password
                 <div v-if="router.currentRoute.value.query?.section === 'false'" class="px-[12px]" @click="handleClick">
                     <p class="font-semibold text-[20px] mt-[14px] mb-2">Zmień hasło</p>
                     <div class="white-retangle " @click="handleClick()">
@@ -108,7 +110,7 @@
                     </div>
                 </div>
             </div>
-            <!-- pageName=invoices -->
+            pageName=invoices
             <div v-if="router.currentRoute.value.query?.pageName === 'invoices'" class="flex-col shrink-0  w-[550px]">
                 <div class="white-retangle px-[21px] -mt-1" @click="handleClick()">
                     <p class="mb-6 text-[20px] font-medium">Nazwa działalności</p>
@@ -148,7 +150,7 @@
             </div>
 
 
-            <!-- pageName=founds -->
+            pageName=founds
             <div v-if="router.currentRoute.value.query?.pageName === 'founds'" class="flex-col shrink-0  w-[550px]">
                 <div class="white-retangle px-[21px] -mt-1" @click="handleClick()">
                     <p class="mb-6 text-[20px] font-medium">Dane bankowe</p>
@@ -170,7 +172,7 @@
 
 
         </div>
-    </div>
+    </div> -->
 </template>
 <script lang="ts" setup>
 import { useAuth } from "@/stores/useAuth";

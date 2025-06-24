@@ -80,7 +80,6 @@
             :isLoading="isLoading" />
         <SectionPagination v-else :last_page="allCompetitions?.pagination?.last_page"
             :current_page="allCompetitions?.pagination?.current_page" :isLoading="isLoading" />
-
     </div>
 </template>
 

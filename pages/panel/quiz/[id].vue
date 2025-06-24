@@ -72,7 +72,7 @@
                         Polecane quizy
                     </p>
                     <div class="w-full mt-[18px]">
-                        <CardSearchQuiz :quizes="allQuiz.data" :isLoading="isLoading" :n="12" />
+                        <CardSearchQuiz :quizes="allQuiz.data" :plan="hasPremium" :isLoading="isLoading" :n="12" />
                     </div>
                 </div>
             </div>
@@ -83,12 +83,13 @@
 <script lang="ts" setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-// import { useCookie } from '#app'
-
+import { useUser } from "@/stores/useUser"
+const userState = useUser()
 const router = useRouter()
 const route = useRoute()
 const axiosInstance = useNuxtApp().$axiosInstance as any
 const quizSubmissionCookie = useCookie('quiz_submission') as any
+const { hasPremium } = storeToRefs(userState)
 
 const quizId = ref(route.params.id)
 const isLoading = ref(true)

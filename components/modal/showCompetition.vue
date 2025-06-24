@@ -161,7 +161,7 @@
                                 <div class="flex gap-[7px]">
                                     <p class="text-gray-600">Trzecie miejsce: </p>
                                     <p class="text-base primary-color font-medium">
-                                        {{ competition.awward.thrid_points }} punktów
+                                        {{ competition.awward.third_points }} punktów
                                     </p>
                                 </div>
                             </div>
