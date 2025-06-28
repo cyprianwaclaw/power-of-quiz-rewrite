@@ -81,9 +81,12 @@ const onSubmit = async () => {
             console.error("Error:", error)
          }
       }
+      questionsArray.value = []
+           console.log("wysŻłytytyanbio")
       isLoadingButton.value = false
    } else {
       scrollToTop()
+      console.log("wysŻłanbio")
       isLoadingButton.value = false
    }
 }
