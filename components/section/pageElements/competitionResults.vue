@@ -1,15 +1,15 @@
 <template>
     <div>
-        <div v-if="userCompetition?.data.length === 7">
-            <div class="grid place-items-center mt-4 md:mt-10">
-                <Icon name="ph:shooting-star" size="166" color="#CFD8E0" />
-                <p class="invite-text mt-2 mb-5">Brak konkursów</p>
-            </div>
-        </div>
-        <div v-else>
+        <div>
             <CardUserCompetition :competitions="userCompetition?.data" :plan="true" :isLoading="isLoading" :n="10" />
             <SectionPagination :last_page="userCompetition?.pagination?.last_page"
                 :current_page="userCompetition?.pagination?.current_page" :isLoading="isLoading" />
+        </div>
+         <div v-if="userCompetition?.data.length < 1" class="w-full flex bg-white rounded-[18px] p-[30px]">
+             <div class="w-full items-center justify-center text-center py-14">
+                <Icon name="ph:shooting-star" color="#CFD8E0" size="120" />
+                <p class="text-[38px] text-[#CFD8E0] font-bold mt-[6px]">Brak konkursów</p>
+            </div>
         </div>
     </div>
 </template>

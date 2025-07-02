@@ -53,18 +53,19 @@ const props = defineProps({
   },
 });
 
-const openAlert = ref(false);
-const openQuiz = ref(false);
-const currentQuiz = ref() as any;
+const openQuiz = ref(false)
+const currentQuiz = ref() as any
+const openAlert = ref(false)
 
 const isClick = (quiz: any) => {
   currentQuiz.value = quiz
   if (props.plan) {
-    openQuiz.value = !openQuiz.value;
+    openQuiz.value = !openQuiz.value
   } else {
-    openAlert.value = !openAlert.value;
+    openAlert.value = !openAlert.value
   }
-};
+}
+
 </script>
 
 <style scoped lang="scss">

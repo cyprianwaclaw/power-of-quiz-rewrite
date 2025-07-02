@@ -1,5 +1,7 @@
 <template>
     <ModalWithdrawFunds :modalActive="isWithdraw" @close="modalWithdraw" />
+    <ModalNotFinancialSettings :modalActive="openAlert" @close="isClick" />
+
     <div class="mt-[28px]">
         <ButtonLink :array="buttonsArray" query="pageName" :isLoading="isLoadingButton" :n="4" />
     </div>
@@ -15,7 +17,9 @@
                     <SectionPagination :last_page="userQuizzes?.pagination?.last_page"
                         :current_page="userQuizzes?.pagination?.current_page" :isLoading="isLoading" />
                 </div>
-                <div v-if="!userQuizzes?.quizzes">
+                <div v-if="userQuizzes?.quizzes.length < 1" class="w-full items-center justify-center text-center py-14">
+                    <Icon name="ph:game-controller" color="#CFD8E0" size="120" />
+                    <p class="text-[38px] text-[#CFD8E0] font-bold mt-[6px]">Brak quizów</p>
                 </div>
             </div>
             <div v-if="router.currentRoute.value.query?.pageName === 'competition'">
@@ -23,13 +27,17 @@
                     <CardUserCompetition :competitions="userCompetition?.data" :plan="true" :isLoading="isLoading" :n="8" />
                     <SectionPagination :last_page="userCompetition?.pagination?.last_page"
                         :current_page="userCompetition?.pagination?.current_page" :isLoading="isLoading" />
-
+                    <div v-if="userCompetition?.data.length < 1"
+                        class="w-full items-center justify-center text-center py-14">
+                        <Icon name="ph:shooting-star" color="#CFD8E0" size="120" />
+                        <p class="text-[38px] text-[#CFD8E0] font-bold mt-[6px]">Brak konkursów</p>
+                    </div>
                 </div>
                 <div v-else>
                     <CardUserQuizzes :quizzes="competitionData?.data" :n="14" :isLoading="isLoading" />
                     <SectionPagination :last_page="competitionData?.pagination?.last_page"
                         :current_page="competitionData?.pagination?.current_page" :isLoading="isLoading" />
-                    <div v-if="!competitionData?.data">
+                    <div v-if="competitionData?.data">
                         Brak konkursów
                     </div>
                 </div>
@@ -46,7 +54,7 @@
                         <p class="primary-color font-semibold">Jak zdobyć środki?</p>
                     </button>
                     <div class="pt-[27px]  w-full flex justify-start mt-[12px]">
-                           <button v-if="user?.points > 0" class="button-primary" @click="modalWithdraw">
+                        <button v-if="user?.points > 0" class="button-primary" @click="isClick">
                             Wypłać
                         </button>
                         <button v-else class="button-primary-disabled h-[45px]">
@@ -62,9 +70,13 @@
                     <CardPayouts :payouts="allPayouts.payouts" :n="14" :isLoading="isLoading" />
                     <SectionPagination :last_page="allPayouts?.pagination?.last_page"
                         :current_page="allPayouts?.pagination?.current_page" :isLoading="isLoading" />
+                    <div v-if="allPayouts.payouts.length < 1"
+                        class="w-full items-center justify-center text-center py-14">
+                        <Icon name="ph:hand-coins" color="#CFD8E0" size="120" />
+                        <p class="text-[38px] text-[#CFD8E0] font-bold mt-[6px]">Brak wypłat</p>
+                    </div>
                 </div>
             </div>
-
             <div v-if="router.currentRoute.value.query?.pageName === 'invoices'" class="w-full flex shrink-0">
                 <div v-if="router.currentRoute.value.query?.section === 'null'" class="w-full">
                     {{ payments?.data.data }}
@@ -88,7 +100,7 @@ import { useUser } from "@/stores/useUser"
 const axiosInstance = useNuxtApp().$axiosInstance as any
 
 const userState = useUser();
-const { user } = storeToRefs(userState);
+const { user, settings } = storeToRefs(userState);
 const route = useRoute()
 const isLoading = ref(true)
 const isLoadingButton = ref(true)
@@ -101,6 +113,16 @@ const userCompetition = ref() as any
 const isOpen = ref(false)
 const isWithdraw = ref(false)
 
+
+const openAlert = ref(false)
+
+const isClick = (quiz: any) => {
+    if (settings.value.financial ? true : false) {
+        isWithdraw.value = !isWithdraw.value;
+    } else {
+        openAlert.value = !openAlert.value
+    }
+}
 
 const isClose = (value: any) => {
     isOpen.value = !isOpen.value;
@@ -128,16 +150,24 @@ const allButtonsArray = (routeName: any) => {
         ]
     }
     if (routeName == 'competition') {
-        return [
-            {
-                title: "Wyniki",
-                link: "results-competition"
-            },
-            {
-                title: "Moje konkursy",
-                link: "null-competition"
-            },
-        ]
+        if (user.value.user_email == "marocz@o2.pl") {
+            return [
+                {
+                    title: "Wyniki",
+                    link: "results-competition"
+                },
+                {
+                    title: "Moje konkursy",
+                    link: "null-competition"
+                },
+            ]
+        } else {
+            return [
+                {
+                    title: "Wyniki",
+                    link: "results-competition"
+                },]
+        }
     }
     if (routeName == 'founds') {
         return [
@@ -261,16 +291,16 @@ onBeforeRouteUpdate(async (to) => {
 @import "@/assets/style/variables.scss";
 
 .button-primary-disabled {
-  cursor: not-allowed !important;
-  background-color: #aec5ff !important;
-  padding: 10px 23px !important;
-  color: $white !important;
-  font-style: normal !important;
-  font-weight: 500 !important;
-  font-size: 15px !important;
-  line-height: 22px !important;
-  letter-spacing: 0.05em !important;
-  display: block !important;
-  border-radius: 8px !important;
+    cursor: not-allowed !important;
+    background-color: #aec5ff !important;
+    padding: 10px 23px !important;
+    color: $white !important;
+    font-style: normal !important;
+    font-weight: 500 !important;
+    font-size: 15px !important;
+    line-height: 22px !important;
+    letter-spacing: 0.05em !important;
+    display: block !important;
+    border-radius: 8px !important;
 }
 </style>

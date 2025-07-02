@@ -78,7 +78,7 @@ const login = (values: any) => {
 
   setTimeout(async () => {
     await userState.currentUser(token.value)
-    await userState.getUserSettings(token.value)
+    userState.getUserSettings(token.value)
     await userState.userPlan(token.value)
   }, 300)
 

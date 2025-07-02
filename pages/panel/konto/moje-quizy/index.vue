@@ -6,9 +6,10 @@
                 <CardUserQuizzes :quizzes="userQuizzes?.quizzes" :n="14" :isLoading="isLoading" />
                 <SectionPagination :last_page="userQuizzes?.pagination?.last_page"
                     :current_page="userQuizzes?.pagination?.current_page" :isLoading="isLoading" />
-                <div v-if="!userQuizzes?.quizzes">
-                    <!-- nie ma quizów -->
-                </div>
+                    <div v-if="userQuizzes?.quizzes.length < 1" class="w-full items-center justify-center text-center py-14">
+                        <Icon name="ph:game-controller" color="#CFD8E0" size="120" />
+                        <p class="text-[38px] text-[#CFD8E0] font-bold mt-[6px]">Brak quizów</p>
+                    </div>
             </div>
         </div>
     </NuxtLayout>

@@ -27,7 +27,11 @@
   </div>
 </template>
 <script setup lang="ts">
+import { useUser } from "@/stores/useUser";
+
 const router = useRouter();
+
+const userState = useUser()
 const openModalSearch = ref(false);
 const isClickSearch = () => {
   openModalSearch.value = !openModalSearch.value;
@@ -44,6 +48,13 @@ const links = [
   { name: "Konkursy", link: "/panel/quiz?section=konkursy" },
 ]
 
+const cookie = useCookie("auth") as any
+
+onMounted(async() => {
+  userState.currentUser(cookie.value?.token)
+userState.getUserSettings(cookie.value?.token)
+  console.log("test6")
+})
 </script>
 <style scoped lang="scss">
 @import "@/assets/style/variables.scss";

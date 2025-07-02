@@ -1,5 +1,5 @@
 <template>
-    <div class="md:mt-6">
+    <div class="md:mt-6 -mb-10">
         <div class="md:flex md:place-items-start md:w-full md:justify-between">
             <h1 class="text-[32px] font-medium color-[#212427]">Odkryj pełnię możliwości <br>w pakiecie <span
                     class="primary-color">Premium</span></h1>
@@ -9,7 +9,6 @@
                 </p>
                 <button class="button-primary" @click="goToPayment">Zapłać teraz</button>
             </div>
-            <!-- {{ plans }} -->
         </div>
         <div class="bg-white p-7 rounded-[18px] mt-[34px]">
             <div class="flex gap-[24px] w-full justify-end">
@@ -58,16 +57,13 @@ const plans = ref()
 
 const planDetailsArray = [
     {
-        title: "cxcx", description: "saerwre re wr ewr ewr we rew rew r wr ewrewrer", premium: true, standard: false
+        title: "Quizy", description: "Dostęp do grania i dodawania quizów", premium: true, standard: false
     },
     {
-        title: "cxcx", description: "dsdasd", premium: true, standard: false
+        title: "Konkursy", description: "Dostęp do grania w konkursach", premium: true, standard: true
     },
     {
-        title: "cxcx", description: "dsdasd", premium: true, standard: false
-    },
-    {
-        title: "cxcx", description: "dsdasd", premium: true, standard: false
+        title: "Punkty", description: "Wypłacanie zdobytych punktów", premium: true, standard: true
     }
 ]
 

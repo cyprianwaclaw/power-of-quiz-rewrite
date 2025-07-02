@@ -20,7 +20,7 @@
                     </div>
                     <div class="content overflow-y-scroll">
                         <div class="w-full">
-                        <NuxtImg :src="props.competition.image" class="image"/>
+                            <NuxtImg :src="props.competition.image" class="image" />
                             <!-- <div v-if="isLoading">
                                 <div class="is-loading">
                                     <div class="image" />
@@ -60,29 +60,29 @@
                                 </p>
                             </div>
                         </div>
-                           <div class="mb-6 flex flex-col">
-                                <p class="text-[17px] font-semibold">Nagrody</p>
-                                <div class="ml-[8px] flex flex-col gap-[5px] mt-[6px]">
-                                    <div class="flex gap-[7px]">
-                                        <p class="text-gray-600">Pierwsze miejsce: </p>
-                                        <p class="text-base primary-color font-medium">
-                                            {{ competition.awward.first_points }} punktów
-                                        </p>
-                                    </div>
-                                    <div class="flex gap-[7px]">
-                                        <p class="text-gray-600">Drugie miejsce: </p>
-                                        <p class="text-base primary-color font-medium">
-                                            {{ competition.awward.second_points }} punktów
-                                        </p>
-                                    </div>
-                                    <div class="flex gap-[7px]">
-                                        <p class="text-gray-600">Trzecie miejsce: </p>
-                                        <p class="text-base primary-color font-medium">
-                                            {{ competition.awward.thrid_points }} punktów
-                                        </p>
-                                    </div>
+                        <div class="mb-6 flex flex-col">
+                            <p class="text-[17px] font-semibold">Nagrody</p>
+                            <div class="ml-[8px] flex flex-col gap-[5px] mt-[6px]">
+                                <div class="flex gap-[7px]">
+                                    <p class="text-gray-600">Pierwsze miejsce: </p>
+                                    <p class="text-base primary-color font-medium">
+                                        {{ competition.awward.first_points }} punktów
+                                    </p>
+                                </div>
+                                <div class="flex gap-[7px]">
+                                    <p class="text-gray-600">Drugie miejsce: </p>
+                                    <p class="text-base primary-color font-medium">
+                                        {{ competition.awward.second_points }} punktów
+                                    </p>
+                                </div>
+                                <div class="flex gap-[7px]">
+                                    <p class="text-gray-600">Trzecie miejsce: </p>
+                                    <p class="text-base primary-color font-medium">
+                                        {{ competition.awward.thrid_points }} punktów
+                                    </p>
                                 </div>
                             </div>
+                        </div>
                         <p class="text-[17px] font-semibold">Opis</p>
                         <p class="text pr-6 mb-5 text-gray-600 mt-[4px]"> {{ competition.description }}</p>
                         <label class="flex w-full mb-5 mt-12">
@@ -93,7 +93,7 @@
                         <button class=" w-full mb-6 " :class="checkbox ? 'button-primary' : 'button-primary-disabled'">
                             <p class="text-center" @click="startGame(competition.id)">Zagraj</p>
                         </button>
-                    </div>  
+                    </div>
                 </div>
             </Transition>
         </div>
@@ -102,7 +102,7 @@
             <Transition @enter="onEnterDesktop" :css="false">
                 <div class="modal-desktop" v-if="props.modalActive">
                     <div class="w-full h-full">
-                        <NuxtImg :src="props.competition.image" class="image"/>
+                        <NuxtImg :src="props.competition.image" class="image" />
                         <!-- <img v-show="!isLoading" :src="props.competition.image" class="image" /> -->
                     </div>
                     <div class="w-full flex flex-col">
@@ -168,14 +168,24 @@
                         </div>
                         <p class="text-[17px] font-semibold">Opis</p>
                         <p class="text pr-6 mb-5 text-gray-600 mt-[4px]"> {{ competition.description }}</p>
+                        <div v-if="isLoading" class="is-loading mb-5 mt-[34px]">
+                            <p class="image"/>
+                                <p class="image -mt-[3px]"/>
+                        </div>
+                        <div v-else>
                         <label class="flex w-full mb-5 mt-12">
                             <input type="checkbox" class="w-5 flex mb-[4px]" v-model="checkbox" />
                             <p class="ml-2">Akceptuje <NuxtLink to="/regulamin" class="link">regulamin</NuxtLink>
                             </p>
-                        </label>
-                        <button class=" w-full mb-6 " :class="checkbox ? 'button-primary' : 'button-primary-disabled'">
+                        </label>                      
+                            <button class=" w-full mb-6 " v-if="isUserCompetitionData == false"
+                            :class="checkbox ? 'button-primary' : 'button-primary-disabled'">
                             <p class="text-center" @click="startGame(competition.id)">Zagraj</p>
                         </button>
+                        <div v-else class="bg-red-100 mt-[4px] h-[44px] rounded-md">
+                            <p class="text-center text-red-500 font-medium pt-[8px]">Rozwiązano konkurs</p>
+                        </div>
+                    </div>
                     </div>
                 </div>
             </Transition>
@@ -188,9 +198,9 @@ import { defineProps, defineEmits } from 'vue'
 import gsap from 'gsap'
 const axiosInstance = useNuxtApp().$axiosInstance as any
 const router = useRouter()
-
+const isUserCompetitionData = ref()
 const quizSubmissionCookie = useCookie('competition_submission') as any
-
+// competitions
 const props = defineProps({
     competition: {
         type: Object,
@@ -205,8 +215,14 @@ const props = defineProps({
 const emit = defineEmits(['close'])
 const isLoading = ref(true)
 const checkbox = ref(false)
+
 const startGame = async (id: number) => {
-    if (checkbox.value === true) {
+
+    // const isUserCompetition = await axiosInstance.post(`/user/isCompetitions`, {
+    //     "competition_id": id
+    // })
+    // isUserCompetitionData.value = isUserCompetition.data?.has_competitions
+    if (checkbox.value === true || isUserCompetitionData.value === false) {
         const newCompetition = await axiosInstance.get(`/competition/${id}/start`)
         const submissionData = {
             submission_id: newCompetition.data.submission_id,
@@ -220,13 +236,18 @@ const startGame = async (id: number) => {
 }
 
 
-watch(props, (newVal) => {
+watch(props, async (newVal) => {
     if (newVal.modalActive === true) {
         setTimeout(() => {
             isLoading.value = false
         }, 320)
+        const isUserCompetition = await axiosInstance.post(`/user/isCompetitions`, {
+            "competition_id": props.competition.id
+        })
+        isUserCompetitionData.value = isUserCompetition.data?.has_competitions
     } else {
         isLoading.value = true
+        isUserCompetitionData.value = null
     }
 });
 
@@ -352,13 +373,9 @@ const LeaveBg = (el: any) => {
     }
 
     .image {
-        border-radius: 12px;
+        border-radius: 8px;
         width: 100%;
-        height: 220px;
-
-        @media only screen and (min-width: 640px) {
-            height: 538px;
-        }
+        height: 44px;
     }
 }
 
