@@ -22,15 +22,15 @@
                     <p class="text-[38px] text-[#CFD8E0] font-bold mt-[6px]">Brak quizów</p>
                 </div>
             </div>
-            <div v-if="router.currentRoute.value.query?.pageName === 'competition'">
-                <div v-if="router.currentRoute.value.query?.section === 'results'">
+            <div v-if="router.currentRoute.value.query?.pageName === 'competition'" class="w-full flex shrink-0">
+                <div v-if="router.currentRoute.value.query?.section === 'results'" class="w-full flex shrink-0">
                     <CardUserCompetition :competitions="userCompetition?.data" :plan="true" :isLoading="isLoading" :n="8" />
                     <SectionPagination :last_page="userCompetition?.pagination?.last_page"
                         :current_page="userCompetition?.pagination?.current_page" :isLoading="isLoading" />
                     <div v-if="userCompetition?.data.length < 1"
                         class="w-full items-center justify-center text-center py-14">
                         <Icon name="ph:shooting-star" color="#CFD8E0" size="120" />
-                        <p class="text-[38px] text-[#CFD8E0] font-bold mt-[6px]">Brak konkursów</p>
+                        <p class="text-[38px] text-[#CFD8E0] font-bold mt-[6px]b text-center">Brak konkursów</p>
                     </div>
                 </div>
                 <div v-else>
@@ -70,8 +70,7 @@
                     <CardPayouts :payouts="allPayouts.payouts" :n="14" :isLoading="isLoading" />
                     <SectionPagination :last_page="allPayouts?.pagination?.last_page"
                         :current_page="allPayouts?.pagination?.current_page" :isLoading="isLoading" />
-                    <div v-if="allPayouts.payouts.length < 1"
-                        class="w-full items-center justify-center text-center py-14">
+                    <div v-if="allPayouts.payouts.length < 1" class="w-full items-center justify-center text-center py-14">
                         <Icon name="ph:hand-coins" color="#CFD8E0" size="120" />
                         <p class="text-[38px] text-[#CFD8E0] font-bold mt-[6px]">Brak wypłat</p>
                     </div>
@@ -79,11 +78,15 @@
             </div>
             <div v-if="router.currentRoute.value.query?.pageName === 'invoices'" class="w-full flex shrink-0">
                 <div v-if="router.currentRoute.value.query?.section === 'null'" class="w-full">
-                    {{ payments?.data.data }}
                     <CardPayments :payments="payments?.data.data" :n="14" :isLoading="isLoading" />
                     <SectionPagination :last_page="payments?.pagination?.last_page"
                         :current_page="payments?.pagination?.current_page" :isLoading="isLoading" />
+                    <div v-if="payments?.data.data.length < 1" class="w-full items-center justify-center text-center py-14">
+                        <Icon name="ph:hand-coins" color="#CFD8E0" size="120" />
+                        <p class="text-[38px] text-[#CFD8E0] font-bold mt-[6px]">Brak danych</p>
+                    </div>
                 </div>
+
                 <div v-else class="w-full">
                     <!-- sdafdf
                     <CardPayouts :payouts="allPayouts.payouts" :n="14" :isLoading="isLoading" />
@@ -186,10 +189,6 @@ const allButtonsArray = (routeName: any) => {
             {
                 title: "Wszystkie",
                 link: "null-invoices"
-            },
-            {
-                title: "Wyniki",
-                link: "results-invoices"
             },
         ]
     }
