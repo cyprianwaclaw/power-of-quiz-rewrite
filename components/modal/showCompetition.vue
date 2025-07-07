@@ -169,23 +169,35 @@
                         <p class="text-[17px] font-semibold">Opis</p>
                         <p class="text pr-6 mb-5 text-gray-600 mt-[4px]"> {{ competition.description }}</p>
                         <div v-if="isLoading" class="is-loading mb-5 mt-[34px]">
-                            <p class="image"/>
-                                <p class="image -mt-[3px]"/>
+                            <p class="image" />
+                            <p class="image -mt-[3px]" />
                         </div>
                         <div v-else>
-                        <label class="flex w-full mb-5 mt-12">
-                            <input type="checkbox" class="w-5 flex mb-[4px]" v-model="checkbox" />
-                            <p class="ml-2">Akceptuje <NuxtLink to="/regulamin" class="link">regulamin</NuxtLink>
-                            </p>
-                        </label>                      
-                            <button class=" w-full mb-6 " v-if="isUserCompetitionData == false"
-                            :class="checkbox ? 'button-primary' : 'button-primary-disabled'">
-                            <p class="text-center" @click="startGame(competition.id)">Zagraj</p>
-                        </button>
-                        <div v-else class="bg-red-100 mt-[4px] h-[44px] rounded-md">
-                            <p class="text-center text-red-500 font-medium pt-[8px]">Rozwiązano konkurs</p>
+                            <div
+                                v-if="isUserCompetitionData == true && isNowWithinRange(competition.time.start, competition.time.end)">
+                                <div 
+                                    class="bg-red-100 mt-[4px] h-[44px] rounded-md">
+                                    <p class="text-center text-red-500 font-medium pt-[9px]">Rozwiązano konkurs</p>
+                                </div>
+                            </div>
+                            <div v-else>
+                                <label class="flex w-full mb-5 mt-12">
+                                    <input type="checkbox" class="w-5 flex mb-[4px]" v-model="checkbox" />
+                                    <p class="ml-2">Akceptuje <NuxtLink to="/regulamin" class="link">regulamin</NuxtLink>
+                                    </p>
+                                </label>
+                                <div v-if="isNowWithinRange(competition.time.start, competition.time.end)">
+                                    <button class=" w-full mb-6 "
+                                        :class="checkbox ? 'button-primary' : 'button-primary-disabled'">
+                                        <p class="text-center" @click="startGame(competition.id)">Zagraj</p>
+                                    </button>
+                                </div>
+                            </div>
+                            <div v-if="isUserCompetitionData == false && !isNowWithinRange(competition.time.start, competition.time.end)"
+                                class="bg-blue-100 mt-[4px] h-[44px] rounded-md">
+                                <p class="text-center primary-color font-medium pt-[9px]">Poczekaj na rozpoczęcie</p>
+                            </div>
                         </div>
-                    </div>
                     </div>
                 </div>
             </Transition>
@@ -250,6 +262,15 @@ watch(props, async (newVal) => {
         isUserCompetitionData.value = null
     }
 });
+
+const isNowWithinRange = (start: string, end: string): boolean => {
+    const now = new Date().getTime();
+    const startTime = new Date(start).getTime();
+    const endTime = new Date(end).getTime();
+
+    return now >= startTime && now <= endTime;
+};
+
 
 const onEnterDesktop = (el: any) => {
     gsap.from(el, {
