@@ -71,10 +71,6 @@ onBeforeRouteUpdate(async (to) => {
     // }
 })
 
-definePageMeta({
-    middleware: "auth",
-})
-
 useSeoMeta({
     title: 'Twoje konto - płatności',
     ogTitle: 'Twoje konto - płatności',
