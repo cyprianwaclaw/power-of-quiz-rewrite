@@ -121,9 +121,6 @@ onBeforeRouteUpdate(async (to) => {
     }
 })
 
-definePageMeta({
-    middleware: "auth",
-})
 
 useSeoMeta({
     title: 'Ustawienia - środki',
