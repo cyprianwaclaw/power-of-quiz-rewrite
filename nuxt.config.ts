@@ -7,7 +7,7 @@ export default defineNuxtConfig({
       API_URL: process.env.API_URL
     }
   },
-  ssr: true,
+  ssr: false,
   // image: {
   //   quality: 80,
   // },
