@@ -46,27 +46,27 @@
             <div class="white-retangle">
                 <div class="row-table-start flex place-items-center justify-between">
                     <div class="flex flex-col">
-                        <p class="text-gray-500 text-[13px]">Numer IBAN</p>
+                        <p class="text-gray-500 text-[13px]">Numer konta</p>
                         <p class="font-semibold text-[16px]">{{ settings?.financial?.iban ? settings?.financial?.iban :
                             'Brak'
                         }}</p>
                     </div>
                 </div>
-                <div class="row-table-start flex place-items-center justify-between">
+                <!-- <div class="row-table-start flex place-items-center justify-between">
                     <div class="flex flex-col">
                         <p class=" text-gray-500 text-[13px]">Nazwa banku</p>
                         <p class="font-semibold text-[16px]">{{ truncateText(settings?.financial?.bank_name ?
                             settings?.financial?.bank_name : 'Brak', 34) }} </p>
                     </div>
-                </div>
-                <div class="row-table-start flex place-items-center justify-between">
+                </div> -->
+                <!-- <div class="row-table-start flex place-items-center justify-between">
                     <div class="flex flex-col">
                         <p class=" text-gray-500 text-[13px]">Numer SWIFT</p>
                         <p class="font-semibold text-[16px]">{{ settings?.financial?.swift ? settings?.financial?.swift :
                             'Brak'
                         }}</p>
                     </div>
-                </div>
+                </div> -->
                 <NuxtLink to="/panel/konto/ustawienia/bank">
                     <div class="row-table-end flex place-items-center justify-between mt-1">
                         <p class="font-medium text-[15px]">Edytuj</p>

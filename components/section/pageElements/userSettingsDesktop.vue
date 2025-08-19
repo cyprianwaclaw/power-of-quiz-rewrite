@@ -156,11 +156,11 @@
                     <p class="mb-6 text-[20px] font-medium">Dane bankowe</p>
                     <Form @submit="updateFinancial" :initial-values="settings.financial"
                         class=" flex flex-col mt-[3px] gap-[10px]">
-                        <InputSettings name="iban" placeholder="Numer IBAN"
+                        <InputSettings name="iban" placeholder="Numer konta"
                             :hasError="showError?.iban || showError?.errors?.iban?.message" />
-                        <InputSettings name="bank_name" placeholder="Nazwa banku" :hasError="showError?.bank_name" />
-                        <InputSettings name="swift" placeholder="Numer SWIFT"
-                            :hasError="showError?.swift || showError?.errors?.swift?.message" />
+                        <!-- <InputSettings name="bank_name" placeholder="Nazwa banku" :hasError="showError?.bank_name" /> -->
+                        <!-- <InputSettings name="swift" placeholder="Numer SWIFT"
+                           :hasError="showError?.swift || showError?.errors?.swift?.message" /> -->
                         <div class="flex w-full justify-start mt-4 mb-5">
                             <div class="w-[140px]">
                                 <ButtonLoading isLoading="false" :loading="isLoadingButton" text="Gotowe" />
@@ -393,7 +393,7 @@ const updatePersonal = async (values: any) => {
                         const res = await axiosInstance.post('/user/settings', validData);
                         showAlert()
                         setTimeout(async () => {
-                            await userState.getUserSettings()
+                            await userState.getUserSettings(token)
                             await userState.login()
 
                         }, 120)
@@ -579,10 +579,17 @@ const updateCompany = async (values: any) => {
             schemaCompany.validate(values, { abortEarly: false })
                 .then(async (validData) => {
                     try {
-                        const res = await axiosInstance.post('/user/settings', validData);
+                        const res = await axiosInstance.post('/user/settings', validData,
+                            {
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Accept': 'application/json',
+                                    Authorization: `Bearer ${token.value}`,
+                                },
+                            });
                         showAlert()
                         setTimeout(async () => {
-                            await userState.getUserSettings()
+                            await userState.getUserSettings(token)
                         }, 120)
                     } catch (error: any) {
                         showError.value = error.response.data
@@ -605,30 +612,30 @@ const updateCompany = async (values: any) => {
 
 
 const schemaFinancial = yup.object().shape({
-    bank_name: yup
-        .string()
-        .test("valid-name", "Nieprawidłowa nazwa banku", (value) => {
-            if (!value) return true;
-            const nameRegex = /^[A-ZĄĆĘŁŃÓŚŹŻ0-9][a-zA-ZĄĆĘŁŃÓŚŹŻąćęłńóśźż0-9\s]*$/u;
-            return nameRegex.test(value);
-        })
-        .required("Pole wymagane"),
+    // bank_name: yup
+    //     .string()
+    //     .test("valid-name", "Nieprawidłowa nazwa banku", (value) => {
+    //         if (!value) return true;
+    //         const nameRegex = /^[A-ZĄĆĘŁŃÓŚŹŻ0-9][a-zA-ZĄĆĘŁŃÓŚŹŻąćęłńóśźż0-9\s]*$/u;
+    //         return nameRegex.test(value);
+    //     })
+    //     .required("Pole wymagane"),
     iban: yup
         .string()
-        .test("valid-iban", "Nieprawidłowy numer IBAN", (value) => {
+        .test("valid-account", "Nieprawidłowy numer konta", (value) => {
             if (!value || value === "") return true;
-            const polishIbanRegex = /^[A-Z]{2}\d{26}$/;
-            return polishIbanRegex.test(value);
+            const polishAccountRegex = /^\d{26}$/; // tylko 26 cyfr
+            return polishAccountRegex.test(value);
         })
         .required("Pole wymagane"),
-    swift: yup
-        .string()
-        .test("valid-swift", "Nieprawidłowy numer SWIFT", (value) => {
-            if (!value || value === "") return true;
-            const swiftRegex = /^[A-Z]{2}[A-Z0-9]{4}([A-Z0-9]{2})?$/;
-            return swiftRegex.test(value);
-        })
-        .required("Pole wymagane"),
+    // swift: yup
+    //     .string()
+    //     .test("valid-swift", "Nieprawidłowy numer SWIFT", (value) => {
+    //         if (!value || value === "") return true;
+    //         const swiftRegex = /^[A-Z]{2}[A-Z0-9]{4}([A-Z0-9]{2})?$/;
+    //         return swiftRegex.test(value);
+    //     })
+    //     .required("Pole wymagane"),
 })
 
 const updateFinancial = async (values: any) => {
@@ -639,10 +646,18 @@ const updateFinancial = async (values: any) => {
             schemaFinancial.validate(values, { abortEarly: false })
                 .then(async (validData) => {
                     try {
-                        const res = await axiosInstance.post('/user/settings', validData);
+                        const res = await axiosInstance.post('/user/settings', validData,
+                            {
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Accept': 'application/json',
+                                    Authorization: `Bearer ${token.value}`,
+                                },
+                            }
+                        );
                         showAlert()
                         setTimeout(async () => {
-                            await userState.getUserSettings()
+                            await userState.getUserSettings(token.value)
                         }, 120)
                     } catch (error: any) {
                         showError.value = error.response.data

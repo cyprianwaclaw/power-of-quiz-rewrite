@@ -4,11 +4,11 @@
     <NuxtLayout name="account" arrowText="Ustawienia" title="Dane banku">
         <div class="white-retangle px-[21px] mt-6" @click="handleClick()">
             <Form @submit="updateFinancial" :initial-values="settings.financial" class=" flex gap-[10px] flex-col mt-[3px]">
-                <InputSettings name="iban" placeholder="Numer IBAN"
+                <InputSettings name="iban" placeholder="Numer konta"
                     :hasError="showError?.iban || showError?.errors?.iban?.message" />
-                <InputSettings name="bank_name" placeholder="Nazwa banku" :hasError="showError?.bank_name" />
+                <!-- <InputSettings name="bank_name" placeholder="Nazwa banku" :hasError="showError?.bank_name" />
                 <InputSettings name="swift" placeholder="Numer SWIFT"
-                    :hasError="showError?.swift || showError?.errors?.iban?.message" />
+                    :hasError="showError?.swift || showError?.errors?.iban?.message" /> -->
                 <div class="flex w-full justify-end mt-4 mb-5">
                     <div class="w-[140px]">
                         <ButtonLoading isLoading="false" :loading="isLoadingButton" text="Gotowe" />
@@ -23,6 +23,7 @@ import { storeToRefs } from "pinia"
 import * as yup from "yup"
 import { Form } from "vee-validate"
 import { useUser } from "@/stores/useUser"
+import { useAuth } from "@/stores/useAuth";
 const axiosInstance = useNuxtApp().$axiosInstance as any
 
 const isLoadingButton = ref(false)
@@ -31,32 +32,34 @@ const userState = useUser();
 const { settings } = storeToRefs(userState);
 const showError = ref<boolean | any>(false)
 
+const auth = useAuth();
+const { token } = storeToRefs(auth)
 
 const schemaFinancial = yup.object().shape({
-    bank_name: yup
-        .string()
-        .test("valid-name", "Nieprawidłowa nazwa banku", (value) => {
-            if (!value) return true;
-            const nameRegex = /^[A-ZĄĆĘŁŃÓŚŹŻ0-9][a-zA-ZĄĆĘŁŃÓŚŹŻąćęłńóśźż0-9\s]*$/u;
-            return nameRegex.test(value);
-        })
-        .required("Pole wymagane"),
+    // bank_name: yup
+    //     .string()
+    //     .test("valid-name", "Nieprawidłowa nazwa banku", (value) => {
+    //         if (!value) return true;
+    //         const nameRegex = /^[A-ZĄĆĘŁŃÓŚŹŻ0-9][a-zA-ZĄĆĘŁŃÓŚŹŻąćęłńóśźż0-9\s]*$/u;
+    //         return nameRegex.test(value);
+    //     })
+    //     .required("Pole wymagane"),
     iban: yup
         .string()
-        .test("valid-iban", "Nieprawidłowy numer IBAN", (value) => {
+        .test("valid-iban", "Nieprawidłowy numer", (value) => {
             if (!value || value === "") return true;
-            const polishIbanRegex = /^[A-Z]{2}\d{26}$/;
+            const polishIbanRegex = /^\d{26}$/;
             return polishIbanRegex.test(value);
         })
         .required("Pole wymagane"),
-    swift: yup
-        .string()
-        .test("valid-swift", "Nieprawidłowy numer SWIFT", (value) => {
-            if (!value || value === "") return true;
-            const swiftRegex = /^[A-Z]{2}[A-Z0-9]{4}([A-Z0-9]{2})?$/;
-            return swiftRegex.test(value);
-        })
-        .required("Pole wymagane"),
+    // swift: yup
+    //     .string()
+    //     .test("valid-swift", "Nieprawidłowy numer SWIFT", (value) => {
+    //         if (!value || value === "") return true;
+    //         const swiftRegex = /^[A-Z]{2}[A-Z0-9]{4}([A-Z0-9]{2})?$/;
+    //         return swiftRegex.test(value);
+    //     })
+    //     .required("Pole wymagane"),
 })
 
 const updateFinancial = async (values: any) => {
@@ -67,10 +70,17 @@ const updateFinancial = async (values: any) => {
             schemaFinancial.validate(values, { abortEarly: false })
                 .then(async (validData) => {
                     try {
-                        const res = await axiosInstance.post('/user/settings', validData);
+                        const res = await axiosInstance.post('/user/settings', validData,
+                            {
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Accept': 'application/json',
+                                    Authorization: `Bearer ${token.value}`,
+                                },
+                            });
                         showAlert()
                         setTimeout(async () => {
-                            await userState.getUserSettings()
+                            await userState.getUserSettings(token.value)
                         }, 120)
                     } catch (error: any) {
                         showError.value = error.response.data
